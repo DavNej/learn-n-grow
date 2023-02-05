@@ -1,5 +1,5 @@
 import { useAccount } from 'wagmi'
-import { owner } from '@/utils/voting-contract'
+import { owner } from '@/utils/contract'
 
 function useIsOwner() {
   const { address } = useAccount()

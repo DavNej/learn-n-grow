@@ -1,12 +1,12 @@
 {
-  "name": "boilerplate",
+  "name": "learn-n-grow",
   "version": "1.0.0",
-  "description": "hardhat project template",
-  "main": "index.js",
+  "description": "Decentralized application for online courses",
   "author": "DavNej",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf artifacts && rimraf cache && rimraf deployments && rimraf typechain-types",
+    "deploy": "clean && hardhat deploy",
     "dev": "clean && hardhat node"
   },
   "devDependencies": {

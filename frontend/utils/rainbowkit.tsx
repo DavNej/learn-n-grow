@@ -1,9 +1,7 @@
 import '@rainbow-me/rainbowkit/styles.css'
 
 import type { PropsWithChildren } from 'react'
-
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
-
 import { configureChains, createClient, WagmiConfig } from 'wagmi'
 
 // Supported chains 👉 https://wagmi.sh/react/chains#supported-chains
@@ -20,7 +18,7 @@ const { chains, provider } = configureChains(
   ]
 )
 const { connectors } = getDefaultWallets({
-  appName: 'Voting DApp',
+  appName: 'Learn N Grow',
   chains,
 })
 
