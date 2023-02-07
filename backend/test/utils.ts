@@ -1,13 +1,44 @@
+import type { Contract, Signer } from 'ethers'
 import { ethers } from 'hardhat'
 
-// Fixtures
-export async function deploySimpleStorageFixture() {
-  const [owner, otherAccount] = await ethers.getSigners()
+// Constants
+export const baseURI = 'baseURI'
 
-  const SimpleStorage = await ethers.getContractFactory('SimpleStorage')
-  const simpleStorage = await SimpleStorage.deploy()
-
-  return { simpleStorage, owner, otherAccount }
+export const profile_1 = {
+  name: 'Alice',
+  description: 'I am Alice',
+  avatar: 'avatar',
+  tokenURI: 'tokenURI',
 }
 
-// Constansts
+// Helpers
+export async function mintProfile(
+  contract: Contract,
+  user: Signer,
+  ...args: string[]
+) {
+  const params = Boolean(args.length)
+    ? args
+    : [
+        profile_1.name,
+        profile_1.description,
+        profile_1.avatar,
+        profile_1.tokenURI,
+      ]
+
+  const tx = await contract.connect(user).mintProfile(...params)
+
+  await tx.wait(1)
+
+  return tx
+}
+
+// Fixtures
+export async function deployLNGProfileFixture() {
+  const [owner, user_1, user_2, user_3] = await ethers.getSigners()
+
+  const LNGProfile = await ethers.getContractFactory('LNGProfile')
+  const contract = await LNGProfile.deploy(baseURI)
+
+  return { contract, owner, user_1, user_2, user_3 }
+}
