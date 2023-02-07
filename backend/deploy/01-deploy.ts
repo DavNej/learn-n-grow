@@ -4,33 +4,28 @@ import type { DeployFunction } from 'hardhat-deploy/types'
 import { verify } from '../utils/verify'
 import { developmentChains, blockConfirmations } from '../helper-hardhat-config'
 
+const deploymentArgs = ['baseRUI']
+
 const deploy: DeployFunction = async function ({
   getNamedAccounts,
   deployments,
   network,
 }: HardhatRuntimeEnvironment) {
-  const { deploy, log } = deployments
+  const { deploy } = deployments
   const { deployer } = await getNamedAccounts()
 
   const isProduction = !developmentChains.includes(network.name)
 
-  log('--------------------------------------')
-  const args: [] = []
-
-  const Storage = await deploy('Storage', {
+  const LNGProfile = await deploy('LNGProfile', {
     from: deployer,
-    args,
-    log: true,
+    args: deploymentArgs,
     waitConfirmations: isProduction ? blockConfirmations : 1,
   })
 
   //Verify the smart contract
   if (isProduction && process.env.ETERSCAN_API_KEY) {
-    log('Verifying...')
-    await verify(Storage.address, args)
+    await verify(LNGProfile.address, deploymentArgs)
   }
 }
-
-deploy.tags = ['all', 'main', 'simple-storage']
 
 export default deploy

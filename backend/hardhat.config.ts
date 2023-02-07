@@ -10,12 +10,8 @@ import 'hardhat-gas-reporter'
 import 'solidity-coverage'
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY || ''
-
 const ALCHEMY_GOERLI = process.env.ALCHEMY_GOERLI || ''
-const ALCHEMY_MUMBAI = process.env.ALCHEMY_MUMBAI || ''
-
 const ETERSCAN_API_KEY = process.env.ETERSCAN_API_KEY || ''
-const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY || ''
 
 const networks: Record<string, NetworkUserConfig> = {
   localhost: {
@@ -27,11 +23,6 @@ const networks: Record<string, NetworkUserConfig> = {
     chainId: 5,
     accounts: [`0x${PRIVATE_KEY}`],
   },
-  polygonMumbai: {
-    url: ALCHEMY_MUMBAI,
-    chainId: 80001,
-    accounts: [`0x${PRIVATE_KEY}`],
-  },
 }
 
 const config: HardhatUserConfig = {
@@ -40,7 +31,6 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: {
       goerli: ETERSCAN_API_KEY,
-      polygonMumbai: POLYGONSCAN_API_KEY,
     },
   },
   namedAccounts: {

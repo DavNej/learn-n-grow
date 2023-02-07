@@ -6,8 +6,9 @@
   "license": "MIT",
   "scripts": {
     "clean": "rimraf artifacts && rimraf cache && rimraf deployments && rimraf typechain-types",
-    "deploy": "clean && hardhat deploy",
-    "dev": "clean && hardhat node"
+    "deploy": "yarn clean && hardhat deploy",
+    "dev": "yarn clean && hardhat node",
+    "test": "yarn hardhat test"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.4.7",
