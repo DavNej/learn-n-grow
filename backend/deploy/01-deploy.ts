@@ -2,10 +2,10 @@ import type { HardhatRuntimeEnvironment } from 'hardhat/types'
 import type { DeployFunction } from 'hardhat-deploy/types'
 
 import { verify } from '../utils/verify'
-import { baseURI } from '../utils/constants'
+import { NAME, SYMBOL } from '../utils/constants'
 import { developmentChains, blockConfirmations } from '../helper-hardhat-config'
 
-const deploymentArgs = [baseURI]
+const deploymentArgs = [NAME, SYMBOL]
 
 const deploy: DeployFunction = async function ({
   getNamedAccounts,
@@ -17,7 +17,7 @@ const deploy: DeployFunction = async function ({
 
   const isProduction = !developmentChains.includes(network.name)
 
-  const LNGProfile = await deploy('LNGProfile', {
+  const LearnNGrow = await deploy('LearnNGrow', {
     from: deployer,
     args: deploymentArgs,
     waitConfirmations: isProduction ? blockConfirmations : 1,
@@ -25,7 +25,7 @@ const deploy: DeployFunction = async function ({
 
   //Verify the smart contract
   if (isProduction && process.env.ETERSCAN_API_KEY) {
-    await verify(LNGProfile.address, deploymentArgs)
+    await verify(LearnNGrow.address, deploymentArgs)
   }
 }
 
