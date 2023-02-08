@@ -1,20 +1,18 @@
 import { assert, expect } from 'chai'
 
-import {
-  deployLNGProfileFixture,
-  profile_1,
-  baseURI,
-  mintProfile,
-} from './utils'
+import { baseURI } from '../utils/constants'
+import { deployLNGProfileFixture, profile_1, mintProfile } from './utils'
 
 describe('LNGProfile', () => {
   describe('Deployment', () => {
     it('Should deploy contract', async function () {
       const { contract } = await deployLNGProfileFixture()
       assert.exists(await contract.deployed())
-      assert.equal(await contract.baseURI(), baseURI)
       assert.equal(await contract.name(), 'LNGProfile')
       assert.equal(await contract.symbol(), 'LNGP')
+      assert.equal(await contract.baseURI(), baseURI)
+
+      assert.equal(await contract.totalSupply(), 0)
     })
   })
 

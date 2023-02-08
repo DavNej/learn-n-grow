@@ -2,9 +2,10 @@ import type { HardhatRuntimeEnvironment } from 'hardhat/types'
 import type { DeployFunction } from 'hardhat-deploy/types'
 
 import { verify } from '../utils/verify'
+import { baseURI } from '../utils/constants'
 import { developmentChains, blockConfirmations } from '../helper-hardhat-config'
 
-const deploymentArgs = ['baseRUI']
+const deploymentArgs = [baseURI]
 
 const deploy: DeployFunction = async function ({
   getNamedAccounts,
