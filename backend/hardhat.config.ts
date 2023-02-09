@@ -1,8 +1,10 @@
 import { HardhatUserConfig } from 'hardhat/config'
 import type { NetworkUserConfig } from 'hardhat/types'
 
-import '@nomicfoundation/hardhat-toolbox'
+import '@nomiclabs/hardhat-ethers'
 import '@nomiclabs/hardhat-etherscan'
+import '@nomicfoundation/hardhat-toolbox'
+import '@typechain/hardhat'
 
 import 'dotenv/config'
 import 'hardhat-deploy'
@@ -46,6 +48,12 @@ const config: HardhatUserConfig = {
     compilers: [
       {
         version: '0.8.17',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
       },
     ],
   },

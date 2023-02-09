@@ -10,7 +10,6 @@ library Events {
      *
      * @param profileId The newly created profile's token ID.
      * @param creator The profile creator, who created the token with the given profile ID.
-     * @param to The address receiving the profile with the given profile ID.
      * @param handle The handle set for the profile.
      * @param imageURI The image uri set for the profile.
      * @param timestamp The current block timestamp.
@@ -18,7 +17,6 @@ library Events {
     event ProfileCreated(
         uint256 indexed profileId,
         address indexed creator,
-        address indexed to,
         string handle,
         string imageURI,
         uint256 timestamp

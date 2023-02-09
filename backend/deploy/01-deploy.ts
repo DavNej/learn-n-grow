@@ -2,10 +2,13 @@ import type { HardhatRuntimeEnvironment } from 'hardhat/types'
 import type { DeployFunction } from 'hardhat-deploy/types'
 
 import { verify } from '../utils/verify'
-import { NAME, SYMBOL } from '../utils/constants'
+import {
+  LEARN_N_GROW_NFT_NAME,
+  LEARN_N_GROW_NFT_SYMBOL,
+} from '../utils/constants'
 import { developmentChains, blockConfirmations } from '../helper-hardhat-config'
 
-const deploymentArgs = [NAME, SYMBOL]
+const deploymentArgs = [LEARN_N_GROW_NFT_NAME, LEARN_N_GROW_NFT_SYMBOL]
 
 const deploy: DeployFunction = async function ({
   getNamedAccounts,

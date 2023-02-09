@@ -17,7 +17,7 @@ library PublishingLogic {
     /**
      * @notice Executes the logic to create a profile with the given parameters to the given address.
      *
-     * @param vars The CreateProfileData struct containing the following parameters:
+     * @param vars The Profile struct containing the following parameters:
      *      to: The address receiving the profile.
      *      handle: The handle to set for the profile, must be unique and non-empty.
      *      imageURI: The URI to set for the profile image.
@@ -26,10 +26,10 @@ library PublishingLogic {
      * @param _profileById The storage reference to the mapping of profile structs by IDs.
      */
     function createProfile(
-        DataTypes.CreateProfileData calldata vars,
+        DataTypes.Profile calldata vars,
         uint256 profileId,
         mapping(bytes32 => uint256) storage _profileIdByHandleHash,
-        mapping(uint256 => DataTypes.ProfileStruct) storage _profileById
+        mapping(uint256 => DataTypes.Profile) storage _profileById
     ) internal {
         _validateHandle(vars.handle);
 
@@ -49,7 +49,6 @@ library PublishingLogic {
         emit Events.ProfileCreated(
             profileId,
             msg.sender, // Creator is always the msg sender
-            vars.to,
             vars.handle,
             vars.imageURI,
             block.timestamp

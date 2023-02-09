@@ -10,8 +10,8 @@ import {Errors} from "./libraries/Errors.sol";
 import {PublishingLogic} from "./libraries/PublishingLogic.sol";
 import {ProfileTokenURILogic} from "./libraries/ProfileTokenURILogic.sol";
 import {LearnNGrowStorage} from "./LearnNGrowStorage.sol";
-import {IERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
 /**
  * @title LearnNGrow
@@ -20,7 +20,7 @@ import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
  * @notice This is the main entrypoint of LearnNGrow. It contains publishing and profile interaction functionality.
  */
 
-contract LearnNGrow is ERC721, LearnNGrowStorage, ILearnNGrow {
+contract LearnNGrow is ERC721Enumerable, LearnNGrowStorage, ILearnNGrow {
     constructor(
         string memory name,
         string memory symbol
@@ -28,11 +28,11 @@ contract LearnNGrow is ERC721, LearnNGrowStorage, ILearnNGrow {
 
     /// @inheritdoc ILearnNGrow
     function createProfile(
-        DataTypes.CreateProfileData calldata vars
+        DataTypes.Profile calldata vars
     ) external override returns (uint256) {
         unchecked {
             uint256 profileId = ++_profileCounter;
-            _mint(vars.to, profileId);
+            _mint(msg.sender, profileId);
             PublishingLogic.createProfile(
                 vars,
                 profileId,
@@ -46,8 +46,16 @@ contract LearnNGrow is ERC721, LearnNGrowStorage, ILearnNGrow {
     /// @inheritdoc ILearnNGrow
     function getProfile(
         uint256 profileId
-    ) external view override returns (DataTypes.ProfileStruct memory) {
+    ) external view override returns (DataTypes.Profile memory) {
         return _profileById[profileId];
+    }
+
+    /// @inheritdoc ILearnNGrow
+    function getProfileIdByHandle(
+        string calldata handle
+    ) external view override returns (uint256) {
+        bytes32 handleHash = keccak256(bytes(handle));
+        return _profileIdByHandleHash[handleHash];
     }
 
     /**

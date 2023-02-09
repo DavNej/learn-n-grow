@@ -5,9 +5,9 @@
   "author": "DavNej",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf artifacts && rimraf cache && rimraf deployments && rimraf typechain-types",
-    "deploy": "yarn clean && hardhat deploy",
-    "dev": "yarn clean && hardhat node",
+    "compile": "hardhat clean && hardhat compile",
+    "deploy": "hardhat clean && hardhat deploy",
+    "dev": "hardhat clean && hardhat node",
     "test": "yarn hardhat test"
   },
   "devDependencies": {
