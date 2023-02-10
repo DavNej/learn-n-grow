@@ -36,6 +36,17 @@ interface ILearnNGrow {
     ) external;
 
     /**
+     * @notice Returns the full profile struct associated with a given profile token ID.
+     *
+     * @param profileId The token ID of the profile to query.
+     *
+     * @return The Profile struct of the given profile.
+     */
+    function getProfile(
+        uint256 profileId
+    ) external view returns (DataTypes.Profile memory);
+
+    /**
      * @notice Returns the profile token ID according to a given handle.
      *
      * @param handle The handle to resolve the profile token ID with.
@@ -47,13 +58,11 @@ interface ILearnNGrow {
     ) external view returns (uint256);
 
     /**
-     * @notice Returns the full profile struct associated with a given profile token ID.
+     * @notice Returns the handle associated with a profile.
      *
-     * @param profileId The token ID of the profile to query.
+     * @param profileId The token ID of the profile to query the handle for.
      *
-     * @return The Profile struct of the given profile.
+     * @return string The handle associated with the profile.
      */
-    function getProfile(
-        uint256 profileId
-    ) external view returns (DataTypes.Profile memory);
+    function getHandle(uint256 profileId) external view returns (string memory);
 }

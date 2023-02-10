@@ -57,6 +57,13 @@ contract LearnNGrow is ERC721Enumerable, LearnNGrowStorage, ILearnNGrow {
         return _profileIdByHandleHash[handleHash];
     }
 
+    /// @inheritdoc ILearnNGrow
+    function getHandle(
+        uint256 profileId
+    ) external view override returns (string memory) {
+        return _profileById[profileId].handle;
+    }
+
     /**
      * @dev Overrides the ERC721 tokenURI function to return the associated URI with a given profile.
      */
