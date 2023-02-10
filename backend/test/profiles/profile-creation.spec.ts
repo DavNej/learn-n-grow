@@ -14,7 +14,7 @@ import {
   FIRST_PROFILE_ID,
   MAX_PROFILE_IMAGE_URI_LENGTH,
   MOCK_PROFILE_HANDLE,
-  MOCK_PROFILE_URI,
+  MOCK_URI,
 } from '../helpers/constants'
 import { ERRORS } from '../helpers/errors'
 import { createProfileReturningTokenId } from '../helpers/utils'
@@ -29,7 +29,7 @@ makeSuiteCleanRoom('Profile Creation', function () {
         await expect(
           learnNGrow.createProfile({
             handle: val,
-            imageURI: MOCK_PROFILE_URI,
+            imageURI: MOCK_URI,
           })
         ).to.be.revertedWithCustomError(
           learnNGrow,
@@ -41,7 +41,7 @@ makeSuiteCleanRoom('Profile Creation', function () {
         await expect(
           learnNGrow.createProfile({
             handle: '',
-            imageURI: MOCK_PROFILE_URI,
+            imageURI: MOCK_URI,
           })
         ).to.be.revertedWithCustomError(
           learnNGrow,
@@ -53,7 +53,7 @@ makeSuiteCleanRoom('Profile Creation', function () {
         await expect(
           learnNGrow.createProfile({
             handle: 'Egg',
-            imageURI: MOCK_PROFILE_URI,
+            imageURI: MOCK_URI,
           })
         ).to.be.revertedWithCustomError(
           learnNGrow,
@@ -65,7 +65,7 @@ makeSuiteCleanRoom('Profile Creation', function () {
         await expect(
           learnNGrow.createProfile({
             handle: 'egg?',
-            imageURI: MOCK_PROFILE_URI,
+            imageURI: MOCK_URI,
           })
         ).to.be.revertedWithCustomError(
           learnNGrow,
@@ -74,7 +74,7 @@ makeSuiteCleanRoom('Profile Creation', function () {
       })
 
       it('User should fail to create a profile with invalid image URI length', async function () {
-        const profileURITooLong = MOCK_PROFILE_URI.repeat(500)
+        const profileURITooLong = MOCK_URI.repeat(500)
         expect(profileURITooLong.length).to.be.greaterThan(
           MAX_PROFILE_IMAGE_URI_LENGTH
         )
@@ -101,7 +101,7 @@ makeSuiteCleanRoom('Profile Creation', function () {
           await createProfileReturningTokenId({
             vars: {
               handle: MOCK_PROFILE_HANDLE,
-              imageURI: MOCK_PROFILE_URI,
+              imageURI: MOCK_URI,
             },
           })
         ).to.eq(FIRST_PROFILE_ID)
@@ -121,7 +121,7 @@ makeSuiteCleanRoom('Profile Creation', function () {
             sender: userTwo,
             vars: {
               handle: secondProfileHandle,
-              imageURI: MOCK_PROFILE_URI,
+              imageURI: MOCK_URI,
             },
           })
         ).to.eq(secondProfileId)
@@ -140,7 +140,7 @@ makeSuiteCleanRoom('Profile Creation', function () {
           await createProfileReturningTokenId({
             vars: {
               handle: 'token.id_1',
-              imageURI: MOCK_PROFILE_URI,
+              imageURI: MOCK_URI,
             },
           })
         ).to.eq(FIRST_PROFILE_ID)
@@ -151,7 +151,7 @@ makeSuiteCleanRoom('Profile Creation', function () {
             sender: userTwo,
             vars: {
               handle: 'token.id_2',
-              imageURI: MOCK_PROFILE_URI,
+              imageURI: MOCK_URI,
             },
           })
         ).to.eq(secondProfileId)
@@ -161,7 +161,7 @@ makeSuiteCleanRoom('Profile Creation', function () {
           await createProfileReturningTokenId({
             vars: {
               handle: 'token.id_3',
-              imageURI: MOCK_PROFILE_URI,
+              imageURI: MOCK_URI,
             },
           })
         ).to.eq(thirdProfileId)
@@ -171,7 +171,7 @@ makeSuiteCleanRoom('Profile Creation', function () {
         await expect(
           learnNGrow.createProfile({
             handle: 'morse--__-_--code',
-            imageURI: MOCK_PROFILE_URI,
+            imageURI: MOCK_URI,
           })
         ).to.not.be.reverted
       })
@@ -180,19 +180,19 @@ makeSuiteCleanRoom('Profile Creation', function () {
         await expect(
           learnNGrow.createProfile({
             handle: '123456789012345',
-            imageURI: MOCK_PROFILE_URI,
+            imageURI: MOCK_URI,
           })
         ).to.not.be.reverted
         await expect(
           learnNGrow.createProfile({
             handle: '123456789012345',
-            imageURI: MOCK_PROFILE_URI,
+            imageURI: MOCK_URI,
           })
         ).to.be.revertedWithCustomError(learnNGrow, ERRORS.PROFILE_HANDLE_TAKEN)
         await expect(
           learnNGrow.createProfile({
             handle: 'abcdefghijklmno',
-            imageURI: MOCK_PROFILE_URI,
+            imageURI: MOCK_URI,
           })
         ).to.not.be.reverted
       })

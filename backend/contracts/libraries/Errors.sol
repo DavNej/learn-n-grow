@@ -7,6 +7,7 @@ library Errors {
     error HandleLengthInvalid();
     error HandleTaken();
     error ProfileImageURILengthInvalid();
+    error ProfileImageURIEmpty();
     error NotProfileOwner();
     error UnsafeURI();
 }

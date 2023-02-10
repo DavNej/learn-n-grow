@@ -2,6 +2,7 @@
 
 pragma solidity 0.8.17;
 
+import {Constants} from "../libraries/Constants.sol";
 import {Errors} from "../libraries/Errors.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
@@ -75,7 +76,7 @@ library ProfileTokenURILogic {
         string memory handleWithAtSymbol,
         string memory imageURI
     ) internal pure returns (string memory) {
-        if (!_validateImageURI(imageURI)) revert Errors.UnsafeURI();
+        _validateImageURI(imageURI);
 
         return
             Base64.encode(
@@ -122,26 +123,26 @@ library ProfileTokenURILogic {
      * injection attacks through the generated SVG.
      *
      * @param imageURI The imageURI set by the profile owner.
-     *
-     * @return bool A boolean indicating whether URI can be used or not.
      */
-    function _validateImageURI(
-        string memory imageURI
-    ) internal pure returns (bool) {
+    function _validateImageURI(string memory imageURI) internal pure {
         bytes memory imageURIBytes = bytes(imageURI);
+
+        if (imageURIBytes.length > Constants.MAX_PROFILE_IMAGE_URI_LENGTH)
+            revert Errors.ProfileImageURILengthInvalid();
+
         if (imageURIBytes.length == 0) {
-            return false;
+            revert Errors.ProfileImageURIEmpty();
         }
+
         uint256 imageURIBytesLength = imageURIBytes.length;
         for (uint256 i = 0; i < imageURIBytesLength; ) {
             if (imageURIBytes[i] == '"') {
                 // Avoids embedding a user provided imageURI containing double-quotes to prevent injection attacks
-                return false;
+                revert Errors.UnsafeURI();
             }
             unchecked {
                 ++i;
             }
         }
-        return true;
     }
 }

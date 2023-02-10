@@ -4,7 +4,6 @@ pragma solidity 0.8.17;
 
 import {ILearnNGrow} from "./interfaces/ILearnNGrow.sol";
 import {Events} from "./libraries/Events.sol";
-import {Constants} from "./libraries/Constants.sol";
 import {DataTypes} from "./libraries/DataTypes.sol";
 import {Errors} from "./libraries/Errors.sol";
 import {PublishingLogic} from "./libraries/PublishingLogic.sol";
@@ -79,6 +78,7 @@ contract LearnNGrow is ERC721Enumerable, LearnNGrowStorage, ILearnNGrow {
         string calldata imageURI
     ) external override {
         _validateCallerIsProfileOwner(profileId);
+        ProfileTokenURILogic._validateImageURI(imageURI);
         _setProfileImageURI(profileId, imageURI);
     }
 
@@ -86,8 +86,6 @@ contract LearnNGrow is ERC721Enumerable, LearnNGrowStorage, ILearnNGrow {
         uint256 profileId,
         string calldata imageURI
     ) internal {
-        if (bytes(imageURI).length > Constants.MAX_PROFILE_IMAGE_URI_LENGTH)
-            revert Errors.ProfileImageURILengthInvalid();
         _profileById[profileId].imageURI = imageURI;
         emit Events.ProfileImageURISet(profileId, imageURI, block.timestamp);
     }

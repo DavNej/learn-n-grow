@@ -17,8 +17,8 @@ export const FIRST_PROFILE_ID = 1
 export const MOCK_PROFILE_HANDLE = 'hello.eth'
 
 export const MOCK_URI =
-  'https://ipfs.io/ipfs/QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
-export const OTHER_MOCK_URI =
-  'https://ipfs.io/ipfs/QmSfyMcnh1wnJHrAWCBjZHapTS859oNSsuDFiAPPdAHgHP'
-export const MOCK_PROFILE_URI =
-  'https://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu'
+  'https://gateway.pinata.cloud/ipfs/QmVBiWuvd3LZDafCJbWJWCb3cXrwKLYqrRhsjHPRrBja8k'
+export const MOCK_URI_TWO =
+  'https://gateway.pinata.cloud/ipfs/QmRudXHS2XvkYfaDSNowzJvirSZQAqki7Z5ULHizHhv5iG'
+export const MOCK_URI_THREE =
+  'https://gateway.pinata.cloud/ipfs/QmazakVDvNYEnQjFNWTKDYdkhujawPS2kNz2L6ty6MKmcx'
