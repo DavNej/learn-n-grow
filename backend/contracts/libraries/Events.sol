@@ -34,4 +34,38 @@ library Events {
         string imageURI,
         uint256 timestamp
     );
+
+    /**
+     * @dev Emitted when a "post" is published.
+     *
+     * @param profileId The profile's token ID.
+     * @param pubId The new publication's ID.
+     * @param contentURI The URI mapped to this new publication.
+     * @param timestamp The current block timestamp.
+     */
+    event PostCreated(
+        uint256 indexed profileId,
+        uint256 indexed pubId,
+        string contentURI,
+        uint256 timestamp
+    );
+
+    /**
+     * @dev Emitted when a "comment" is published.
+     *
+     * @param profileId The profile's token ID.
+     * @param pubId The new publication's ID.
+     * @param contentURI The URI mapped to this new publication.
+     * @param profileIdPointed The profile token ID that this comment points to.
+     * @param pubIdPointed The publication ID that this comment points to.
+     * @param timestamp The current block timestamp.
+     */
+    event CommentCreated(
+        uint256 indexed profileId,
+        uint256 indexed pubId,
+        string contentURI,
+        uint256 profileIdPointed,
+        uint256 pubIdPointed,
+        uint256 timestamp
+    );
 }

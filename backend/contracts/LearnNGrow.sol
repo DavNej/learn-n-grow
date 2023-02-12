@@ -27,11 +27,12 @@ contract LearnNGrow is ERC721Enumerable, LearnNGrowStorage, ILearnNGrow {
 
     /// @inheritdoc ILearnNGrow
     function createProfile(
-        DataTypes.Profile calldata vars
+        DataTypes.CreateProfileData calldata vars
     ) external override returns (uint256) {
         unchecked {
             uint256 profileId = ++_profileCounter;
-            _mint(msg.sender, profileId);
+            _profileByAddress[msg.sender] = profileId;
+            _safeMint(msg.sender, profileId);
             PublishingLogic.createProfile(
                 vars,
                 profileId,
@@ -40,6 +41,11 @@ contract LearnNGrow is ERC721Enumerable, LearnNGrowStorage, ILearnNGrow {
             );
             return profileId;
         }
+    }
+
+    /// @inheritdoc ILearnNGrow
+    function profile(address wallet) external view override returns (uint256) {
+        return _profileByAddress[wallet];
     }
 
     /// @inheritdoc ILearnNGrow
@@ -99,5 +105,101 @@ contract LearnNGrow is ERC721Enumerable, LearnNGrowStorage, ILearnNGrow {
 
     function _validateCallerIsProfileOwner(uint256 profileId) internal view {
         if (msg.sender != ownerOf(profileId)) revert Errors.NotProfileOwner();
+    }
+
+    /// @inheritdoc ILearnNGrow
+    function post(
+        DataTypes.Post calldata vars
+    ) external override returns (uint256) {
+        _validateCallerIsProfileOwner(vars.profileId);
+        return _createPost(vars.profileId, vars.contentURI);
+    }
+
+    function _createPost(
+        uint256 profileId,
+        string memory contentURI
+    ) internal returns (uint256) {
+        unchecked {
+            uint256 pubId = ++_profileById[profileId].pubCount;
+            PublishingLogic.createPost(
+                profileId,
+                contentURI,
+                pubId,
+                _pubByIdByProfile
+            );
+            return pubId;
+        }
+    }
+
+    /// @inheritdoc ILearnNGrow
+    function comment(
+        DataTypes.Comment calldata vars
+    ) external override returns (uint256) {
+        _validateCallerIsProfileOwner(vars.profileId);
+        return _createComment(vars);
+    }
+
+    function _createComment(
+        DataTypes.Comment memory vars
+    ) internal returns (uint256) {
+        unchecked {
+            uint256 pubId = ++_profileById[vars.profileId].pubCount;
+            PublishingLogic.createComment(
+                vars,
+                pubId,
+                _profileById,
+                _pubByIdByProfile
+            );
+            return pubId;
+        }
+    }
+
+    /// @inheritdoc ILearnNGrow
+    function getPubCount(
+        uint256 profileId
+    ) external view override returns (uint256) {
+        return _profileById[profileId].pubCount;
+    }
+
+    /// @inheritdoc ILearnNGrow
+    function getPubPointer(
+        uint256 profileId,
+        uint256 pubId
+    ) external view override returns (uint256, uint256) {
+        uint256 profileIdPointed = _pubByIdByProfile[profileId][pubId]
+            .profileIdPointed;
+        uint256 pubIdPointed = _pubByIdByProfile[profileId][pubId].pubIdPointed;
+        return (profileIdPointed, pubIdPointed);
+    }
+
+    /// @inheritdoc ILearnNGrow
+    function getContentURI(
+        uint256 profileId,
+        uint256 pubId
+    ) external view override returns (string memory) {
+
+        return _pubByIdByProfile[profileId][pubId].contentURI;
+    }
+
+    /// @inheritdoc ILearnNGrow
+    function getPub(
+        uint256 profileId,
+        uint256 pubId
+    ) external view override returns (DataTypes.Publication memory) {
+        return _pubByIdByProfile[profileId][pubId];
+    }
+
+    /// @inheritdoc ILearnNGrow
+    function getPubType(
+        uint256 profileId,
+        uint256 pubId
+    ) external view override returns (DataTypes.PubType) {
+        if (pubId == 0 || _profileById[profileId].pubCount < pubId) {
+            return DataTypes.PubType.Nonexistent;
+        } else if (_pubByIdByProfile[profileId][pubId].profileIdPointed == 0) {
+            return DataTypes.PubType.Post;
+        } else {
+            return DataTypes.PubType.Comment;
+        }
     }
 }

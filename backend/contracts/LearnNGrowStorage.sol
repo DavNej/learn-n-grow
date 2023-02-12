@@ -15,6 +15,9 @@ import {DataTypes} from "./libraries/DataTypes.sol";
 abstract contract LearnNGrowStorage {
     mapping(bytes32 => uint256) internal _profileIdByHandleHash;
     mapping(uint256 => DataTypes.Profile) internal _profileById;
+    mapping(uint256 => mapping(uint256 => DataTypes.Publication))
+        internal _pubByIdByProfile;
 
     uint256 internal _profileCounter;
+    mapping(address => uint256) internal _profileByAddress;
 }

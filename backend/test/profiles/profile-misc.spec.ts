@@ -34,8 +34,14 @@ makeSuiteCleanRoom('Profile Misc', function () {
       )
     })
 
-    it.skip('User should burn profile owned by user', async function () {
-      await expect(learnNGrow.burn(FIRST_PROFILE_ID)).to.not.be.reverted
+    it('Profile getter by address should return accurate profile id', async function () {
+      expect(await learnNGrow.profile(userAddress)).to.eq(FIRST_PROFILE_ID)
+    })
+
+    it('Profile getter by id should return accurate profile parameters', async function () {
+      const fetchedProfile = await learnNGrow.getProfile(FIRST_PROFILE_ID)
+      expect(fetchedProfile.imageURI).to.eq(MOCK_URI)
+      expect(fetchedProfile.handle).to.eq(MOCK_PROFILE_HANDLE)
     })
 
     it('Profile tokenURI should return the accurate URI', async function () {
@@ -58,10 +64,8 @@ makeSuiteCleanRoom('Profile Misc', function () {
       expect(actualSvg).to.eq(expectedSvg)
     })
 
-    it('Profile getter should return accurate profile parameters', async function () {
-      const fetchedProfile = await learnNGrow.getProfile(FIRST_PROFILE_ID)
-      expect(fetchedProfile.imageURI).to.eq(MOCK_URI)
-      expect(fetchedProfile.handle).to.eq(MOCK_PROFILE_HANDLE)
+    it.skip('User should burn profile owned by user', async function () {
+      await expect(learnNGrow.burn(FIRST_PROFILE_ID)).to.not.be.reverted
     })
   })
 })

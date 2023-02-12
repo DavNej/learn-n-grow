@@ -10,4 +10,6 @@ library Errors {
     error ProfileImageURIEmpty();
     error NotProfileOwner();
     error UnsafeURI();
+    error PublicationDoesNotExist();
+    error CannotCommentOnSelf();
 }
