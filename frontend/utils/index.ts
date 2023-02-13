@@ -19,7 +19,7 @@ export const isEthereumAddress = (address: string | undefined): boolean => {
 }
 
 export const defaultToastContent: Partial<UseToastOptions> = {
-  position: 'bottom-left',
+  position: 'bottom-right',
   duration: 5200,
   isClosable: true,
 }

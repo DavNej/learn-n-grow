@@ -1,10 +1,30 @@
-export function formatError(message: string | undefined, args: string) {
-  if (typeof message === 'undefined') {
-    return 'An error occured'
+import { Contract } from 'ethers'
+
+function extractErrorMessage(contract: Contract, error: Error) {
+  let reason
+
+  console.error(error)
+
+  // Custom error
+  try {
+    // @ts-ignore
+    const data = error?.error.data.data.data
+    reason = contract?.interface.parseError(data).name
+  } catch (err) {
+    // Require error
+    reason = error?.message || 'An error occured'
   }
 
-  if (message.includes('Ownable: caller is not the owner')) {
-    return 'Action can only be done by owner'
+  console.warn(reason)
+
+  return reason
+}
+
+export function formatError(contract: Contract, error: Error) {
+  const message = extractErrorMessage(contract, error)
+
+  if (message.includes('HandleContainsInvalidCharacters')) {
+    return 'Handle contains invalid characters'
   }
 
   return message
