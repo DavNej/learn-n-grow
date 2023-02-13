@@ -11,9 +11,18 @@ import 'hardhat-deploy'
 import 'hardhat-gas-reporter'
 import 'solidity-coverage'
 
+import glob from 'glob'
+import path from 'path'
+
 const PRIVATE_KEY = process.env.PRIVATE_KEY || ''
 const ALCHEMY_GOERLI = process.env.ALCHEMY_GOERLI || ''
 const ETERSCAN_API_KEY = process.env.ETERSCAN_API_KEY || ''
+
+if (!process.env.SKIP_TASKS_LOAD) {
+  glob.sync('./tasks/**/*.ts').forEach(function (file) {
+    require(path.resolve(file))
+  })
+}
 
 const networks: Record<string, NetworkUserConfig> = {
   localhost: {
@@ -23,7 +32,7 @@ const networks: Record<string, NetworkUserConfig> = {
   goerli: {
     url: ALCHEMY_GOERLI,
     chainId: 5,
-    accounts: [`0x${PRIVATE_KEY}`],
+    accounts: [PRIVATE_KEY],
   },
 }
 
@@ -38,7 +47,6 @@ const config: HardhatUserConfig = {
   namedAccounts: {
     deployer: {
       default: 0,
-      1: 0,
     },
   },
   gasReporter: {
