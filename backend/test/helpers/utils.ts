@@ -22,7 +22,7 @@ export async function revertToSnapshot() {
 
 export interface CreateProfileReturningTokenIdStruct {
   sender?: Signer
-  vars: DataTypes.ProfileStruct
+  vars: DataTypes.CreateProfileDataStruct
 }
 
 export async function createProfileReturningTokenId({

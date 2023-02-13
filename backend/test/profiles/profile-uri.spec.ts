@@ -22,7 +22,7 @@ import {
   userTwoAddress,
 } from '../__setup.spec'
 
-makeSuiteCleanRoom('Profile URI Functionality', function () {
+makeSuiteCleanRoom('Profile: URI Functionality', function () {
   context('Generic', function () {
     beforeEach(async function () {
       await expect(

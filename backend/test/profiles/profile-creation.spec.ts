@@ -19,7 +19,7 @@ import {
 import { ERRORS } from '../helpers/errors'
 import { createProfileReturningTokenId } from '../helpers/utils'
 
-makeSuiteCleanRoom('Profile Creation', function () {
+makeSuiteCleanRoom('Profile: Creation', function () {
   context('Generic', function () {
     context('Negatives', function () {
       it('User should fail to create a profile with a handle longer than 31 bytes', async function () {

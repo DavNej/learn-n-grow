@@ -17,7 +17,7 @@ import {
   userAddress,
 } from '../__setup.spec'
 
-makeSuiteCleanRoom('Profile Misc', function () {
+makeSuiteCleanRoom('Profile: Getters', function () {
   context('Generic', function () {
     beforeEach(async function () {
       await expect(

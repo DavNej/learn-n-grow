@@ -11,7 +11,7 @@ import {
   MOCK_URI_THREE,
 } from '../helpers/constants'
 
-makeSuiteCleanRoom('Learn N Grow publications', function () {
+makeSuiteCleanRoom('Publications: Getters', function () {
   context('Generic', function () {
     beforeEach(async function () {
       await expect(

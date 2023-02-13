@@ -177,7 +177,6 @@ contract LearnNGrow is ERC721Enumerable, LearnNGrowStorage, ILearnNGrow {
         uint256 profileId,
         uint256 pubId
     ) external view override returns (string memory) {
-
         return _pubByIdByProfile[profileId][pubId].contentURI;
     }
 
