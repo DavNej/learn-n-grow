@@ -25,7 +25,7 @@ if (!process.env.SKIP_TASKS_LOAD) {
 }
 
 const networks: Record<string, NetworkUserConfig> = {
-  localhost: {
+  local: {
     url: 'http://127.0.0.1:8545',
     chainId: 31337,
   },
@@ -37,7 +37,7 @@ const networks: Record<string, NetworkUserConfig> = {
 }
 
 const config: HardhatUserConfig = {
-  defaultNetwork: 'hardhat',
+  defaultNetwork: 'local',
   networks,
   etherscan: {
     apiKey: {
