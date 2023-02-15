@@ -1,35 +1,49 @@
 import {
   Address,
   useContractRead,
+  UseContractReadConfig,
   useContractWrite,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi'
 
-import type { ILearnNGrowWriteFunctionName } from '@/utils/types'
+import type {
+  ILearnNGrowReadFunctionName,
+  ILearnNGrowWriteFunctionName,
+} from '@/utils/types'
 import type { DataTypes } from '@/utils/LearnNGrow'
-import { address, abi } from '@/utils/contract'
+import learnNGrowContract from '@/utils/contract'
+import type { LearnNGrowAbi } from '@/utils/contract'
 
 import useErrorHandling from '../useErrorHandling'
+import { BigNumber } from 'ethers'
 
 export function useProfile({
   enabled,
-  addr,
+  address,
 }: {
   enabled: boolean
-  addr: Address
+  address: Address | undefined
 }) {
-  const { data } = useContractRead({
-    address,
-    abi,
-    enabled,
-    functionName: 'profile',
-    args: [addr],
-  })
+  const functionName: ILearnNGrowReadFunctionName = 'profile'
+
+  const options: UseContractReadConfig<LearnNGrowAbi> = {
+    ...learnNGrowContract,
+    functionName,
+    enabled: false,
+  }
+
+  if (enabled && address) {
+    options.args = [address]
+    options.enabled = true
+    options.functionName = functionName
+  }
+
+  const { data } = useContractRead(options)
 
   if (!data) return null
 
-  return data
+  return data as BigNumber
 }
 
 export function useCreateProfile({
@@ -44,9 +58,8 @@ export function useCreateProfile({
     { handle: '', imageURI: '' },
   ]
 
-  let options = {
-    address,
-    abi,
+  const options = {
+    ...learnNGrowContract,
     functionName,
     args,
     enabled: false,
