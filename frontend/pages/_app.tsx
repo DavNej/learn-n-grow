@@ -6,14 +6,17 @@ import { ChakraProvider } from '@chakra-ui/react'
 import RainbowKitProvider from '@/utils/rainbowkit'
 
 import Layout from '@/components/Layout'
+import { StoreProvider } from '@/hooks/useStore'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <RainbowKitProvider>
       <ChakraProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <StoreProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </StoreProvider>
       </ChakraProvider>
     </RainbowKitProvider>
   )

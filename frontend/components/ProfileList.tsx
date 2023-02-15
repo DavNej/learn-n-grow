@@ -4,6 +4,7 @@ import { Avatar, Box, Flex, LinkBox, LinkOverlay, Text } from '@chakra-ui/react'
 import { useProfileList } from '@/hooks/contracts/profile'
 import type { DataTypes } from '@/utils/LearnNGrow'
 import Link from 'next/link'
+import { useStore } from '@/hooks/useStore'
 
 function ProfileItem({ profile }: { profile: DataTypes.ProfileStruct }) {
   return (
@@ -19,17 +20,29 @@ function ProfileItem({ profile }: { profile: DataTypes.ProfileStruct }) {
 }
 
 export default function ProfileList() {
-  const profiles = useProfileList()
+  const data = useProfileList()
+  const { setStore, store } = useStore()
 
-  const curratedProfiles = profiles?.filter(({ handle }) => !!handle)
+  const profiles = data?.filter(({ handle }) => !!handle)
+
+  React.useEffect(() => {
+    if (!!profiles) {
+      const profilesByHandles = profiles.reduce((acc, curr) => {
+        return { ...acc, [curr.handle]: curr }
+      }, {})
+      setStore(profilesByHandles)
+    }
+  }, [data])
 
   return (
     <aside>
       <Box p={4}>
         <Box py={2} bg='white' overflow='hidden' borderRadius='xl'>
-          {curratedProfiles?.map(profile => (
-            <ProfileItem key={profile.handle} profile={profile} />
-          ))}
+          {profiles
+            ? profiles.map(profile => (
+                <ProfileItem key={profile.handle} profile={profile} />
+              ))
+            : 'No members yet 🤷'}
         </Box>
       </Box>
     </aside>
