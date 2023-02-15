@@ -9,14 +9,13 @@ import {
   Button,
   Container,
   Flex,
-  LinkBox,
-  LinkOverlay,
 } from '@chakra-ui/react'
 
 import useIsMounted from '@/hooks/useIsMounted'
 import { useProfile } from '@/hooks/contracts/profile'
 import Header from '@/components/Header'
 import ProfileList from '@/components/ProfileList'
+import Link from 'next/link'
 
 const newProfilePagePath = '/profile/new'
 
@@ -61,11 +60,9 @@ function Main({ children }: React.PropsWithChildren) {
     <>
       {!hasProfile && !onNewProfilePage && (
         <Box textAlign='center' mb={4}>
-          <LinkBox>
-            <LinkOverlay href={newProfilePagePath}>
-              <Button colorScheme='blue'>Create my profile</Button>
-            </LinkOverlay>
-          </LinkBox>
+          <Link href={newProfilePagePath}>
+            <Button colorScheme='blue'>Create my profile</Button>
+          </Link>
         </Box>
       )}
       <Box p={4}>{children}</Box>
