@@ -1,6 +1,13 @@
 import Head from 'next/head'
 
-import { Alert, AlertIcon, Box, Button, LinkOverlay } from '@chakra-ui/react'
+import {
+  Alert,
+  AlertIcon,
+  Box,
+  Button,
+  LinkBox,
+  LinkOverlay,
+} from '@chakra-ui/react'
 
 import { useAccount } from 'wagmi'
 import useIsMounted from '@/hooks/useIsMounted'
@@ -32,11 +39,11 @@ export default function Layout({ children }: React.PropsWithChildren) {
       <Header />
 
       {!hasProfile && !onNewProfilePage && (
-        <Box p={4}>
+        <LinkBox p={4}>
           <LinkOverlay href={newProfilePagePath}>
             <Button colorScheme='blue'>Create my profile</Button>
           </LinkOverlay>
-        </Box>
+        </LinkBox>
       )}
 
       {isConnected ? (
