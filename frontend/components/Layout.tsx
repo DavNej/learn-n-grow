@@ -7,7 +7,7 @@ import {
   AlertIcon,
   Box,
   Button,
-  Center,
+  Container,
   Flex,
   LinkBox,
   LinkOverlay,
@@ -21,14 +21,7 @@ import ProfileList from '@/components/ProfileList'
 const newProfilePagePath = '/profile/new'
 
 export default function Layout({ children }: React.PropsWithChildren) {
-  const { address, isConnected } = useAccount()
   const isMounted = useIsMounted()
-
-  const profileId = useProfile({ address, enabled: Boolean(address) })
-
-  const hasProfile = profileId?.toNumber() !== 0
-  const { pathname } = useRouter()
-  const onNewProfilePage = pathname === newProfilePagePath
 
   return isMounted ? (
     <>
@@ -42,34 +35,47 @@ export default function Layout({ children }: React.PropsWithChildren) {
       <Header />
 
       <main>
-        <Flex>
-          <ProfileList />
+        <Container maxW='5xl'>
+          <Flex>
+            <ProfileList />
 
-          <Flex flexDirection='column'>
-            {isConnected ? (
-              <>
-                {!hasProfile && !onNewProfilePage && (
-                  <Center>
-                    <LinkBox p={4}>
-                      <LinkOverlay href={newProfilePagePath}>
-                        <Button colorScheme='blue'>Create my profile</Button>
-                      </LinkOverlay>
-                    </LinkBox>
-                  </Center>
-                )}
-                {children}
-              </>
-            ) : (
-              <Box m='2rem'>
-                <Alert status='info'>
-                  <AlertIcon />
-                  Please connect wallet to use the app
-                </Alert>
-              </Box>
-            )}
+            <Flex width='100%' flexDirection='column'>
+              <Main>{children}</Main>
+            </Flex>
           </Flex>
-        </Flex>
+        </Container>
       </main>
     </>
   ) : null
+}
+
+function Main({ children }: React.PropsWithChildren) {
+  const { address, isConnected } = useAccount()
+  const profileId = useProfile({ address, enabled: Boolean(address) })
+
+  const hasProfile = profileId?.toNumber() !== 0
+  const { pathname } = useRouter()
+  const onNewProfilePage = pathname === newProfilePagePath
+
+  return isConnected ? (
+    <>
+      {!hasProfile && !onNewProfilePage && (
+        <Box textAlign='center' mb={4}>
+          <LinkBox>
+            <LinkOverlay href={newProfilePagePath}>
+              <Button colorScheme='blue'>Create my profile</Button>
+            </LinkOverlay>
+          </LinkBox>
+        </Box>
+      )}
+      <Box p={4}>{children}</Box>
+    </>
+  ) : (
+    <Box>
+      <Alert status='info'>
+        <AlertIcon />
+        Please connect wallet to use the app
+      </Alert>
+    </Box>
+  )
 }

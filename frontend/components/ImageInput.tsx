@@ -29,8 +29,8 @@ function ImageInput({ onChange }: { onChange: (i: File) => void }) {
         onClick={() => {
           document.getElementById('file-input')?.click()
         }}
-        style={{ cursor: 'copy' }}
-        src={previewUrl ? previewUrl : 'avatar-placeholder.png'}
+        style={{ cursor: 'pointer' }}
+        src={previewUrl ? previewUrl : '/avatar-placeholder.png'}
         alt='Avatar'
       />
     </>
