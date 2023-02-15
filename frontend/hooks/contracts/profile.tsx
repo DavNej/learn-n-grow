@@ -2,6 +2,7 @@ import {
   Address,
   useContractRead,
   UseContractReadConfig,
+  useContractReads,
   useContractWrite,
   usePrepareContractWrite,
   useWaitForTransaction,
@@ -44,6 +45,28 @@ export function useProfile({
   if (!data) return null
 
   return data as BigNumber
+}
+
+export function useProfileList() {
+  //! NOT GOOD !!!
+  const PROFILES_COUNT = 5
+  const contracts = []
+
+  for (let i = 1; i <= PROFILES_COUNT; i++) {
+    contracts.push({
+      ...learnNGrowContract,
+      functionName: 'getProfile',
+      args: [i],
+    })
+  }
+
+  const { data, isError, isLoading } = useContractReads({
+    contracts,
+  })
+
+  if (!data) return null
+
+  return data
 }
 
 export function useCreateProfile({

@@ -1,19 +1,22 @@
 import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { useAccount } from 'wagmi'
 
 import {
   Alert,
   AlertIcon,
   Box,
   Button,
+  Center,
+  Flex,
   LinkBox,
   LinkOverlay,
 } from '@chakra-ui/react'
 
-import { useAccount } from 'wagmi'
 import useIsMounted from '@/hooks/useIsMounted'
-import Header from '@/components/Header'
 import { useProfile } from '@/hooks/contracts/profile'
-import { useRouter } from 'next/router'
+import Header from '@/components/Header'
+import ProfileList from '@/components/ProfileList'
 
 const newProfilePagePath = '/profile/new'
 
@@ -38,24 +41,35 @@ export default function Layout({ children }: React.PropsWithChildren) {
 
       <Header />
 
-      {!hasProfile && !onNewProfilePage && (
-        <LinkBox p={4}>
-          <LinkOverlay href={newProfilePagePath}>
-            <Button colorScheme='blue'>Create my profile</Button>
-          </LinkOverlay>
-        </LinkBox>
-      )}
+      <main>
+        <Flex>
+          <ProfileList />
 
-      {isConnected ? (
-        <main>{children}</main>
-      ) : (
-        <Box m='2rem'>
-          <Alert status='info'>
-            <AlertIcon />
-            Please connect wallet to use the app
-          </Alert>
-        </Box>
-      )}
+          <Flex flexDirection='column'>
+            {isConnected ? (
+              <>
+                {!hasProfile && !onNewProfilePage && (
+                  <Center>
+                    <LinkBox p={4}>
+                      <LinkOverlay href={newProfilePagePath}>
+                        <Button colorScheme='blue'>Create my profile</Button>
+                      </LinkOverlay>
+                    </LinkBox>
+                  </Center>
+                )}
+                {children}
+              </>
+            ) : (
+              <Box m='2rem'>
+                <Alert status='info'>
+                  <AlertIcon />
+                  Please connect wallet to use the app
+                </Alert>
+              </Box>
+            )}
+          </Flex>
+        </Flex>
+      </main>
     </>
   ) : null
 }
