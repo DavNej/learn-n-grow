@@ -3,14 +3,7 @@ import { abi, contractAddress } from '@/utils/contract'
 
 import { ethers } from 'ethers'
 import { useSigner } from 'wagmi'
-
-interface IProfile {
-  handle: string
-  imageURI: string
-  pubCount: number
-  id: number
-  tokenURI?: string
-}
+import { IProfile } from '@/utils/types'
 
 const MAX_PROFILE_COUNT = 5
 
@@ -41,6 +34,14 @@ export function useProfileList() {
     getProfileList()
   }, [signer])
 
+  // React.useEffect(() => {
+  //   if (!!profiles) {
+  //     const profilesByHandles = profiles.reduce((acc, curr) => {
+  //       return { ...acc, [curr.handle]: curr }
+  //     }, {})
+  //     setStore(profilesByHandles)
+  //   }
+  // }, [data])
 
   return profiles
 }

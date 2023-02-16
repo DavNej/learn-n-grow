@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { useAccount } from 'wagmi'
+import React, { ChangeEvent, useState } from 'react'
 
 import {
   Box,
@@ -13,16 +12,30 @@ import {
 } from '@chakra-ui/react'
 
 import ImageInput from '@/components/ImageInput'
-import { useCreateProfile } from '@/hooks/contracts/profile'
+import { useCreateProfile } from '@/hooks/contracts/useCreateProfile'
+import useDebounce from '@/hooks/useDebounce'
 
 export default function Register() {
   const [handle, setHandle] = useState('')
+  const debouncedHandle = useDebounce(handle, 500)
+  function handleHandleChange(e: ChangeEvent<HTMLInputElement>) {
+    setHandle(e.target.value)
+  }
+
   const [imageURI, setImageURI] = useState('')
+  const debouncedImageURI = useDebounce(imageURI, 500)
+  function handleImageURIChange(e: ChangeEvent<HTMLInputElement>) {
+    setImageURI(e.target.value)
+  }
+
   const [image, setImage] = useState<File | null>(null)
 
-  const enabled = !!handle && !!imageURI
-  const vars = { handle, imageURI }
-  const { data, write } = useCreateProfile({ vars, enabled })
+  const res = useCreateProfile({
+    handle: debouncedHandle,
+    imageURI: debouncedImageURI,
+  })
+
+  const { data, write, isPrepareError, error, isLoading, isSuccess } = res || {}
 
   async function mintProfile() {
     await write?.()

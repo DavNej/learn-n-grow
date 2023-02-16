@@ -2,10 +2,10 @@ import * as React from 'react'
 import { Avatar, Box, Flex, Text } from '@chakra-ui/react'
 
 import { useProfileList } from '@/hooks/contracts/useProfileList'
-import type { DataTypes } from '@/utils/LearnNGrow'
 import Link from 'next/link'
+import { IProfile } from '@/utils/types'
 
-function ProfileItem({ profile }: { profile: DataTypes.ProfileStruct }) {
+function ProfileItem({ profile }: { profile: IProfile }) {
   return (
     <Link href={`/profile/${profile.handle}`}>
       <Box px={4} py={2} _hover={{ backgroundColor: 'gray.200' }}>

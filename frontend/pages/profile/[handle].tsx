@@ -3,23 +3,8 @@ import { useRouter } from 'next/router'
 
 import { Box, Flex, Heading, Image } from '@chakra-ui/react'
 
-import { useProfile } from '@/hooks/useProfile'
-
-function decodeJsonDataURI(dataURI: string) {
-  const base64String = dataURI.replace('data:application/json;base64,', '')
-  const buffer = Buffer.from(base64String, 'base64')
-  const jsonString = buffer.toString()
-
-  return JSON.parse(jsonString)
-}
-
-function decodeImageDataURI(dataURI: string) {
-  const base64String = dataURI.replace('data:image/svg+xml;base64,', '')
-  const buffer = Buffer.from(base64String, 'base64')
-  const svg = buffer.toString()
-
-  return svg
-}
+import { useProfile } from '@/hooks/contracts/useProfile'
+import { decodeImageDataURI, decodeJsonDataURI } from '@/utils/decode'
 
 export default function Profile() {
   const {
@@ -27,7 +12,7 @@ export default function Profile() {
   } = useRouter()
 
   const profileHandle = handle ? handle.toString() : null
-  const profile = useProfile(profileHandle)
+  const profile = useProfile({ handle: profileHandle })
 
   if (!profile) return null
 

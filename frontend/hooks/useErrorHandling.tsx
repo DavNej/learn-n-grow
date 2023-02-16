@@ -3,21 +3,18 @@ import { useToast } from '@chakra-ui/react'
 import { formatError } from '@/utils/format'
 import { defaultToastContent } from '@/utils'
 import { useContract } from 'wagmi'
-import { abi, address } from '@/utils/contract'
+import learnNGrowContract from '@/utils/contract'
 
 export default async function useErrorHandling({
   error,
   args,
 }: {
   error: Error | null
-  args: string
+  args: readonly unknown[]
 }) {
   const toast = useToast()
 
-  const contract = useContract({
-    address,
-    abi,
-  })
+  const contract = useContract(learnNGrowContract)
 
   useEffect(() => {
     if (!error || !contract) return
