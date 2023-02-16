@@ -5,7 +5,7 @@ import { ethers } from 'ethers'
 import { useSigner } from 'wagmi'
 import { IProfile } from '@/utils/types'
 
-const MAX_PROFILE_COUNT = 5
+const MAX_PROFILE_COUNT = 20
 
 export function useProfileList() {
   const { data: signer } = useSigner()

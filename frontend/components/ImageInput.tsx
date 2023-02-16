@@ -1,14 +1,20 @@
 import React, { useState } from 'react'
 import { Image } from '@chakra-ui/react'
 
-function ImageInput({ onChange }: { onChange: (i: File) => void }) {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+function ImageInput({
+  onChange,
+  src,
+}: {
+  onChange: (i: File) => void
+  src?: string
+}) {
+  // const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
   function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
     const img = event.target.files && event.target.files[0]
 
     if (img) {
-      setPreviewUrl(URL.createObjectURL(img))
+      // setPreviewUrl(URL.createObjectURL(img))
       onChange(img)
     }
   }
@@ -30,7 +36,8 @@ function ImageInput({ onChange }: { onChange: (i: File) => void }) {
           document.getElementById('file-input')?.click()
         }}
         style={{ cursor: 'pointer' }}
-        src={previewUrl ? previewUrl : '/avatar-placeholder.png'}
+        src={src ? src : '/avatar-placeholder.png'}
+        // src={previewUrl ? previewUrl : '/avatar-placeholder.png'}
         alt='Avatar'
       />
     </>

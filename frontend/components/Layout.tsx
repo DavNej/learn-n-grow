@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 
 import useIsMounted from '@/hooks/useIsMounted'
-import { useProfile } from '@/hooks/contracts/profile'
+import { useProfile } from '@/hooks/contracts/useProfile'
 import Header from '@/components/Header'
 import ProfileList from '@/components/ProfileList'
 import Link from 'next/link'
@@ -51,16 +51,19 @@ export default function Layout({ children }: React.PropsWithChildren) {
 
 function Main({ children }: React.PropsWithChildren) {
   const { address, isConnected } = useAccount()
-  const profileId = useProfile({ address, enabled: Boolean(address) })
-
-  const hasProfile = profileId?.toNumber() !== 0
   const { pathname } = useRouter()
-  const onNewProfilePage = pathname === newProfilePagePath
+  const profile = useProfile({ address })
+
+  let showCreateProfile = false
+
+  if (!profile?.id) {
+    showCreateProfile = pathname !== newProfilePagePath
+  }
 
   return isConnected ? (
     <>
-      {!hasProfile && !onNewProfilePage && (
-        <Box textAlign='center' mb={4}>
+      {showCreateProfile && (
+        <Box textAlign='center' my={4}>
           <Link href={newProfilePagePath}>
             <Button colorScheme='blue'>Create my profile</Button>
           </Link>

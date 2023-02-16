@@ -9,26 +9,20 @@ import {
   FormLabel,
   Heading,
   Input,
+  Spinner,
 } from '@chakra-ui/react'
 
 import ImageInput from '@/components/ImageInput'
-import { useCreateProfile } from '@/hooks/contracts/useCreateProfile'
 import useDebounce from '@/hooks/useDebounce'
+import { useCreateProfile } from '@/hooks/contracts/useCreateProfile'
+import { usePinata } from '@/hooks/usePinata'
 
 export default function Register() {
   const [handle, setHandle] = useState('')
   const debouncedHandle = useDebounce(handle, 500)
-  function handleHandleChange(e: ChangeEvent<HTMLInputElement>) {
-    setHandle(e.target.value)
-  }
 
   const [imageURI, setImageURI] = useState('')
   const debouncedImageURI = useDebounce(imageURI, 500)
-  function handleImageURIChange(e: ChangeEvent<HTMLInputElement>) {
-    setImageURI(e.target.value)
-  }
-
-  const [image, setImage] = useState<File | null>(null)
 
   const res = useCreateProfile({
     handle: debouncedHandle,
@@ -37,31 +31,60 @@ export default function Register() {
 
   const { data, write, isPrepareError, error, isLoading, isSuccess } = res || {}
 
+  const {
+    dataURI,
+    isLoading: isUploadLoading,
+    error: uploadError,
+    upload,
+  } = usePinata()
+
+  function onImageLoad(img: File) {
+    if (!!img) {
+      upload(img)
+    }
+  }
+
+  React.useEffect(() => {
+    if (dataURI) {
+      setImageURI(dataURI)
+    }
+  }, [dataURI])
+
   async function mintProfile() {
     await write?.()
-    console.log({ data })
   }
 
   return (
-    <Box bg='white' p={4} borderRadius='xl'>
-        <Heading mb={2} size='md'>
-          Create your profile
-        </Heading>
-      <Flex mt={4} alignItems='center'>
-        <ImageInput onChange={img => setImage(img)} />
+    <Box bg='white' p={8} borderRadius='xl'>
+      <Heading mb={2} size='md'>
+        Create your profile
+      </Heading>
+      <Flex my={8} alignItems='center'>
+        {isUploadLoading ? (
+          <Center boxSize='150px'>
+            <Spinner />
+          </Center>
+        ) : (
+          <ImageInput
+            src={dataURI || undefined}
+            onChange={img => {
+              onImageLoad(img)
+            }}
+          />
+        )}
 
-        <Box flexGrow={1} p='2rem'>
+        <Box flexGrow={1} ml={8}>
           <FormControl isRequired>
+            <FormLabel>Profile handle</FormLabel>
+            <Input value={handle} onChange={e => setHandle(e.target.value)} />
+          </FormControl>
+
+          <FormControl isRequired mt={2}>
             <FormLabel>ImageURI</FormLabel>
             <Input
               value={imageURI}
               onChange={e => setImageURI(e.target.value)}
             />
-          </FormControl>
-
-          <FormControl isRequired>
-            <FormLabel>Profile handle</FormLabel>
-            <Input value={handle} onChange={e => setHandle(e.target.value)} />
           </FormControl>
         </Box>
       </Flex>
@@ -72,4 +95,4 @@ export default function Register() {
       </Center>
     </Box>
   )
-  }
+}

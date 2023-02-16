@@ -1,13 +1,18 @@
-import { Address } from 'wagmi'
-import axios from 'axios'
+import type { AxiosRequestConfig } from 'axios'
+import { hashWithSha256 } from '@/utils'
+
+export const PINATA_GATEWAY = 'https://gateway.pinata.cloud/ipfs/'
 
 const baseUrl = 'https://api.pinata.cloud/pinning'
 const JWT = `Bearer ${process.env.NEXT_PUBLIC_PINATA_JWT}`
 
-export async function pinFile(file: File, address: Address) {
+type Args = [string, FormData | string, AxiosRequestConfig]
+
+export function buildPinFileArgs(file: File): Args {
   const formData = new FormData()
 
-  const metadata = JSON.stringify({ name: `${address}-avatar` })
+  const name = hashWithSha256(file)
+  const metadata = JSON.stringify({ name })
   formData.append('pinataMetadata', metadata)
 
   const options = JSON.stringify({ cidVersion: 0 })
@@ -20,23 +25,16 @@ export async function pinFile(file: File, address: Address) {
     Authorization: JWT,
   }
 
-  try {
-    const res = await axios.post(baseUrl + '/pinFileToIPFS', formData, {
-      headers,
-    })
-    return { ipfsHash: res.data.IpfsHash, isSuccess: true }
-  } catch (error) {
-    console.error(error)
-    return { isError: true, error }
-  }
+  return [baseUrl + '/pinFileToIPFS', formData, { headers }]
 }
 
-export async function pinJson(json: Object, address: Address) {
+export function buildPinJsonArgs(json: JSON): Args {
   const content = JSON.stringify(json)
 
+  const hash = hashWithSha256({ json })
   const data = JSON.stringify({
     pinataOptions: { cidVersion: 1 },
-    pinataMetadata: { name: `${address}-json` },
+    pinataMetadata: { name: hash },
     pinataContent: content,
   })
 
@@ -45,11 +43,5 @@ export async function pinJson(json: Object, address: Address) {
     Authorization: JWT,
   }
 
-  try {
-    const res = await axios.post(baseUrl + '/pinJSONToIPFS', data, { headers })
-    return { ipfsHash: res.data.IpfsHash, isSuccess: true }
-  } catch (error) {
-    console.error(error)
-    return { isError: true, error }
-  }
+  return [baseUrl + '/pinFileToIPFS', data, { headers }]
 }

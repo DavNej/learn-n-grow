@@ -1,4 +1,5 @@
 import { UseToastOptions } from '@chakra-ui/react'
+import { createHash } from 'crypto'
 
 export function isUndefined(arg: unknown | undefined) {
   return typeof arg === 'undefined'
@@ -22,4 +23,10 @@ export const defaultToastContent: Partial<UseToastOptions> = {
   position: 'bottom-right',
   duration: 5200,
   isClosable: true,
+}
+
+export function hashWithSha256(data: unknown): string {
+  const hash = createHash('sha256')
+  hash.update(JSON.stringify(data))
+  return hash.digest('hex')
 }
