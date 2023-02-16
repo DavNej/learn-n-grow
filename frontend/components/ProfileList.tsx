@@ -1,10 +1,9 @@
 import * as React from 'react'
-import { Avatar, Box, Flex, LinkBox, LinkOverlay, Text } from '@chakra-ui/react'
+import { Avatar, Box, Flex, Text } from '@chakra-ui/react'
 
-import { useProfileList } from '@/hooks/contracts/profile'
+import { useProfileList } from '@/hooks/contracts/useProfileList'
 import type { DataTypes } from '@/utils/LearnNGrow'
 import Link from 'next/link'
-import { useStore } from '@/hooks/useStore'
 
 function ProfileItem({ profile }: { profile: DataTypes.ProfileStruct }) {
   return (
@@ -20,32 +19,16 @@ function ProfileItem({ profile }: { profile: DataTypes.ProfileStruct }) {
 }
 
 export default function ProfileList() {
-  const data = useProfileList()
-  const { setStore } = useStore()
-
-  const profiles = data
-    ?.map((profile, idx) => ({ ...profile, id: idx }))
-    .filter(({ handle }) => !!handle)
-
-  React.useEffect(() => {
-    if (!!profiles) {
-      const profilesByHandles = profiles.reduce((acc, curr) => {
-        return { ...acc, [curr.handle]: curr }
-      }, {})
-      setStore(profilesByHandles)
-    }
-  }, [data])
+  const profiles = useProfileList()
 
   return (
     <aside>
-      <Box p={4}>
-        <Box py={2} bg='white' overflow='hidden' borderRadius='xl'>
-          {profiles
-            ? profiles.map(profile => (
-                <ProfileItem key={profile.handle} profile={profile} />
-              ))
-            : 'No members yet 🤷'}
-        </Box>
+      <Box py={2} bg='white' overflow='hidden' borderRadius='xl'>
+        {profiles
+          ? profiles.map(profile => (
+              <ProfileItem key={profile.handle} profile={profile} />
+            ))
+          : 'No members yet 🤷'}
       </Box>
     </aside>
   )

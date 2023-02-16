@@ -16,10 +16,7 @@ import { useProfile } from '@/hooks/contracts/profile'
 import Header from '@/components/Header'
 import ProfileList from '@/components/ProfileList'
 import Link from 'next/link'
-import { useContext, useState } from 'react'
-import { DataTypes } from '@/utils/LearnNGrow'
 import React from 'react'
-import { StoreProvider } from '@/hooks/useStore'
 
 const newProfilePagePath = '/profile/new'
 
