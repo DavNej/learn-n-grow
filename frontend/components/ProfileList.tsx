@@ -21,9 +21,11 @@ function ProfileItem({ profile }: { profile: DataTypes.ProfileStruct }) {
 
 export default function ProfileList() {
   const data = useProfileList()
-  const { setStore, store } = useStore()
+  const { setStore } = useStore()
 
-  const profiles = data?.filter(({ handle }) => !!handle)
+  const profiles = data
+    ?.map((profile, idx) => ({ ...profile, id: idx }))
+    .filter(({ handle }) => !!handle)
 
   React.useEffect(() => {
     if (!!profiles) {
