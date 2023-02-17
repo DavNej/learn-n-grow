@@ -4,6 +4,7 @@ import { Avatar, Box, Flex, Text } from '@chakra-ui/react'
 import { useProfileList } from '@/hooks/contracts/useProfileList'
 import Link from 'next/link'
 import { IProfile } from '@/utils/types'
+import { useStore } from '@/hooks/useStore'
 
 function ProfileItem({ profile }: { profile: IProfile }) {
   return (
@@ -19,13 +20,19 @@ function ProfileItem({ profile }: { profile: IProfile }) {
 }
 
 export default function ProfileList() {
-  const profiles = useProfileList()
+  const profileList = useProfileList()
+
+  const { setStore } = useStore()
+
+  React.useEffect(() => {
+    setStore(store => ({ ...store, profileList }))
+  }, [profileList])
 
   return (
     <aside>
       <Box py={2} bg='white' overflow='hidden' borderRadius='xl'>
-        {profiles
-          ? profiles.map(profile => (
+        {profileList
+          ? profileList.map(profile => (
               <ProfileItem key={profile.handle} profile={profile} />
             ))
           : 'No members yet 🤷'}

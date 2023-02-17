@@ -1,9 +1,23 @@
+import { IProfile } from '@/utils/types'
 import * as React from 'react'
 
+interface IStore {
+  currentProfile: IProfile | {}
+  profileList: IProfile[]
+}
+
+const initialStore: IStore = {
+  currentProfile: {},
+  profileList: [],
+}
+
 const StoreContext = React.createContext<{
-  store: {}
-  setStore: React.Dispatch<React.SetStateAction<{}>>
-} | null>(null)
+  store: IStore
+  setStore: React.Dispatch<React.SetStateAction<IStore>>
+}>({
+  store: initialStore,
+  setStore: () => {},
+})
 
 export function useStore() {
   const context = React.useContext(StoreContext)
@@ -14,7 +28,7 @@ export function useStore() {
 }
 
 export function StoreProvider(props: React.PropsWithChildren) {
-  const [store, setStore] = React.useState({})
+  const [store, setStore] = React.useState(initialStore)
 
   const value = React.useMemo(() => ({ store, setStore }), [store, setStore])
 

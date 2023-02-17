@@ -17,6 +17,7 @@ import Header from '@/components/Header'
 import ProfileList from '@/components/ProfileList'
 import Link from 'next/link'
 import React from 'react'
+import { useStore } from '@/hooks/useStore'
 
 const newProfilePagePath = '/profile/new'
 
@@ -52,11 +53,16 @@ export default function Layout({ children }: React.PropsWithChildren) {
 function Main({ children }: React.PropsWithChildren) {
   const { address, isConnected } = useAccount()
   const { pathname } = useRouter()
-  const profile = useProfile({ address })
+  const currentProfile = useProfile({ address })
+  const { setStore, store } = useStore()
+
+  React.useEffect(() => {
+    setStore(s => ({ ...s, currentProfile }))
+  }, [currentProfile])
 
   let showCreateProfile = false
 
-  if (!profile?.id) {
+  if (!currentProfile.id) {
     showCreateProfile = pathname !== newProfilePagePath
   }
 

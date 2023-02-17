@@ -14,10 +14,10 @@ export function useProfile({
   handle?: string | null
 }) {
   const { data: signer } = useSigner()
-  const [profile, setprofile] = React.useState<IProfile | null>(null)
+  const [profile, setprofile] = React.useState<IProfile | {}>({})
 
   async function getProfile() {
-    if (!signer || !(handle || address)) return null
+    if (!signer || !(handle || address)) return {}
 
     const learnNGrow = new ethers.Contract(contractAddress, abi, signer)
 
@@ -29,21 +29,17 @@ export function useProfile({
       profileId = await learnNGrow.getProfileIdByHandle(handle)
     }
 
-    if (profileId.toNumber() === 0) return null
+    if (profileId.toNumber() === 0) return {}
 
-    const {
-      handle: resHandle,
-      imageURI,
-      pubCount,
-    } = await learnNGrow.getProfile(profileId)
+    const profile = await learnNGrow.getProfile(profileId)
 
     const tokenURI = await learnNGrow.tokenURI(profileId)
 
     setprofile({
-      handle: resHandle,
-      imageURI,
-      pubCount,
       id: profileId.toNumber(),
+      imageURI: profile.imageURI,
+      handle: profile.handle,
+      pubCount: profile.pubCount,
       tokenURI,
     })
   }
@@ -52,5 +48,5 @@ export function useProfile({
     getProfile()
   }, [signer, handle])
 
-  return profile
+  return profile as IProfile
 }
