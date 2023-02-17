@@ -28,14 +28,12 @@ export function buildPinFileArgs(file: File): Args {
   return [baseUrl + '/pinFileToIPFS', formData, { headers }]
 }
 
-export function buildPinJsonArgs(json: JSON): Args {
-  const content = JSON.stringify(json)
-
-  const hash = hashWithSha256({ json })
+export function buildPinJsonArgs(json: Object): Args {
+  const name = hashWithSha256(json)
   const data = JSON.stringify({
     pinataOptions: { cidVersion: 1 },
-    pinataMetadata: { name: hash },
-    pinataContent: content,
+    pinataMetadata: { name },
+    pinataContent: json,
   })
 
   const headers = {
@@ -43,5 +41,5 @@ export function buildPinJsonArgs(json: JSON): Args {
     Authorization: JWT,
   }
 
-  return [baseUrl + '/pinFileToIPFS', data, { headers }]
+  return [baseUrl + '/pinJSONToIPFS', data, { headers }]
 }

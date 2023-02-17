@@ -38,7 +38,20 @@ export default function Layout({ children }: React.PropsWithChildren) {
       <main>
         <Container maxW='5xl'>
           <Flex>
-            <ProfileList />
+            <Flex p={4} flexDirection='column'>
+              <Link href='/post/new'>
+                <Button
+                  mb={4}
+                  width='100%'
+                  colorScheme='teal'
+                  aria-label='Call Segun'
+                  size='md'>
+                  + Create post
+                </Button>
+              </Link>
+
+              <ProfileList />
+            </Flex>
 
             <Flex width='100%' flexDirection='column'>
               <Main>{children}</Main>
@@ -59,6 +72,8 @@ function Main({ children }: React.PropsWithChildren) {
   React.useEffect(() => {
     setStore(s => ({ ...s, currentProfile }))
   }, [currentProfile])
+
+  console.log(store)
 
   let showCreateProfile = false
 

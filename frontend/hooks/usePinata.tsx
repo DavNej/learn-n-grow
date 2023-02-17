@@ -13,7 +13,7 @@ export function usePinata() {
   const [error, setError] = useState<unknown | null>(null)
   const [dataURI, setDataURI] = useState<string | null>(null)
 
-  const upload = useCallback((data: File | JSON): void => {
+  const upload = useCallback((data: File | Object): void => {
     let axiosArgs
 
     if (data instanceof File) {
