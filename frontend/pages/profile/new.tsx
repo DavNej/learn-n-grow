@@ -24,12 +24,11 @@ export default function Register() {
   const [imageURI, setImageURI] = useState('')
   const debouncedImageURI = useDebounce(imageURI, 500)
 
-  const res = useCreateProfile({
-    handle: debouncedHandle,
-    imageURI: debouncedImageURI,
-  })
-
-  const { data, write, isPrepareError, error, isLoading, isSuccess } = res || {}
+  const { data, write, isPrepareError, error, isLoading, isSuccess } =
+    useCreateProfile({
+      handle: debouncedHandle,
+      imageURI: debouncedImageURI,
+    })
 
   const {
     dataURI,
@@ -38,7 +37,7 @@ export default function Register() {
     upload,
   } = usePinata()
 
-  function onImageLoad(img: File) {
+  function handleImageChange(img: File) {
     if (!!img) {
       upload(img)
     }
@@ -65,12 +64,7 @@ export default function Register() {
             <Spinner />
           </Center>
         ) : (
-          <ImageInput
-            src={dataURI || undefined}
-            onChange={img => {
-              onImageLoad(img)
-            }}
-          />
+          <ImageInput src={dataURI || undefined} onChange={handleImageChange} />
         )}
 
         <Box flexGrow={1} ml={8}>

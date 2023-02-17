@@ -1,13 +1,18 @@
-import { IProfile } from '@/utils/types'
 import * as React from 'react'
+import { IProfile } from '@/utils/types'
 
 interface IStore {
-  currentProfile: IProfile | {}
+  currentProfile: IProfile
   profileList: IProfile[]
 }
 
 const initialStore: IStore = {
-  currentProfile: {},
+  currentProfile: {
+    handle: '',
+    imageURI: '',
+    pubCount: 0,
+    id: 0,
+  },
   profileList: [],
 }
 

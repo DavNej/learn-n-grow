@@ -17,7 +17,9 @@ export default function Profile() {
   if (!profile) return null
 
   const NFTJson = decodeJsonDataURI(profile.tokenURI)
-  const image = decodeImageDataURI(NFTJson.image)
+  const image = NFTJson
+    ? decodeImageDataURI(NFTJson.image)
+    : 'Broken image URI 😣'
 
   return (
     <Box bg='white' p={4} borderRadius='xl'>
