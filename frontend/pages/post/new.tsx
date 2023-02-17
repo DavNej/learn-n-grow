@@ -59,17 +59,22 @@ export default function NewPost() {
     profileId: store.currentProfile.id,
   })
 
-  const { dataURI, upload, isLoading: isUploadLoading } = usePinata()
+  const { upload, isLoading: isUploadLoading } = usePinata()
 
   function handleImageChange(img: File) {
     setImageIsLoading(true)
-    setMediaURI('')
     if (!!img) {
-      upload(img)
+      upload({
+        data: img,
+        onSuccess(uri) {
+          setMediaURI(uri)
+          setImageIsLoading(false)
+        },
+      })
     }
   }
 
-  function onPost() {
+  async function onPost() {
     const postContent =
       address &&
       buildPublication({
@@ -79,26 +84,16 @@ export default function NewPost() {
       })
 
     if (!!postContent) {
-      upload(postContent)
+      upload({
+        data: postContent,
+        onSuccess(uri) {
+          setContentURI(uri)
+        },
+      })
+
+      await write?.()
     }
   }
-
-  React.useEffect(() => {
-    if (dataURI) {
-      if (!mediaURI) {
-        setMediaURI(dataURI)
-        setImageIsLoading(false)
-      } else {
-        setContentURI(dataURI)
-      }
-    }
-  }, [dataURI])
-
-  React.useEffect(() => {
-    if (write) {
-      write()
-    }
-  }, [write])
 
   const handle = `@${store.currentProfile.handle}`
 
@@ -123,7 +118,6 @@ export default function NewPost() {
             placeholder="What's on your mind ?"
             onChange={e => setContent(e.target.value)}
           />
-          {/* {true ? ( */}
           {imageIsLoading ? (
             <Box
               mx='auto'

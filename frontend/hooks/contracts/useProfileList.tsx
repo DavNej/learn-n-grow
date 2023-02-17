@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { abi, contractAddress } from '@/utils/contract'
+import { learnNGrow } from '@/utils/contracts'
 
 import { ethers } from 'ethers'
 import { useSigner } from 'wagmi'
@@ -14,12 +14,16 @@ export function useProfileList() {
   async function getProfileList() {
     if (!signer) return null
 
-    const learnNGrow = new ethers.Contract(contractAddress, abi, signer)
+    const learnNGrowContract = new ethers.Contract(
+      learnNGrow.address,
+      learnNGrow.abi,
+      signer
+    )
 
     const allProfiles = []
 
     for (let i = 1; i <= MAX_PROFILE_COUNT; i++) {
-      const profile = await learnNGrow.getProfile(i)
+      const profile = await learnNGrowContract.getProfile(i)
       const { handle, imageURI, pubCount } = profile
 
       if (!handle) break
@@ -33,15 +37,6 @@ export function useProfileList() {
   React.useEffect(() => {
     getProfileList()
   }, [signer])
-
-  // React.useEffect(() => {
-  //   if (!!profiles) {
-  //     const profilesByHandles = profiles.reduce((acc, curr) => {
-  //       return { ...acc, [curr.handle]: curr }
-  //     }, {})
-  //     setStore(profilesByHandles)
-  //   }
-  // }, [data])
 
   return profiles
 }

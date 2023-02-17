@@ -4,7 +4,7 @@ import { ethers } from 'ethers'
 import type { Address } from 'wagmi'
 import { useSigner } from 'wagmi'
 import { IProfile } from '@/utils/types'
-import { abi, contractAddress } from '@/utils/contract'
+import { learnNGrow } from '@/utils/contracts'
 
 export function useProfile({
   address,
@@ -19,21 +19,25 @@ export function useProfile({
   async function getProfile() {
     if (!signer || !(handle || address)) return {}
 
-    const learnNGrow = new ethers.Contract(contractAddress, abi, signer)
+    const learnNGrowContract = new ethers.Contract(
+      learnNGrow.address,
+      learnNGrow.abi,
+      signer
+    )
 
     let profileId
 
     if (address) {
-      profileId = await learnNGrow.profile(address)
+      profileId = await learnNGrowContract.profile(address)
     } else {
-      profileId = await learnNGrow.getProfileIdByHandle(handle)
+      profileId = await learnNGrowContract.getProfileIdByHandle(handle)
     }
 
     if (profileId.toNumber() === 0) return {}
 
-    const profile = await learnNGrow.getProfile(profileId)
+    const profile = await learnNGrowContract.getProfile(profileId)
 
-    const tokenURI = await learnNGrow.tokenURI(profileId)
+    const tokenURI = await learnNGrowContract.tokenURI(profileId)
 
     setprofile({
       id: profileId.toNumber(),

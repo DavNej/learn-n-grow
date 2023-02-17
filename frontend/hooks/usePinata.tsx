@@ -10,35 +10,45 @@ import { useState, useCallback } from 'react'
 export function usePinata() {
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
-  const [error, setError] = useState<unknown | null>(null)
-  const [dataURI, setDataURI] = useState<string | null>(null)
 
-  const upload = useCallback((data: File | Object): void => {
-    let axiosArgs
+  const upload = useCallback(
+    ({
+      data,
+      onSuccess,
+      onError,
+    }: {
+      data: File | Object
+      onSuccess: (uri: string) => void
+      onError?: Function
+    }): void => {
+      let axiosArgs
 
-    if (data instanceof File) {
-      axiosArgs = buildPinFileArgs(data)
-    } else {
-      axiosArgs = buildPinJsonArgs(data)
-    }
+      if (data instanceof File) {
+        axiosArgs = buildPinFileArgs(data)
+      } else {
+        axiosArgs = buildPinJsonArgs(data)
+      }
 
-    setIsLoading(true)
+      setIsLoading(true)
 
-    axios
-      .post(...axiosArgs)
-      .then(res => {
-        setDataURI(PINATA_GATEWAY + res.data.IpfsHash)
-        setIsSuccess(true)
-      })
-      .catch(error => setError(error))
-      .finally(() => setIsLoading(false))
-  }, [])
+      axios
+        .post(...axiosArgs)
+        .then(res => {
+          const uri = PINATA_GATEWAY + res.data.IpfsHash
+          onSuccess(uri)
+          setIsSuccess(true)
+        })
+        .catch(error => {
+          onError?.(error)
+        })
+        .finally(() => setIsLoading(false))
+    },
+    []
+  )
 
   return {
-    dataURI,
     upload,
     isSuccess,
     isLoading,
-    error,
   }
 }

@@ -1,15 +1,15 @@
 import {
-  // useContractEvent,
+  useContractEvent,
   useContractWrite,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi'
 
-// import { useToast } from '@chakra-ui/react'
-// import { defaultToastContent } from '@/utils'
+import { useToast } from '@chakra-ui/react'
+import { defaultToastContent } from '@/utils'
 
 import type { ILearnNGrowWriteFunctionName } from '@/utils/types'
-import learnNGrowContract from '@/utils/contract'
+import { eventsLib, learnNGrow } from '@/utils/contracts'
 
 import useErrorHandling from '../useErrorHandling'
 
@@ -28,7 +28,7 @@ export function useCreateProfile({
   ]
 
   const options = {
-    ...learnNGrowContract,
+    ...learnNGrow,
     functionName,
     args,
     enabled,
@@ -50,23 +50,22 @@ export function useCreateProfile({
     hash: data?.hash,
   })
 
-  // const toast = useToast()
+  const toast = useToast()
 
-  // useContractEvent({
-  //   address,
-  //   abi,
-  //   eventName: 'ProfileCreated',
-  //   listener(id) {
-  //     if (isSuccess) {
-  //       toast({
-  //         ...defaultToastContent,
-  //         title: 'Success',
-  //         description: `Proposal ${id} added`,
-  //         status: 'success',
-  //       })
-  //     }
-  //   },
-  // })
+  useContractEvent({
+    address: learnNGrow.address,
+    abi: eventsLib.abi,
+    eventName: 'ProfileCreated',
+    listener(...args) {
+      console.warn(args)
+      toast({
+        ...defaultToastContent,
+        title: 'Success',
+        description: `Profile created 🎨`,
+        status: 'success',
+      })
+    },
+  })
 
   return {
     data,

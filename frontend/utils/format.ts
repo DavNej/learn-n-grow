@@ -26,6 +26,30 @@ export function formatError(contract: Contract, error: Error) {
   if (message.includes('HandleContainsInvalidCharacters')) {
     return 'Handle contains invalid characters'
   }
+  if (message.includes('HandleLengthInvalid')) {
+    return 'Handle too long'
+  }
+  if (message.includes('HandleTaken')) {
+    return 'Handle already taken'
+  }
+  if (message.includes('ProfileImageURILengthInvalid')) {
+    return "Profile's image URI is too long"
+  }
+  if (message.includes('ProfileImageURIEmpty')) {
+    return "Profile's image URI empty"
+  }
+  if (message.includes('NotProfileOwner')) {
+    return 'You are not the profile owner'
+  }
+  if (message.includes('UnsafeURI')) {
+    return 'URI contains illegal characters'
+  }
+  if (message.includes('PublicationDoesNotExist')) {
+    return 'Publication does not exist'
+  }
+  if (message.includes('CannotCommentOnSelf')) {
+    return 'Cannot comment on self'
+  }
 
   return message
 }

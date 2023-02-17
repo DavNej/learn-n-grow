@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { useState } from 'react'
 
 import {
   Box,
@@ -30,24 +30,18 @@ export default function Register() {
       imageURI: debouncedImageURI,
     })
 
-  const {
-    dataURI,
-    isLoading: isUploadLoading,
-    error: uploadError,
-    upload,
-  } = usePinata()
+  const { isLoading: isUploadLoading, upload } = usePinata()
 
   function handleImageChange(img: File) {
     if (!!img) {
-      upload(img)
+      upload({
+        data: img,
+        onSuccess(uri) {
+          setImageURI(uri)
+        },
+      })
     }
   }
-
-  React.useEffect(() => {
-    if (dataURI) {
-      setImageURI(dataURI)
-    }
-  }, [dataURI])
 
   async function mintProfile() {
     await write?.()
@@ -64,7 +58,10 @@ export default function Register() {
             <Spinner />
           </Center>
         ) : (
-          <ImageInput src={dataURI || undefined} onChange={handleImageChange} />
+          <ImageInput
+            src={imageURI || undefined}
+            onChange={handleImageChange}
+          />
         )}
 
         <Box flexGrow={1} ml={8}>
