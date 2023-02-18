@@ -37,7 +37,7 @@ const networks: Record<string, NetworkUserConfig> = {
 }
 
 const config: HardhatUserConfig = {
-  defaultNetwork: 'local',
+  defaultNetwork: 'hardhat',
   networks,
   etherscan: {
     apiKey: {

@@ -7,7 +7,7 @@
   "scripts": {
     "compile": "SKIP_TASKS_LOAD=true hardhat clean && SKIP_TASKS_LOAD=true hardhat compile",
     "deploy": "hardhat deploy",
-    "dev": "hardhat node",
+    "dev": "yarn compile && yarn deploy && hardhat node",
     "test": "hardhat test"
   },
   "devDependencies": {

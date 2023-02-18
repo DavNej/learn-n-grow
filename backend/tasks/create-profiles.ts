@@ -1,19 +1,14 @@
 import '@nomicfoundation/hardhat-toolbox'
-import { ContractTransaction } from 'ethers'
 
 import { task } from 'hardhat/config'
 import { LearnNGrow__factory } from '../typechain-types/index'
-
-export async function waitForTx(tx: Promise<ContractTransaction>) {
-  await (await tx).wait()
-}
-
-const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
+import { waitForTx } from '../utils'
+import { CONTRACT_ADDRESS } from '../utils/constants'
 
 task('create-profiles', 'Populate profiles').setAction(async (_, hre) => {
   const [deployer, user, userTwo, userThree] = await hre.ethers.getSigners()
 
-  const learnNGrow = LearnNGrow__factory.connect(contractAddress, deployer)
+  const learnNGrow = LearnNGrow__factory.connect(CONTRACT_ADDRESS, deployer)
 
   await waitForTx(
     learnNGrow.connect(user).createProfile({
