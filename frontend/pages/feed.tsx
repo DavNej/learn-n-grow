@@ -1,9 +1,10 @@
 import axios from 'axios'
 import React from 'react'
-import { Box, Flex, Heading, Image, Text } from '@chakra-ui/react'
-import { IPostContent, IProfile } from '@/utils/types'
+import { Box, Text } from '@chakra-ui/react'
+import { IPostContent } from '@/utils/types'
 import { usePostList } from '@/hooks/contracts/usePostList'
 import { useStore } from '@/hooks/useStore'
+import Post from '@/components/Post'
 
 export default function Feed() {
   const postsByUser = usePostList()
@@ -32,41 +33,17 @@ export default function Feed() {
 
   return hasPosts ? (
     formattedPosts.map(post => (
-      <Post post={post} profile={profileList[post.authorId]} />
+      <Post
+        key={post.creationDate}
+        post={post}
+        profile={profileList[post.authorId]}
+      />
     ))
   ) : (
     <Box p={4} mb={4} bgColor='white' borderRadius='md'>
       <Text fontSize='md' textAlign='center'>
         No post to show 🤷
       </Text>
-    </Box>
-  )
-}
-
-function Post({ post, profile }: { post: IPostContent; profile: IProfile }) {
-  const handle = `@${profile.handle}`
-
-  return (
-    <Box key={post.creationDate} p={4} mb={4} bgColor='white' borderRadius='xl'>
-      <Flex alignItems='center' justifyContent='space-between'>
-        <Image
-          borderRadius='full'
-          boxSize='52px'
-          src={profile.imageURI}
-          alt={handle}
-        />
-        <Flex
-          flexDirection='column'
-          alignItems='stretch'
-          justifyContent='space-between'>
-          <Heading size='sm'>{handle}</Heading>
-          <Text fontSize='xs'>{post.creationDate}</Text>
-        </Flex>
-      </Flex>
-      <Text p={4} m={4} border='2px' borderColor='gray.100' borderRadius='md'>
-        {post.content}
-      </Text>
-      {post.mediaURI && <Image src={post.mediaURI} />}
     </Box>
   )
 }

@@ -1,3 +1,5 @@
+import { Address } from 'wagmi'
+
 export type ILearnNGrowReadFunctionName =
   | 'getContentURI'
   | 'getHandle'
@@ -34,4 +36,11 @@ export interface IPost {
   id: number
   authorId: number
   comments?: ICommment[]
+}
+
+export interface IPostContent extends IPost {
+  content: string
+  creationDate: number
+  author: Address
+  mediaURI?: string
 }

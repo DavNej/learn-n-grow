@@ -17,12 +17,11 @@ export function usePostList() {
   async function getPostList() {
     if (!learnNGrowContract) return
 
-    const profiles = Object.values(profileList)
-
     const publicationsByProfileId = new Map<number, PostMap>()
+    const profileCount = Object.keys(profileList).length
+    for (let i = 1; i <= profileCount; i++) {
+      const { pubCount, id: profileId } = profileList[i]
 
-    for (let i = 1; i < profiles.length; i++) {
-      const { pubCount, id: profileId } = profiles[i]
       if (!pubCount) continue
 
       const profilePosts: PostMap = new Map()
