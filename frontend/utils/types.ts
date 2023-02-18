@@ -25,3 +25,12 @@ export interface IProfile {
 }
 export type IProfileList = Record<string, IProfile>
 
+export interface ICommment {
+  contentURI: string
+}
+
+export interface IPost {
+  contentURI: string
+  id: number
+  comments?: ICommment[]
+}
