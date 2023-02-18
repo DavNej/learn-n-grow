@@ -23,3 +23,5 @@ export interface IProfile {
   id: number
   tokenURI?: string
 }
+export type IProfileList = Record<string, IProfile>
+

@@ -1,15 +1,18 @@
 import * as React from 'react'
 import { learnNGrow } from '@/utils/contracts'
 
-import { ethers } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import { useSigner } from 'wagmi'
-import { IProfile } from '@/utils/types'
+import { IProfileList } from '@/utils/types'
+import { useStore } from '../useStore'
 
 const MAX_PROFILE_COUNT = 20
 
 export function useProfileList() {
   const { data: signer } = useSigner()
-  const [profiles, setprofiles] = React.useState<IProfile[]>([])
+  const [profileList, setProfileList] = React.useState<IProfileList>({})
+
+  const { setStore } = useStore()
 
   async function getProfileList() {
     if (!signer) return null
@@ -20,23 +23,27 @@ export function useProfileList() {
       signer
     )
 
-    const allProfiles = []
+    const profiles: IProfileList = {}
 
     for (let i = 1; i <= MAX_PROFILE_COUNT; i++) {
       const profile = await learnNGrowContract.getProfile(i)
-      const { handle, imageURI, pubCount } = profile
+      const BNpubCount = profile.pubCount as BigNumber
+      const pubCount: number = BNpubCount.toNumber()
+      const handle: string = profile.handle
+      const imageURI: string = profile.imageURI
 
       if (!handle) break
 
-      allProfiles.push({ id: i, handle, imageURI, pubCount })
+      profiles[handle] = { id: i, handle, imageURI, pubCount }
     }
 
-    setprofiles(allProfiles)
+    setProfileList(profiles)
+    setStore(store => ({ ...store, profileList }))
   }
 
   React.useEffect(() => {
     getProfileList()
   }, [signer])
 
-  return profiles
+  return profileList
 }

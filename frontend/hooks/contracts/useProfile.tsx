@@ -1,42 +1,28 @@
 import * as React from 'react'
 
-import { ethers } from 'ethers'
 import type { Address } from 'wagmi'
-import { useSigner } from 'wagmi'
-import { IProfile } from '@/utils/types'
-import { learnNGrow } from '@/utils/contracts'
 
-export function useProfile({
-  address,
-  handle,
-}: {
-  address?: Address | null
-  handle?: string | null
-}) {
-  const { data: signer } = useSigner()
-  const [profile, setprofile] = React.useState<IProfile | {}>({})
+import { IProfile } from '@/utils/types'
+import { useStore } from '../useStore'
+
+export function useProfile({ address }: { address?: Address | null }) {
+  const { store } = useStore()
+  const { learnNGrowContract } = store
+
+  const [profile, setprofile] = React.useState<IProfile | null>(null)
+
+  React.useEffect(() => {
+    getProfile()
+  }, [learnNGrowContract, address])
 
   async function getProfile() {
-    if (!signer || !(handle || address)) return {}
+    if (!learnNGrowContract || !address) return
 
-    const learnNGrowContract = new ethers.Contract(
-      learnNGrow.address,
-      learnNGrow.abi,
-      signer
-    )
+    const profileId = await learnNGrowContract.profile(address)
 
-    let profileId
-
-    if (address) {
-      profileId = await learnNGrowContract.profile(address)
-    } else {
-      profileId = await learnNGrowContract.getProfileIdByHandle(handle)
-    }
-
-    if (profileId.toNumber() === 0) return {}
+    if (profileId.toNumber() === 0) return
 
     const profile = await learnNGrowContract.getProfile(profileId)
-
     const tokenURI = await learnNGrowContract.tokenURI(profileId)
 
     setprofile({
@@ -48,9 +34,5 @@ export function useProfile({
     })
   }
 
-  React.useEffect(() => {
-    getProfile()
-  }, [signer, handle])
-
-  return profile as IProfile
+  return profile
 }
