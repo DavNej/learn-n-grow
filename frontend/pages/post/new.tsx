@@ -54,9 +54,12 @@ export default function NewPost() {
   const [contentURI, setContentURI] = React.useState('')
   const [imageIsLoading, setImageIsLoading] = React.useState(false)
 
+  const profile = store.profileList[store.connectedProfile] || {}
+  const profileId = profile.id || 0
+
   const { write, isLoading } = useCreatePost({
     contentURI,
-    profileId: store.currentProfile.id,
+    profileId,
   })
 
   const { upload, isLoading: isUploadLoading } = usePinata()
@@ -95,7 +98,7 @@ export default function NewPost() {
     }
   }
 
-  const handle = `@${store.currentProfile.handle}`
+  const handle = `@${store.connectedProfile}`
 
   return (
     <Modal isOpen onClose={() => back()}>
@@ -108,7 +111,7 @@ export default function NewPost() {
             <Image
               borderRadius='full'
               boxSize='52px'
-              src={store.currentProfile.imageURI}
+              src={profile.imageURI}
               alt={handle}
             />
             <Heading size='sm'>{handle}</Heading>
