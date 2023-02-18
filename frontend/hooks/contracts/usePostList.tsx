@@ -66,6 +66,7 @@ export function usePostList() {
       profileList,
       publicationsByProfileId
     )
+
     setposts(publications)
     setStore(s => ({ ...s, posts: publications }))
   }

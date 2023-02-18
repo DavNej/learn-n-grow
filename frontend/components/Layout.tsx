@@ -8,9 +8,11 @@ import useIsMounted from '@/hooks/useIsMounted'
 import Header from './Header'
 import Main from './Main'
 import ProfileList from './ProfileList'
+import { useAccount } from 'wagmi'
 
 export default function Layout({ children }: React.PropsWithChildren) {
   const isMounted = useIsMounted()
+  const { isConnected } = useAccount()
 
   return isMounted ? (
     <>
@@ -27,16 +29,18 @@ export default function Layout({ children }: React.PropsWithChildren) {
         <Container maxW='5xl'>
           <Flex>
             <Flex p={4} flexDirection='column'>
-              <Link href='/post/new'>
-                <Button
-                  mb={4}
-                  width='100%'
-                  colorScheme='teal'
-                  aria-label='Call Segun'
-                  size='md'>
-                  + Create post
-                </Button>
-              </Link>
+              {isConnected && (
+                <Link href='/post/new'>
+                  <Button
+                    mb={4}
+                    width='100%'
+                    colorScheme='teal'
+                    aria-label='Call Segun'
+                    size='md'>
+                    + Create post
+                  </Button>
+                </Link>
+              )}
 
               <ProfileList />
             </Flex>

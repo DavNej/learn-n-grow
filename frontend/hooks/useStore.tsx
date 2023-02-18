@@ -1,22 +1,21 @@
 import * as React from 'react'
 import { IProfileList } from '@/utils/types'
-import { Contract, ethers, Signer } from 'ethers'
-
-import type { FetchSignerResult } from '@wagmi/core'
-import { useSigner } from 'wagmi'
+import type { Contract } from 'ethers'
+import { ethers } from 'ethers'
+import { useProvider } from 'wagmi'
 
 import { learnNGrow } from '@/utils/contracts'
 
 interface IStore {
   connectedProfileId: number
   learnNGrowContract: Contract | undefined
-  signer: FetchSignerResult<Signer> | undefined
+  provider: ethers.providers.Provider | undefined
   profileList: IProfileList
 }
 
 const initialStore: IStore = {
   learnNGrowContract: undefined,
-  signer: undefined,
+  provider: undefined,
   connectedProfileId: 0,
   profileList: {},
 }
@@ -38,20 +37,19 @@ export function useStore() {
 }
 
 export function StoreProvider(props: React.PropsWithChildren) {
-  const { data: signer } = useSigner()
+  const provider = useProvider()
 
   const [store, setStore] = React.useState(initialStore)
 
+  const learnNGrowContract = new ethers.Contract(
+    learnNGrow.address,
+    learnNGrow.abi,
+    provider
+  )
+
   React.useEffect(() => {
-    if (signer) {
-      const learnNGrowContract = new ethers.Contract(
-        learnNGrow.address,
-        learnNGrow.abi,
-        signer
-      )
-      setStore(s => ({ ...s, signer, learnNGrowContract }))
-    }
-  }, [signer])
+    setStore(s => ({ ...s, provider, learnNGrowContract }))
+  }, [])
 
   const value = React.useMemo(() => ({ store, setStore }), [store, setStore])
 
