@@ -7,9 +7,7 @@ type PostMap = Map<number, IPost>
 
 export function usePostList() {
   const [posts, setposts] = React.useState<Record<string, IPost[]>>({})
-
   const { store, setStore } = useStore()
-
   const { profileList, learnNGrowContract } = store
 
   React.useEffect(() => {
@@ -64,7 +62,7 @@ export function usePostList() {
       publicationsByProfileId.set(profileId, profilePosts)
     }
 
-    const publications = formatPublicationsByHandle(
+    const publications = formatPublicationsByProfileId(
       profileList,
       publicationsByProfileId
     )
@@ -75,14 +73,14 @@ export function usePostList() {
   return posts
 }
 
-function formatPublicationsByHandle(
+function formatPublicationsByProfileId(
   profileList: IProfileList,
   publicationsByProfileId: Map<number, PostMap>
 ) {
-  const result = Object.values(profileList).reduce((acc, currProfile) => {
-    const posts = publicationsByProfileId.get(currProfile.id)
+  const result = Object.keys(profileList).reduce((acc, currProfileId) => {
+    const posts = publicationsByProfileId.get(parseInt(currProfileId))
     if (!posts) return acc
-    return { ...acc, [currProfile.handle]: Array.from(posts.values()) }
+    return { ...acc, [currProfileId]: Array.from(posts.values()) }
   }, {})
 
   return result

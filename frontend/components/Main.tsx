@@ -19,7 +19,7 @@ export default function Main({ children }: React.PropsWithChildren) {
 
   React.useEffect(() => {
     if (connectedProfile) {
-      setStore(s => ({ ...s, connectedProfile: connectedProfile.handle }))
+      setStore(s => ({ ...s, connectedProfileId: connectedProfile.id }))
     }
   }, [connectedProfile])
 

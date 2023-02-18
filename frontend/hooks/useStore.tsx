@@ -8,7 +8,7 @@ import { useSigner } from 'wagmi'
 import { learnNGrow } from '@/utils/contracts'
 
 interface IStore {
-  connectedProfile: string
+  connectedProfileId: number
   learnNGrowContract: Contract | undefined
   signer: FetchSignerResult<Signer> | undefined
   profileList: IProfileList
@@ -17,7 +17,7 @@ interface IStore {
 const initialStore: IStore = {
   learnNGrowContract: undefined,
   signer: undefined,
-  connectedProfile: '',
+  connectedProfileId: 0,
   profileList: {},
 }
 

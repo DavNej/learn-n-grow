@@ -13,7 +13,9 @@ export default function Profile() {
   const { store } = useStore()
 
   const profileHandle = handle ? handle.toString() : ''
-  const profile = store.profileList[profileHandle]
+  const profile = Object.values(store.profileList).find(
+    p => p.handle === profileHandle
+  )
 
   const profileId = profile?.id || 0
   const token = useProfileToken({ profileId })

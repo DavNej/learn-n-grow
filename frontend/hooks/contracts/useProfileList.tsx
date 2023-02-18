@@ -26,7 +26,7 @@ export function useProfileList() {
 
       if (!handle) break
 
-      profiles[handle] = { id: i, handle, imageURI, pubCount }
+      profiles[i] = { id: i, handle, imageURI, pubCount }
     }
 
     setProfileList(profiles)

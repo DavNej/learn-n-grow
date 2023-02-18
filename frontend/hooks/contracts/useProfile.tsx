@@ -23,14 +23,12 @@ export function useProfile({ address }: { address?: Address | null }) {
     if (profileId.toNumber() === 0) return
 
     const profile = await learnNGrowContract.getProfile(profileId)
-    const tokenURI = await learnNGrowContract.tokenURI(profileId)
 
     setprofile({
       id: profileId.toNumber(),
       imageURI: profile.imageURI,
       handle: profile.handle,
       pubCount: profile.pubCount,
-      tokenURI,
     })
   }
 

@@ -32,5 +32,6 @@ export interface ICommment {
 export interface IPost {
   contentURI: string
   id: number
+  authorId: number
   comments?: ICommment[]
 }

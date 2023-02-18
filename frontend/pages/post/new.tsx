@@ -54,12 +54,12 @@ export default function NewPost() {
   const [contentURI, setContentURI] = React.useState('')
   const [imageIsLoading, setImageIsLoading] = React.useState(false)
 
-  const profile = store.profileList[store.connectedProfile] || {}
-  const profileId = profile.id || 0
+  const { connectedProfileId, profileList } = store
+  const profile = profileList[connectedProfileId] || {}
 
   const { write, isLoading } = useCreatePost({
     contentURI,
-    profileId,
+    profileId: connectedProfileId,
   })
 
   const { upload, isLoading: isUploadLoading } = usePinata()
@@ -98,7 +98,7 @@ export default function NewPost() {
     }
   }
 
-  const handle = `@${store.connectedProfile}`
+  const handle = `@${profile.handle}`
 
   return (
     <Modal isOpen onClose={() => back()}>

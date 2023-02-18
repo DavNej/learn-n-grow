@@ -7,10 +7,8 @@ export default function Feed() {
   return (
     <div>
       {posts.map(post => (
-        <div>
-          <a key={post.id} href={post.contentURI}>
-            {post.authorId}
-          </a>
+        <div key={`${post.authorId}-${post.id}`}>
+          <a href={post.contentURI}>{post.authorId}</a>
         </div>
       ))}
     </div>
