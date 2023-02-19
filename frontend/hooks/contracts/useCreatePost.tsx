@@ -16,9 +16,11 @@ import useErrorHandling from '../useErrorHandling'
 export function useCreatePost({
   profileId = 0,
   contentURI,
+  onSuccess,
 }: {
   profileId: number
   contentURI: string
+  onSuccess: () => void
 }) {
   const functionName: ILearnNGrowWriteFunctionName = 'post'
   const args: readonly [{ profileId: BigNumber; contentURI: string }] = [
@@ -49,6 +51,10 @@ export function useCreatePost({
   })
 
   const toast = useToast()
+
+  if (isSuccess) {
+    onSuccess()
+  }
 
   useContractEvent({
     address: learnNGrow.address,

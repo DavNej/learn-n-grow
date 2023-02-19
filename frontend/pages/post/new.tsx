@@ -43,9 +43,12 @@ function buildPublication({ content, mediaURI, address }: IPublication) {
 }
 
 export default function NewPost() {
-  const { back } = useRouter()
+  const { push, back } = useRouter()
+  const { isConnected, address } = useAccount()
+
   const { store } = useStore()
-  const { address } = useAccount()
+  const { connectedProfileId, profileList } = store
+  const profile = profileList[connectedProfileId] || {}
 
   const [content, setContent] = React.useState('')
   const debouncedContent = useDebounce(content, 500)
@@ -53,25 +56,29 @@ export default function NewPost() {
   const debouncedMediaURI = useDebounce(mediaURI, 500)
   const [contentURI, setContentURI] = React.useState('')
   const [imageIsLoading, setImageIsLoading] = React.useState(false)
+  const [shouldPost, setShouldPost] = React.useState(false)
 
-  const { connectedProfileId, profileList } = store
-  const profile = profileList[connectedProfileId] || {}
-
+  const { upload, isLoading: isUploadLoading } = usePinata()
   const { write, isLoading } = useCreatePost({
     contentURI,
     profileId: connectedProfileId,
+    onSuccess() {
+      push(`/profile/${profile.handle}`)
+    },
   })
 
-  const { isConnected } = useAccount()
-  const { push } = useRouter()
+  React.useEffect(() => {
+    if (shouldPost) {
+      write?.()
+      setShouldPost(false)
+    }
+  }, [shouldPost])
 
   React.useEffect(() => {
     if (!isConnected) {
       push('/feed')
     }
   }, [isConnected])
-
-  const { upload, isLoading: isUploadLoading } = usePinata()
 
   function handleImageChange(img: File) {
     setImageIsLoading(true)
@@ -100,10 +107,9 @@ export default function NewPost() {
         data: postContent,
         onSuccess(uri) {
           setContentURI(uri)
+          setShouldPost(true)
         },
       })
-
-      await write?.()
     }
   }
 
