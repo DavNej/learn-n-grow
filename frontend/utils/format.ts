@@ -1,5 +1,27 @@
 import { Contract } from 'ethers'
 
+const locale = 'fr-FR'
+
+// https://tc39.es/ecma402/#sec-datetimeformat-abstracts
+const options: Intl.DateTimeFormatOptions = {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  // hour: 'numeric',
+  // minute: 'numeric',
+  // second: 'numeric',
+  // timeZoneName: 'shortOffset',
+  // timeZone: 'Australia/Sydney',
+
+  hour12: false,
+}
+
+export function formatTimestamp(timestamp: number) {
+  const date = new Intl.DateTimeFormat(locale, options).format(timestamp)
+
+  return date
+}
+
 function extractErrorMessage(contract: Contract, error: Error) {
   let reason
 

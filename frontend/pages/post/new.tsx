@@ -16,6 +16,7 @@ import {
   Flex,
   Heading,
   Box,
+  Avatar,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { Address, useAccount } from 'wagmi'
@@ -123,12 +124,7 @@ export default function NewPost() {
         <ModalCloseButton />
         <ModalBody>
           <Flex alignItems='center' justifyContent='space-between'>
-            <Image
-              borderRadius='full'
-              boxSize='52px'
-              src={profile.imageURI}
-              alt={handle}
-            />
+            <Avatar mr={4} name={profile.handle} src={profile.imageURI} />
             <Heading size='sm'>{handle}</Heading>
           </Flex>
           <Textarea

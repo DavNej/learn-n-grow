@@ -1,12 +1,12 @@
 import * as React from 'react'
-
-import { IPost, IProfileList } from '@/utils/types'
+import axios from 'axios'
+import { IPostContent, IProfileList } from '@/utils/types'
 import { useStore } from '../useStore'
 
-type PostMap = Map<number, IPost>
+type PostMap = Map<number, IPostContent>
 
 export function usePostList() {
-  const [posts, setposts] = React.useState<Record<string, IPost[]>>({})
+  const [posts, setposts] = React.useState<Record<string, IPostContent[]>>({})
   const { store, setStore } = useStore()
   const { profileList, learnNGrowContract } = store
 
@@ -44,11 +44,15 @@ export function usePostList() {
         const isPost = !(profileIdPointed && pubIdPointed)
 
         if (isPost) {
+          axios.get(contentURI).then(res => {
           profilePosts.set(pubId, {
+              ...res.data,
             id: pubId,
             contentURI,
             authorId: profileId,
           })
+          })
+
           continue
         }
 
