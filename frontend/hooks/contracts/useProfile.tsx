@@ -10,17 +10,25 @@ export function useProfile({ address }: { address?: Address | null }) {
   const { learnNGrowContract } = store
 
   const [profile, setprofile] = React.useState<IProfile | null>(null)
+  const [isLoading, setIsLoading] = React.useState(true)
+  const [hasProfile, setHasProfile] = React.useState(false)
 
   React.useEffect(() => {
-    getProfile()
+    if (address) {
+      getProfile()
+    }
   }, [learnNGrowContract, address])
 
   async function getProfile() {
     if (!learnNGrowContract || !address) return
 
+    setIsLoading(true)
+
     const profileId = await learnNGrowContract.profile(address)
 
     if (profileId.toNumber() === 0) return
+
+    setHasProfile(true)
 
     const profile = await learnNGrowContract.getProfile(profileId)
 
@@ -30,7 +38,9 @@ export function useProfile({ address }: { address?: Address | null }) {
       handle: profile.handle,
       pubCount: profile.pubCount,
     })
+
+    setIsLoading(false)
   }
 
-  return profile
+  return { profile, isLoading, hasProfile }
 }

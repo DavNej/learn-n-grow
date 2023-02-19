@@ -1,13 +1,13 @@
 import axios from 'axios'
 import React from 'react'
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Spinner, Text } from '@chakra-ui/react'
 import { IPostContent } from '@/utils/types'
 import { usePostList } from '@/hooks/contracts/usePostList'
 import { useStore } from '@/hooks/useStore'
 import Post from '@/components/Post'
 
 export default function Feed() {
-  const postsByUser = usePostList()
+  const { posts: postsByUser, isLoading } = usePostList()
   const { store } = useStore()
   const [formattedPosts, setFormattedPosts] = React.useState<IPostContent[]>([])
 
@@ -30,6 +30,8 @@ export default function Feed() {
       )
     }
   }, [postsByUser])
+
+  if (isLoading) return <Spinner />
 
   return hasPosts ? (
     formattedPosts.map(post => (

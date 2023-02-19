@@ -10,8 +10,12 @@ export function usePostList() {
   const { store, setStore } = useStore()
   const { profileList, learnNGrowContract } = store
 
+  const [isLoading, setIsLoading] = React.useState(true)
+
   React.useEffect(() => {
+    if (Object.keys(profileList).length > 0) {
     getPostList()
+    }
   }, [learnNGrowContract, profileList])
 
   async function getPostList() {
@@ -19,6 +23,9 @@ export function usePostList() {
 
     const publicationsByProfileId = new Map<number, PostMap>()
     const profileCount = Object.keys(profileList).length
+
+    setIsLoading(true)
+
     for (let i = 1; i <= profileCount; i++) {
       const { pubCount, id: profileId } = profileList[i]
 
@@ -68,9 +75,11 @@ export function usePostList() {
 
     setposts(publications)
     setStore(s => ({ ...s, posts: publications }))
+
+    setIsLoading(false)
   }
 
-  return posts
+  return { posts, isLoading }
 }
 
 function formatPublicationsByProfileId(

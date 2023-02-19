@@ -16,6 +16,8 @@ import ImageInput from '@/components/ImageInput'
 import useDebounce from '@/hooks/useDebounce'
 import { useCreateProfile } from '@/hooks/contracts/useCreateProfile'
 import { usePinata } from '@/hooks/usePinata'
+import { useAccount } from 'wagmi'
+import { useRouter } from 'next/router'
 
 export default function Register() {
   const [handle, setHandle] = useState('')
@@ -31,6 +33,15 @@ export default function Register() {
     })
 
   const { isLoading: isUploadLoading, upload } = usePinata()
+
+  const { isConnected } = useAccount()
+  const { push } = useRouter()
+
+  React.useEffect(() => {
+    if (!isConnected) {
+      push('/feed')
+    }
+  }, [isConnected])
 
   function handleImageChange(img: File) {
     if (!!img) {

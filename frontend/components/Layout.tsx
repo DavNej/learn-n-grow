@@ -1,18 +1,46 @@
+import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
-import React from 'react'
+import { useAccount } from 'wagmi'
+import * as React from 'react'
 
-import { Button, Container, Flex } from '@chakra-ui/react'
+import {
+  Alert,
+  AlertIcon,
+  Box,
+  Button,
+  Container,
+  Flex,
+} from '@chakra-ui/react'
 
 import useIsMounted from '@/hooks/useIsMounted'
+import { useProfile } from '@/hooks/contracts/useProfile'
+import { useStore } from '@/hooks/useStore'
+
 import Header from './Header'
-import Main from './Main'
 import ProfileList from './ProfileList'
-import { useAccount } from 'wagmi'
+
+const newProfilePagePath = '/profile/new'
 
 export default function Layout({ children }: React.PropsWithChildren) {
   const isMounted = useIsMounted()
-  const { isConnected } = useAccount()
+  const { pathname } = useRouter()
+  const { address, isConnected } = useAccount()
+  const {
+    profile: connectedProfile,
+    hasProfile,
+    isLoading,
+  } = useProfile({ address })
+  const { setStore } = useStore()
+
+  React.useEffect(() => {
+    if (connectedProfile) {
+      setStore(s => ({ ...s, connectedProfileId: connectedProfile.id }))
+    }
+  }, [connectedProfile])
+
+  const showCreateProfileButton =
+    !isLoading && !hasProfile && pathname !== newProfilePagePath
 
   return isMounted ? (
     <>
@@ -29,7 +57,7 @@ export default function Layout({ children }: React.PropsWithChildren) {
         <Container maxW='5xl'>
           <Flex>
             <Flex p={4} flexDirection='column'>
-              {isConnected && (
+              {hasProfile && (
                 <Link href='/post/new'>
                   <Button
                     mb={4}
@@ -46,7 +74,23 @@ export default function Layout({ children }: React.PropsWithChildren) {
             </Flex>
 
             <Flex width='100%' flexDirection='column'>
-              <Main>{children}</Main>
+              {!isConnected ? (
+                <Box mt={4} px={4}>
+                  <Alert status='warning'>
+                    <AlertIcon />
+                    Please connect wallet to use the app
+                  </Alert>
+                </Box>
+              ) : (
+                showCreateProfileButton && (
+                  <Box textAlign='center' my={4}>
+                    <Link href={newProfilePagePath}>
+                      <Button colorScheme='blue'>Create my profile</Button>
+                    </Link>
+                  </Box>
+                )
+              )}
+              <Box p={4}>{children}</Box>
             </Flex>
           </Flex>
         </Container>

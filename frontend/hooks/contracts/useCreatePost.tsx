@@ -1,3 +1,4 @@
+import { BigNumber, ethers } from 'ethers'
 import {
   useContractWrite,
   usePrepareContractWrite,
@@ -7,12 +8,10 @@ import {
 
 import { useToast } from '@chakra-ui/react'
 import { defaultToastContent } from '@/utils'
-
-import type { ILearnNGrowWriteFunctionName } from '@/utils/types'
 import { eventsLib, learnNGrow } from '@/utils/contracts'
+import type { ILearnNGrowWriteFunctionName } from '@/utils/types'
 
 import useErrorHandling from '../useErrorHandling'
-import { BigNumber, ethers } from 'ethers'
 
 export function useCreatePost({
   profileId = 0,
@@ -22,9 +21,6 @@ export function useCreatePost({
   contentURI: string
 }) {
   const functionName: ILearnNGrowWriteFunctionName = 'post'
-
-  const enabled = !!contentURI && !!profileId
-
   const args: readonly [{ profileId: BigNumber; contentURI: string }] = [
     { profileId: ethers.BigNumber.from(profileId), contentURI },
   ]
@@ -33,7 +29,7 @@ export function useCreatePost({
     ...learnNGrow,
     functionName,
     args,
-    enabled,
+    enabled: !!contentURI && !!profileId,
   }
 
   const {
@@ -59,13 +55,15 @@ export function useCreatePost({
     abi: eventsLib.abi,
     eventName: 'PostCreated',
     listener(...args) {
-      console.warn(args)
-      toast({
-        ...defaultToastContent,
-        title: 'Success',
-        description: `Post created 🎉`,
-        status: 'success',
-      })
+      if (isSuccess) {
+        console.warn(args)
+        toast({
+          ...defaultToastContent,
+          title: 'Success',
+          description: `Post created 🎉`,
+          status: 'success',
+        })
+      }
     },
   })
 

@@ -62,6 +62,15 @@ export default function NewPost() {
     profileId: connectedProfileId,
   })
 
+  const { isConnected } = useAccount()
+  const { push } = useRouter()
+
+  React.useEffect(() => {
+    if (!isConnected) {
+      push('/feed')
+    }
+  }, [isConnected])
+
   const { upload, isLoading: isUploadLoading } = usePinata()
 
   function handleImageChange(img: File) {

@@ -9,6 +9,8 @@ const MAX_PROFILE_COUNT = 20
 export function useProfileList() {
   const [profileList, setProfileList] = React.useState<IProfileList>({})
 
+  const [isLoading, setIsLoading] = React.useState(true)
+
   const { store, setStore } = useStore()
   const { learnNGrowContract } = store
 
@@ -16,6 +18,8 @@ export function useProfileList() {
     if (!learnNGrowContract) return null
 
     const profiles: IProfileList = {}
+
+    setIsLoading(true)
 
     for (let i = 1; i <= MAX_PROFILE_COUNT; i++) {
       const profile = await learnNGrowContract.getProfile(i)
@@ -31,11 +35,13 @@ export function useProfileList() {
 
     setProfileList(profiles)
     setStore(store => ({ ...store, profileList: profiles }))
+
+    setIsLoading(false)
   }
 
   React.useEffect(() => {
     getProfileList()
   }, [learnNGrowContract])
 
-  return profileList
+  return { profileList, isLoading }
 }

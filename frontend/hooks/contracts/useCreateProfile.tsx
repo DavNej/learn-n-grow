@@ -57,13 +57,15 @@ export function useCreateProfile({
     abi: eventsLib.abi,
     eventName: 'ProfileCreated',
     listener(...args) {
-      console.warn(args)
-      toast({
-        ...defaultToastContent,
-        title: 'Success',
-        description: `Profile created 🎨`,
-        status: 'success',
-      })
+      if (isSuccess) {
+        console.warn(args)
+        toast({
+          ...defaultToastContent,
+          title: 'Success',
+          description: `Profile created 🎨`,
+          status: 'success',
+        })
+      }
     },
   })
 

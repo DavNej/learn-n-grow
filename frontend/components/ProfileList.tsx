@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Avatar, Box, Flex, Text } from '@chakra-ui/react'
+import { Avatar, Box, Flex, Spinner, Text } from '@chakra-ui/react'
 
 import { useProfileList } from '@/hooks/contracts/useProfileList'
 import Link from 'next/link'
@@ -19,7 +19,7 @@ function ProfileItem({ profile }: { profile: IProfile }) {
 }
 
 export default function ProfileList() {
-  const profileList = useProfileList()
+  const { profileList, isLoading } = useProfileList()
 
   const profiles = Object.values(profileList)
   const hasProfiles = profiles.length > 0
@@ -27,7 +27,9 @@ export default function ProfileList() {
   return (
     <aside>
       <Box py={2} bg='white' overflow='hidden' borderRadius='xl'>
-        {hasProfiles ? (
+        {isLoading ? (
+          <Spinner />
+        ) : hasProfiles ? (
           profiles.map(profile => (
             <ProfileItem key={profile.handle} profile={profile} />
           ))

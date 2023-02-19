@@ -2,8 +2,7 @@ import { useEffect } from 'react'
 import { useToast } from '@chakra-ui/react'
 import { formatError } from '@/utils/format'
 import { defaultToastContent } from '@/utils'
-import { useContract } from 'wagmi'
-import { learnNGrow } from '@/utils/contracts'
+import { useStore } from './useStore'
 
 export default async function useErrorHandling({
   error,
@@ -13,16 +12,17 @@ export default async function useErrorHandling({
   args: readonly unknown[]
 }) {
   const toast = useToast()
+  const { store } = useStore()
 
-  const contract = useContract(learnNGrow)
+  const { learnNGrowContract } = store
 
   useEffect(() => {
-    if (!error || !contract) return
+    if (!error || !learnNGrowContract) return
 
     toast({
       ...defaultToastContent,
       title: 'Error',
-      description: formatError(contract, error),
+      description: formatError(learnNGrowContract, error),
       status: 'error',
     })
   }, [args, error])

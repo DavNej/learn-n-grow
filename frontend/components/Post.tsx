@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Flex, Heading, Image, Text } from '@chakra-ui/react'
+import { Box, Flex, Heading, Image, Link, Text } from '@chakra-ui/react'
 import { IPostContent, IProfile } from '@/utils/types'
 
 export default function Post({
@@ -14,12 +14,14 @@ export default function Post({
   return (
     <Box p={4} mb={4} bgColor='white' borderRadius='xl'>
       <Flex alignItems='center' justifyContent='space-between'>
-        <Image
-          borderRadius='full'
-          boxSize='52px'
-          src={profile.imageURI}
-          alt={handle}
-        />
+        <Link href={`/profile/${profile.handle}`}>
+          <Image
+            borderRadius='full'
+            boxSize='52px'
+            src={profile.imageURI}
+            alt={handle}
+          />
+        </Link>
         <Flex
           flexDirection='column'
           alignItems='stretch'
