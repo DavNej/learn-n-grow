@@ -1,14 +1,16 @@
 import { readFileSync } from 'fs'
 import { join } from 'path'
 
-import { BigNumber, logger, Signer } from 'ethers'
+import { BigNumber, Contract, logger, Signer } from 'ethers'
 import { expect } from 'chai'
 import hre from 'hardhat'
 
 import '@nomiclabs/hardhat-ethers'
 
 import { DataTypes } from '../../typechain-types/contracts/LearnNGrow'
-import { learnNGrow, user } from '../__setup.spec'
+import { eventsLib, learnNGrow, user } from '../__setup.spec'
+import { TransactionReceipt } from '@ethersproject/providers'
+import { keccak256, toUtf8Bytes } from 'ethers/lib/utils'
 
 let snapshotId: string = '0x1'
 
@@ -81,9 +83,95 @@ export async function getDecodedSvgImage(
     )
   }
 }
+
 export function loadTestResourceAsUtf8String(relativePathToResouceDir: string) {
   return readFileSync(
     join('test', 'resources', relativePathToResouceDir),
     'utf8'
   )
+}
+
+export async function getTimestamp(): Promise<any> {
+  const blockNumber = await hre.ethers.provider.send('eth_blockNumber', [])
+  const block = await hre.ethers.provider.send('eth_getBlockByNumber', [
+    blockNumber,
+    false,
+  ])
+  return block.timestamp
+}
+
+export function matchEvent(
+  receipt: TransactionReceipt,
+  name: string,
+  expectedArgs?: any[],
+  eventContract: Contract = eventsLib
+) {
+  const events = receipt.logs
+
+  if (events == undefined) {
+    logger.throwError('No events were emitted')
+  }
+  // match name from list of events in eventContract, when found, compute the sigHash
+  let sigHash: string | undefined
+
+  for (let contractEvent of Object.keys(eventContract.interface.events)) {
+    if (
+      contractEvent.startsWith(name) &&
+      contractEvent.charAt(name.length) == '('
+    ) {
+      sigHash = keccak256(toUtf8Bytes(contractEvent))
+      break
+    }
+  }
+  // Throw if the sigHash was not found
+  if (!sigHash) {
+    logger.throwError(
+      `Event "${name}" not found in provided contract (default: Events libary). \nAre you sure you're using the right contract?`
+    )
+  }
+
+  // Find the given event in the emitted logs
+  let invalidParamsButExists = false
+  for (let emittedEvent of events) {
+    // If we find one with the correct sighash, check if it is the one we're looking for
+    if (emittedEvent.topics[0] == sigHash) {
+      const event = eventContract.interface.parseLog(emittedEvent)
+      // If there are expected arguments, validate them, otherwise, return here
+      if (!expectedArgs) return
+      if (expectedArgs.length != event.args.length) {
+        logger.throwError(
+          `Event "${name}" emitted with correct signature, but expected args are of invalid length`
+        )
+      }
+      invalidParamsButExists = false
+      // Iterate through arguments and check them, if there is a mismatch, continue with the loop
+      for (let i = 0; i < expectedArgs.length; i++) {
+        // Parse empty arrays as empty bytes
+        if (
+          expectedArgs[i].constructor == Array &&
+          expectedArgs[i].length == 0
+        ) {
+          expectedArgs[i] = '0x'
+        }
+
+        // Break out of the expected args loop if there is a mismatch, this will continue the emitted event loop
+        if (BigNumber.isBigNumber(event.args[i])) {
+          if (!event.args[i].eq(BigNumber.from(expectedArgs[i]))) {
+            invalidParamsButExists = true
+            break
+          }
+        } else if (event.args[i] != expectedArgs[i]) {
+          invalidParamsButExists = true
+          break
+        }
+      }
+      // Return if the for loop did not cause a break, so a match has been found, otherwise proceed with the event loop
+      if (!invalidParamsButExists) return
+    }
+  }
+
+  // Throw if the event args were not expected or the event was not found in the logs
+  if (invalidParamsButExists) {
+    logger.throwError(`Event "${name}" found in logs but with unexpected args`)
+  }
 }

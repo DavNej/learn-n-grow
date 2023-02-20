@@ -113,13 +113,11 @@ makeSuiteCleanRoom('Publications: Comments', function () {
         ).to.not.be.reverted
 
         const post = await learnNGrow.getPub(FIRST_PROFILE_ID, 1)
-        console.log({ post })
         expect(post.profileIdPointed).to.eq(0)
         expect(post.pubIdPointed).to.eq(0)
         expect(post.contentURI).to.eq(MOCK_URI)
 
         const pub = await learnNGrow.getPub(SECOND_PROFILE_ID, 1)
-        console.log({ pub })
         expect(pub.profileIdPointed).to.eq(FIRST_PROFILE_ID)
         expect(pub.pubIdPointed).to.eq(1)
         expect(pub.contentURI).to.eq(MOCK_URI_TWO)
