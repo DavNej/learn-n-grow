@@ -5,12 +5,12 @@ import { useStore } from '@/hooks/useStore'
 import Post from '@/components/Post'
 
 export default function Feed() {
-  const { posts: postsByUser, isLoading } = usePostList()
+  const { postsByProfileId, isLoading } = usePostList()
   const { store } = useStore()
 
-  const { profileList } = store
+  const { profilesById } = store
 
-  const allPosts = Object.values(postsByUser).flat()
+  const allPosts = Object.values(postsByProfileId).flat()
   const hasPosts = allPosts.length > 0
 
   if (isLoading) return <Spinner />
@@ -20,7 +20,7 @@ export default function Feed() {
       <Post
         key={`${post.authorId}-${post.id}`}
         post={post}
-        profile={profileList[post.authorId]}
+        profile={profilesById[post.authorId]}
       />
     ))
   ) : (

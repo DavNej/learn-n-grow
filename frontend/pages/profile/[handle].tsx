@@ -11,11 +11,11 @@ import { usePostList } from '@/hooks/contracts/usePostList'
 export default function Profile() {
   const { query } = useRouter()
   const { store } = useStore()
-  const { posts: postsByProfileId } = usePostList()
+  const { postsByProfileId } = usePostList()
 
   const { handle: handleParam } = query
   const handle = handleParam ? handleParam.toString() : ''
-  const profile = Object.values(store.profileList).find(
+  const profile = Object.values(store.profilesById).find(
     p => p.handle === handle
   )
   const profileId = profile?.id || 0
@@ -40,7 +40,7 @@ export default function Profile() {
       </Flex>
       <Heading
         pb={2}
-        mt={4}
+        my={4}
         size='md'
         borderBottom='2px'
         borderColor='gray.400'>

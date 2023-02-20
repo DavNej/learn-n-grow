@@ -10,14 +10,14 @@ interface IStore {
   connectedProfileId: number
   learnNGrowContract: Contract | undefined
   provider: ethers.providers.Provider | undefined
-  profileList: IProfileList
+  profilesById: IProfileList
 }
 
 const initialStore: IStore = {
   learnNGrowContract: undefined,
   provider: undefined,
   connectedProfileId: 0,
-  profileList: {},
+  profilesById: {},
 }
 
 const StoreContext = React.createContext<{

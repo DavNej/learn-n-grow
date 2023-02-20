@@ -48,8 +48,8 @@ export default function NewPost() {
   const { isConnected, address } = useAccount()
 
   const { store } = useStore()
-  const { connectedProfileId, profileList } = store
-  const profile = profileList[connectedProfileId] || {}
+  const { connectedProfileId, profilesById } = store
+  const profile = profilesById[connectedProfileId] || {}
 
   const [content, setContent] = React.useState('')
   const debouncedContent = useDebounce(content, 500)

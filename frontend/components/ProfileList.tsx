@@ -19,9 +19,9 @@ function ProfileItem({ profile }: { profile: IProfile }) {
 }
 
 export default function ProfileList() {
-  const { profileList, isLoading } = useProfileList()
+  const { profilesById, isLoading } = useProfileList()
 
-  const profiles = Object.values(profileList)
+  const profiles = Object.values(profilesById)
   const hasProfiles = profiles.length > 0
 
   return (

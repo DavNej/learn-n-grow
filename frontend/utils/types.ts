@@ -25,10 +25,17 @@ export interface IProfile {
   id: number
   tokenURI?: string
 }
+
 export type IProfileList = Record<string, IProfile>
 
 export interface ICommment {
   contentURI: string
+  id: number
+  authorId: number
+  content: string
+  creationDate: number
+  author: Address
+  mediaURI?: string
 }
 
 export interface IPost {
@@ -36,9 +43,6 @@ export interface IPost {
   id: number
   authorId: number
   comments?: ICommment[]
-}
-
-export interface IPostContent extends IPost {
   content: string
   creationDate: number
   author: Address
