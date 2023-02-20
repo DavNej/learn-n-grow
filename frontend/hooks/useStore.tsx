@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { IProfileList } from '@/utils/types'
+import { IProfileList, PublicationMap } from '@/utils/types'
 import type { Contract } from 'ethers'
 import { ethers } from 'ethers'
 import { useProvider } from 'wagmi'
@@ -11,6 +11,7 @@ interface IStore {
   learnNGrowContract: Contract | undefined
   provider: ethers.providers.Provider | undefined
   profilesById: IProfileList
+  publicationsByProfileId: Map<number, PublicationMap>
 }
 
 const initialStore: IStore = {
@@ -18,6 +19,7 @@ const initialStore: IStore = {
   provider: undefined,
   connectedProfileId: 0,
   profilesById: {},
+  publicationsByProfileId: new Map(),
 }
 
 const StoreContext = React.createContext<{

@@ -48,3 +48,22 @@ export interface IPost {
   author: Address
   mediaURI?: string
 }
+
+export interface IBasePublication {
+  id: number
+  authorId: number
+  contentURI: string
+}
+
+export interface IPostPublication extends IBasePublication {
+  type: 'post'
+}
+
+export interface ICommentPublication extends IBasePublication {
+  type: 'comment'
+  profileIdPointed: number
+  pubIdPointed: number
+}
+
+export type IPublication = IPostPublication | ICommentPublication
+export type PublicationMap = Map<number, IPublication>
