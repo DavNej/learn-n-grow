@@ -42,7 +42,9 @@ export default function Layout({ children }: React.PropsWithChildren) {
   const showCreateProfileButton =
     !isLoading && !hasProfile && pathname !== newProfilePagePath
 
-  return isMounted ? (
+  if (!isMounted) return null
+
+  return (
     <>
       <Head>
         <title>Learn N Grow</title>
@@ -96,5 +98,5 @@ export default function Layout({ children }: React.PropsWithChildren) {
         </Container>
       </main>
     </>
-  ) : null
+  )
 }

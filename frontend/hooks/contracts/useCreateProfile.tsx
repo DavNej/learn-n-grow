@@ -16,12 +16,12 @@ import useErrorHandling from '../useErrorHandling'
 export function useCreateProfile({
   handle,
   imageURI,
+  onSuccess,
 }: {
   handle: string
   imageURI: string
+  onSuccess: () => void
 }) {
-  const enabled = !!handle && !!imageURI
-
   const functionName: ILearnNGrowWriteFunctionName = 'createProfile'
   const args: readonly [{ handle: string; imageURI: string }] = [
     { handle, imageURI },
@@ -31,7 +31,7 @@ export function useCreateProfile({
     ...learnNGrow,
     functionName,
     args,
-    enabled,
+    enabled: !!handle && !!imageURI,
   }
 
   const {
@@ -42,9 +42,11 @@ export function useCreateProfile({
 
   const { data, write, error: writeError } = useContractWrite(config)
 
-  const error = prepareError || writeError
-
-  useErrorHandling({ error, args })
+  const error = useErrorHandling({
+    error: prepareError || writeError,
+    args,
+    enabled: !isPrepareError,
+  })
 
   const { isLoading, isSuccess } = useWaitForTransaction({
     hash: data?.hash,
@@ -68,6 +70,10 @@ export function useCreateProfile({
       }
     },
   })
+
+  if (isSuccess) {
+    onSuccess()
+  }
 
   return {
     data,

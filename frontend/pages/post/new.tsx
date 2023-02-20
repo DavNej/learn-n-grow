@@ -19,7 +19,7 @@ import {
   Avatar,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { Address, useAccount } from 'wagmi'
+import { useAccount } from 'wagmi'
 
 import FileInput from '@/components/FileInput'
 
@@ -27,21 +27,7 @@ import { useCreatePost } from '@/hooks/contracts/useCreatePost'
 import useDebounce from '@/hooks/useDebounce'
 import { useStore } from '@/hooks/useStore'
 import { usePinata } from '@/hooks/usePinata'
-
-interface IPublication {
-  content: string
-  mediaURI: string
-  address: Address
-}
-
-function buildPublication({ content, mediaURI, address }: IPublication) {
-  return {
-    content,
-    mediaURI,
-    creationDate: Date.now(),
-    author: address,
-  }
-}
+import { buildPublication } from '@/utils'
 
 export default function NewPost() {
   const { push, back } = useRouter()
@@ -69,11 +55,11 @@ export default function NewPost() {
   })
 
   React.useEffect(() => {
-    if (shouldPost) {
+    if (shouldPost && write) {
       write?.()
       setShouldPost(false)
     }
-  }, [shouldPost])
+  }, [shouldPost, write])
 
   React.useEffect(() => {
     if (!isConnected) {

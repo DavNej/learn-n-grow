@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useRouter } from 'next/router'
 
-import { Avatar, Box, Flex, Heading, Spinner } from '@chakra-ui/react'
+import { Text, Avatar, Box, Flex, Heading, Spinner } from '@chakra-ui/react'
 
 import { useStore } from '@/hooks/useStore'
 import { useProfileToken } from '@/hooks/contracts/useTokenURI'
@@ -32,7 +32,7 @@ export default function Profile() {
 
   return (
     <Box bg='white' p={4} borderRadius='xl'>
-      <Flex alignItems='center' justifyContent='space-between'>
+      <Flex mb={10} alignItems='center' justifyContent='space-between'>
         <Avatar
           mr={4}
           name={profile.handle}
@@ -52,32 +52,36 @@ export default function Profile() {
         Posts
       </Heading>
 
-      {posts?.map(post => (
-        <Post
-          comments={comments.filter(c => c.pubIdPointed && post.id)}
-          key={post.id}
-          post={post}
-          profile={profile}
-          noBanner
-        />
-      ))}
+      {posts ? (
+        posts.map(post => (
+          <Post
+            comments={comments.filter(c => c.pubIdPointed && post.id)}
+            key={post.id}
+            post={post}
+            profile={profile}
+            noBanner
+          />
+        ))
+      ) : (
+        <Text textAlign='center'>No posts</Text>
+      )}
 
       <Heading
         pb={2}
-        mt={4}
+        mt={10}
         size='md'
         borderBottom='2px'
         borderColor='gray.400'>
         Profile NFT
       </Heading>
 
-      <Box p={8}>
+      <Flex p={8} justifyContent='center'>
         {token ? (
           <div dangerouslySetInnerHTML={{ __html: token.image }} />
         ) : (
           <Spinner />
         )}
-      </Box>
+      </Flex>
     </Box>
   )
 }

@@ -1,5 +1,6 @@
 import { UseToastOptions } from '@chakra-ui/react'
 import { createHash } from 'crypto'
+import { Address } from 'wagmi'
 
 export function isUndefined(arg: unknown | undefined) {
   return typeof arg === 'undefined'
@@ -52,4 +53,20 @@ export function flatten(obj: any) {
   const str = JSON.stringify(obj, replacer)
 
   return JSON.parse(str).flat()
+}
+
+interface IPublication {
+  content: string
+  mediaURI: string
+  address: Address
+}
+
+export function buildPublication({ content, mediaURI, address }: IPublication) {
+  const common = {
+    content,
+    creationDate: Date.now(),
+    author: address,
+  }
+
+  return !!mediaURI ? { ...common } : { ...common, mediaURI }
 }

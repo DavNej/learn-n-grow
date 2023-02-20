@@ -29,6 +29,10 @@ function ImageInput({
           document.getElementById('file-input')?.click()
         }}
         style={{ cursor: 'pointer' }}
+        onError={e => {
+          e.currentTarget.src = '/avatar-placeholder.png'
+          e.currentTarget.style.border = '2px solid red'
+        }}
         src={previewUrl || src || '/avatar-placeholder.png'}
         alt='Avatar'
       />

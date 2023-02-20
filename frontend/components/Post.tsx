@@ -23,7 +23,13 @@ export default function Post({
   const { profilesById } = store
 
   return (
-    <Box p={4} mb={4} bgColor='white' borderRadius='xl' border='1px'>
+    <Box
+      p={4}
+      mb={4}
+      bgColor='white'
+      borderRadius='xl'
+      border='1px'
+      borderColor='gray.400'>
       <Flex alignItems='center' justifyContent='space-between'>
         {!noBanner && (
           <Link href={`/profile/${profile.handle}`}>

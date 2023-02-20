@@ -17,6 +17,8 @@ export function usePosts() {
   React.useEffect(() => {
     if (publicationsByProfileId.size > 0) {
       getPosts()
+    } else {
+      setIsLoading(false)
     }
   }, [learnNGrowContract, publicationsByProfileId])
 
@@ -44,12 +46,12 @@ export function usePosts() {
 
     Promise.all(uris.map(contentURI => axios.get(contentURI)))
       .then(responses => {
+        const _posts = new Map<number, IPost>()
         responses.forEach(res => {
           if (!res.config.url) return
           const _post = contentURIMap.get(res.config.url)
           if (!_post) return
 
-          const _posts = new Map<number, IPost>()
           _posts.set(_post.id, {
             ..._post,
             ...res.data,
@@ -62,7 +64,6 @@ export function usePosts() {
 
         setIsLoading(false)
       })
-
       .catch(err => {
         console.error({ err })
       })

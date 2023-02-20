@@ -26,7 +26,10 @@ export function useProfile({ address }: { address?: Address | null }) {
 
     const profileId = await learnNGrowContract.profile(address)
 
-    if (profileId.toNumber() === 0) return
+    if (profileId.toNumber() === 0) {
+      setIsLoading(false)
+      return
+    }
 
     setHasProfile(true)
 

@@ -42,19 +42,17 @@ export function useCreatePost({
 
   const { data, write, error: writeError } = useContractWrite(config)
 
-  const error = prepareError || writeError
-
-  useErrorHandling({ error, args })
+  const error = useErrorHandling({
+    error: prepareError || writeError,
+    args,
+    enabled: !isPrepareError,
+  })
 
   const { isLoading, isSuccess } = useWaitForTransaction({
     hash: data?.hash,
   })
 
   const toast = useToast()
-
-  if (isSuccess) {
-    onSuccess()
-  }
 
   useContractEvent({
     address: learnNGrow.address,
@@ -72,6 +70,10 @@ export function useCreatePost({
       }
     },
   })
+
+  if (isSuccess) {
+    onSuccess()
+  }
 
   return {
     data,

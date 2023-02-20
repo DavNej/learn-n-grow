@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Spinner, Text } from '@chakra-ui/react'
+import { Box, Flex, Spinner, Text } from '@chakra-ui/react'
 import { usePosts } from '@/hooks/contracts/usePosts'
 import { useStore } from '@/hooks/useStore'
 import Post from '@/components/Post'
@@ -17,11 +17,16 @@ export default function Feed() {
   const posts: IPost[] = flatten(postsByProfileId)
   const hasPosts = posts.length > 0
 
-  if (isLoading) return <Spinner />
+  if (!isLoading)
+    return (
+      <Flex justifyContent='center'>
+        <Spinner />
+      </Flex>
+    )
 
   if (!hasPosts)
     return (
-      <Box p={4} mb={4} bgColor='white' borderRadius='md'>
+      <Box p={4} bgColor='white' borderRadius='md'>
         <Text fontSize='md' textAlign='center'>
           No post to show 🤷
         </Text>

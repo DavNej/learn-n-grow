@@ -7,14 +7,16 @@ import { IProfile } from '@/utils/types'
 
 function ProfileItem({ profile }: { profile: IProfile }) {
   return (
-    <Link href={`/profile/${profile.handle}`}>
-      <Box px={4} py={2} _hover={{ backgroundColor: 'gray.200' }}>
-        <Flex alignItems='center'>
-          <Avatar mr={4} name={profile.handle} src={profile.imageURI} />
-          <Text>@{profile.handle}</Text>
-        </Flex>
-      </Box>
-    </Link>
+    <Box width='100%'>
+      <Link href={`/profile/${profile.handle}`}>
+        <Box px={4} py={2} _hover={{ backgroundColor: 'gray.200' }}>
+          <Flex alignItems='center'>
+            <Avatar mr={4} name={profile.handle} src={profile.imageURI} />
+            <Text>@{profile.handle}</Text>
+          </Flex>
+        </Box>
+      </Link>
+    </Box>
   )
 }
 
@@ -26,7 +28,13 @@ export default function ProfileList() {
 
   return (
     <aside>
-      <Box py={2} bg='white' overflow='hidden' borderRadius='xl'>
+      <Flex
+        py={2}
+        bg='white'
+        overflow='hidden'
+        borderRadius='xl'
+        minW={200}
+        justifyContent='center'>
         {isLoading ? (
           <Spinner />
         ) : hasProfiles ? (
@@ -38,7 +46,7 @@ export default function ProfileList() {
             No members 🤷
           </Text>
         )}
-      </Box>
+      </Flex>
     </aside>
   )
 }

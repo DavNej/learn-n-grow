@@ -72,6 +72,9 @@ export function formatError(contract: Contract, error: Error) {
   if (message.includes('CannotCommentOnSelf')) {
     return 'Cannot comment on self'
   }
+  if (message.includes('Nonce too high')) {
+    return 'Nonce too high, please reset acccount'
+  }
 
   return message
 }
