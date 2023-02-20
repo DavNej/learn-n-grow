@@ -9,7 +9,7 @@ import { useStore } from '@/hooks/useStore'
 function ProfileItem({ profile }: { profile: IProfile }) {
   return (
     <Box width='100%'>
-      <Link href={`/profile/${profile.handle}`}>
+      <Link href={'/' + profile.handle}>
         <Box px={4} py={2} _hover={{ backgroundColor: 'gray.200' }}>
           <Flex alignItems='center'>
             <Avatar mr={4} name={profile.handle} src={profile.imageURI} />
