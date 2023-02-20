@@ -17,7 +17,7 @@ export default function Feed() {
   const posts: IPost[] = flatten(postsByProfileId)
   const hasPosts = posts.length > 0
 
-  if (!isLoading)
+  if (isLoading)
     return (
       <Flex justifyContent='center'>
         <Spinner />

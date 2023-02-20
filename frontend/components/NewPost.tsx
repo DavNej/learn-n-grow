@@ -1,4 +1,5 @@
 import React from 'react'
+import { useAccount } from 'wagmi'
 
 import {
   Button,
@@ -18,20 +19,16 @@ import {
   Box,
   Avatar,
 } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
-import { useAccount } from 'wagmi'
 
 import FileInput from '@/components/FileInput'
-
 import { useCreatePost } from '@/hooks/contracts/useCreatePost'
 import useDebounce from '@/hooks/useDebounce'
 import { useStore } from '@/hooks/useStore'
 import { usePinata } from '@/hooks/usePinata'
 import { buildPublication } from '@/utils'
 
-export default function NewPost() {
-  const { push, back } = useRouter()
-  const { isConnected, address } = useAccount()
+export default function NewPost({ onClose }: { onClose: () => void }) {
+  const { address } = useAccount()
 
   const { store } = useStore()
   const { connectedProfileId, profilesById } = store
@@ -50,7 +47,7 @@ export default function NewPost() {
     contentURI,
     profileId: connectedProfileId,
     onSuccess() {
-      push(`/profile/${profile.handle}`)
+      onClose()
     },
   })
 
@@ -60,12 +57,6 @@ export default function NewPost() {
       setShouldPost(false)
     }
   }, [shouldPost, write])
-
-  React.useEffect(() => {
-    if (!isConnected) {
-      push('/feed')
-    }
-  }, [isConnected])
 
   function handleImageChange(img: File) {
     setImageIsLoading(true)
@@ -103,7 +94,7 @@ export default function NewPost() {
   const handle = `@${profile.handle}`
 
   return (
-    <Modal isOpen onClose={() => back()}>
+    <Modal isOpen onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>New post</ModalHeader>

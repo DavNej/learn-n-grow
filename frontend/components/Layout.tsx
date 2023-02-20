@@ -19,13 +19,16 @@ import { useStore } from '@/hooks/useStore'
 
 import Header from './Header'
 import ProfileList from './ProfileList'
+import NewPost from './NewPost'
 
-const newProfilePagePath = '/profile/new'
+const newProfilePagePath = '/register'
 
 export default function Layout({ children }: React.PropsWithChildren) {
   const isMounted = useIsMounted()
   const { pathname } = useRouter()
   const { address, isConnected } = useAccount()
+  const [showNewPostForm, setShowNewPostForm] = React.useState(false)
+
   const {
     profile: connectedProfile,
     hasProfile,
@@ -60,16 +63,15 @@ export default function Layout({ children }: React.PropsWithChildren) {
           <Flex>
             <Flex p={4} flexDirection='column'>
               {hasProfile && (
-                <Link href='/post/new'>
-                  <Button
-                    mb={4}
-                    width='100%'
-                    colorScheme='teal'
-                    aria-label='Call Segun'
-                    size='md'>
-                    + Create post
-                  </Button>
-                </Link>
+                <Button
+                  mb={4}
+                  width='100%'
+                  colorScheme='teal'
+                  aria-label='Call Segun'
+                  onClick={() => setShowNewPostForm(true)}
+                  size='md'>
+                  + Create post
+                </Button>
               )}
 
               <ProfileList />
@@ -96,6 +98,10 @@ export default function Layout({ children }: React.PropsWithChildren) {
             </Flex>
           </Flex>
         </Container>
+
+        {showNewPostForm && (
+          <NewPost onClose={() => setShowNewPostForm(false)} />
+        )}
       </main>
     </>
   )

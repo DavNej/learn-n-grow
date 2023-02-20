@@ -16,9 +16,11 @@ export default function Header() {
     <header>
       <Container maxW='5xl'>
         <Flex p='1rem' justifyContent='space-between' alignItems='center'>
-          <Link href={'/' + profile.handle}>
-            <Avatar mr={4} name={profile.handle} src={profile.imageURI} />
-          </Link>
+          {profile && (
+            <Link href={'/' + profile.handle}>
+              <Avatar mr={4} name={profile.handle} src={profile.imageURI} />
+            </Link>
+          )}
           <Link href='/'>
             <Flex p='1rem' justifyContent='space-between' alignItems='center'>
               <Image src='/plant.png' alt='Logo' height={30} width={30} />

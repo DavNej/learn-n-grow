@@ -4,6 +4,7 @@ import { Avatar, Box, Flex, Spinner, Text } from '@chakra-ui/react'
 import { useProfileList } from '@/hooks/contracts/useProfileList'
 import Link from 'next/link'
 import { IProfile } from '@/utils/types'
+import { useStore } from '@/hooks/useStore'
 
 function ProfileItem({ profile }: { profile: IProfile }) {
   return (
@@ -22,8 +23,12 @@ function ProfileItem({ profile }: { profile: IProfile }) {
 
 export default function ProfileList() {
   const { profilesById, isLoading } = useProfileList()
+  const { store } = useStore()
+  const { connectedProfileId } = store
 
-  const profiles = Object.values(profilesById)
+  const profiles = Object.values(profilesById).filter(
+    p => p.id !== connectedProfileId
+  )
   const hasProfiles = profiles.length > 0
 
   return (

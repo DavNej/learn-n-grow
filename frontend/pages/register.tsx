@@ -19,6 +19,7 @@ import ImageInput from '@/components/ImageInput'
 import useDebounce from '@/hooks/useDebounce'
 import { useCreateProfile } from '@/hooks/contracts/useCreateProfile'
 import { usePinata } from '@/hooks/usePinata'
+import { useStore } from '@/hooks/useStore'
 
 export default function Register() {
   const [handle, setHandle] = React.useState('')
@@ -34,15 +35,18 @@ export default function Register() {
     handle: debouncedHandle,
     imageURI: debouncedImageURI,
     onSuccess() {
-      push(`/profile/${handle}`)
+      push('/' + handle)
     },
   })
 
+  const { store } = useStore()
+  const { connectedProfileId } = store
+
   React.useEffect(() => {
-    if (!isConnected) {
+    if (!isConnected || connectedProfileId) {
       push('/feed')
     }
-  }, [isConnected])
+  }, [isConnected, connectedProfileId])
 
   function handleImageChange(img: File) {
     if (!!img) {
