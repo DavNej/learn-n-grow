@@ -7,11 +7,15 @@ import { useStore } from '@/hooks/useStore'
 import { useProfileToken } from '@/hooks/contracts/useTokenURI'
 import Post from '@/components/Post'
 import { usePosts } from '@/hooks/contracts/usePosts'
+import { useComments } from '@/hooks/contracts/useComments'
+import { usePublications } from '@/hooks/contracts/usePublications'
 
 export default function Profile() {
   const { query } = useRouter()
   const { store } = useStore()
+  usePublications()
   const { postsByProfileId } = usePosts()
+  const { comments } = useComments({ enabled: true })
 
   const { handle: handleParam } = query
   const handle = handleParam ? handleParam.toString() : ''
@@ -48,10 +52,15 @@ export default function Profile() {
         Posts
       </Heading>
 
-      {posts &&
-        posts.map(post => (
-          <Post key={post.id} post={post} profile={profile} noBanner />
-        ))}
+      {posts?.map(post => (
+        <Post
+          comments={comments.filter(c => c.pubIdPointed && post.id)}
+          key={post.id}
+          post={post}
+          profile={profile}
+          noBanner
+        />
+      ))}
 
       <Heading
         pb={2}

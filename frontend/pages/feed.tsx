@@ -6,10 +6,12 @@ import Post from '@/components/Post'
 import { usePublications } from '@/hooks/contracts/usePublications'
 import { flatten } from '@/utils'
 import { IPost } from '@/utils/types'
+import { useComments } from '@/hooks/contracts/useComments'
 
 export default function Feed() {
   usePublications()
   const { postsByProfileId, isLoading } = usePosts()
+  const { comments } = useComments({ enabled: true })
   const { store } = useStore()
   const { profilesById } = store
   const posts: IPost[] = flatten(postsByProfileId)
@@ -31,6 +33,7 @@ export default function Feed() {
       key={`${post.authorId}-${post.id}`}
       post={post}
       profile={profilesById[post.authorId]}
+      comments={comments.filter(c => c.pubIdPointed && post.id)}
     />
   ))
 }

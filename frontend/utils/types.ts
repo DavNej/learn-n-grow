@@ -39,7 +39,7 @@ export interface IPostPublication extends IBasePublication {
 }
 
 export interface ICommentPublication extends IBasePublication {
-  type: 'comment'
+  type?: 'comment'
   profileIdPointed: number
   pubIdPointed: number
 }
@@ -51,11 +51,11 @@ export interface IPost extends IBasePublication {
   content: string
   creationDate: number
   author: Address
-  comments?: ICommment[]
+  comments?: IComment[]
   mediaURI?: string
 }
 
-export interface ICommment extends IBasePublication {
+export interface IComment extends ICommentPublication {
   content: string
   creationDate: number
   author: Address
