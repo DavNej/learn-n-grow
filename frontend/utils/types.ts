@@ -28,27 +28,6 @@ export interface IProfile {
 
 export type IProfileList = Record<string, IProfile>
 
-export interface ICommment {
-  contentURI: string
-  id: number
-  authorId: number
-  content: string
-  creationDate: number
-  author: Address
-  mediaURI?: string
-}
-
-export interface IPost {
-  contentURI: string
-  id: number
-  authorId: number
-  comments?: ICommment[]
-  content: string
-  creationDate: number
-  author: Address
-  mediaURI?: string
-}
-
 export interface IBasePublication {
   id: number
   authorId: number
@@ -67,3 +46,18 @@ export interface ICommentPublication extends IBasePublication {
 
 export type IPublication = IPostPublication | ICommentPublication
 export type PublicationMap = Map<number, IPublication>
+
+export interface IPost extends IBasePublication {
+  content: string
+  creationDate: number
+  author: Address
+  comments?: ICommment[]
+  mediaURI?: string
+}
+
+export interface ICommment extends IBasePublication {
+  content: string
+  creationDate: number
+  author: Address
+  mediaURI?: string
+}

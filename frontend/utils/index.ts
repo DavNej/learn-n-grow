@@ -30,3 +30,26 @@ export function hashWithSha256(data: unknown): string {
   hash.update(JSON.stringify(data))
   return hash.digest('hex')
 }
+
+export function serialize(obj: any) {
+  function replacer(_: any, value: any) {
+    if (value instanceof Map) {
+      return Object.fromEntries(value)
+    }
+    return value
+  }
+  const str = JSON.stringify(obj, replacer)
+  return JSON.parse(str)
+}
+
+export function flatten(obj: any) {
+  function replacer(_: any, value: any) {
+    if (value instanceof Map) {
+      return Array.from(value.values())
+    }
+    return value
+  }
+  const str = JSON.stringify(obj, replacer)
+
+  return JSON.parse(str).flat()
+}

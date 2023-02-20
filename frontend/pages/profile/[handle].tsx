@@ -6,12 +6,12 @@ import { Avatar, Box, Flex, Heading, Spinner } from '@chakra-ui/react'
 import { useStore } from '@/hooks/useStore'
 import { useProfileToken } from '@/hooks/contracts/useTokenURI'
 import Post from '@/components/Post'
-import { usePostList } from '@/hooks/contracts/usePostList'
+import { usePosts } from '@/hooks/contracts/usePosts'
 
 export default function Profile() {
   const { query } = useRouter()
   const { store } = useStore()
-  const { postsByProfileId } = usePostList()
+  const { postsByProfileId } = usePosts()
 
   const { handle: handleParam } = query
   const handle = handleParam ? handleParam.toString() : ''
@@ -23,7 +23,8 @@ export default function Profile() {
 
   if (!profile) return null
 
-  const posts = postsByProfileId[profileId]
+  const profilePosts = postsByProfileId.get(profileId)
+  const posts = profilePosts && Array.from(profilePosts.values())
 
   return (
     <Box bg='white' p={4} borderRadius='xl'>
