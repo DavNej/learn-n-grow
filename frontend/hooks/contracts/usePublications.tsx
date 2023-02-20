@@ -4,17 +4,14 @@ import { useStore } from '../useStore'
 
 const PUB_TYPES_ENUM = ['Post', 'Comment', 'Nonexistent']
 
-export function usePublications() {
-  const [publicationsByProfileId, setPublicationsByProfileId] = React.useState<
-    Map<number, PublicationMap>
-  >(new Map())
+export function usePublications({ enabled }: { enabled: boolean }) {
   const { store, setStore } = useStore()
-  const { profilesById, learnNGrowContract } = store
+  const { profilesById, learnNGrowContract, publicationsByProfileId } = store
 
   const [isLoading, setIsLoading] = React.useState(true)
 
   React.useEffect(() => {
-    if (Object.keys(profilesById).length > 0) {
+    if (Object.keys(profilesById).length > 0 && enabled) {
       getPublications()
     }
   }, [learnNGrowContract, profilesById])
@@ -84,7 +81,6 @@ export function usePublications() {
       _publicationsByProfileId.set(profileId, profilePublications)
     }
 
-    setPublicationsByProfileId(_publicationsByProfileId)
     setStore(s => ({ ...s, publicationsByProfileId: _publicationsByProfileId }))
 
     setIsLoading(false)

@@ -12,10 +12,11 @@ import { usePublications } from '@/hooks/contracts/usePublications'
 
 export default function Profile() {
   const { query } = useRouter()
+  usePublications({ enabled: true })
+  usePosts({ enabled: true })
+  useComments({ enabled: true })
   const { store } = useStore()
-  usePublications()
-  const { postsByProfileId } = usePosts()
-  const { comments } = useComments({ enabled: true })
+  const { postsByProfileId, comments } = store
 
   const { handle: handleParam } = query
   const handle = handleParam ? handleParam.toString() : ''

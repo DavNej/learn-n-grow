@@ -6,13 +6,17 @@ import { useStore } from '../useStore'
 
 const MAX_PROFILE_COUNT = 20
 
-export function useProfileList() {
-  const [profilesById, setProfileList] = React.useState<IProfileList>({})
-
+export function useProfileList({ enabled }: { enabled: boolean }) {
   const [isLoading, setIsLoading] = React.useState(true)
 
   const { store, setStore } = useStore()
-  const { learnNGrowContract } = store
+  const { learnNGrowContract, profilesById } = store
+
+  React.useEffect(() => {
+    if (!!learnNGrowContract && enabled) {
+      getProfileList()
+    }
+  }, [learnNGrowContract])
 
   async function getProfileList() {
     if (!learnNGrowContract) return null
@@ -33,15 +37,10 @@ export function useProfileList() {
       profiles[i] = { id: i, handle, imageURI, pubCount }
     }
 
-    setProfileList(profiles)
     setStore(store => ({ ...store, profilesById: profiles }))
 
     setIsLoading(false)
   }
-
-  React.useEffect(() => {
-    getProfileList()
-  }, [learnNGrowContract])
 
   return { profilesById, isLoading }
 }

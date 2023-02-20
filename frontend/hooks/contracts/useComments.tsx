@@ -4,8 +4,6 @@ import { IComment, ICommentPublication } from '@/utils/types'
 import { useStore } from '../useStore'
 
 export function useComments({ enabled }: { enabled: boolean }) {
-  const [comments, setComments] = React.useState<IComment[]>([])
-
   const { store, setStore } = useStore()
   const { publicationsByProfileId, learnNGrowContract } = store
 
@@ -53,9 +51,7 @@ export function useComments({ enabled }: { enabled: boolean }) {
           })
         })
 
-        setComments(_comments)
-        setStore(s => ({ ...s, comments }))
-
+        setStore(s => ({ ...s, comments: _comments }))
         setIsLoading(false)
       })
 
@@ -64,5 +60,5 @@ export function useComments({ enabled }: { enabled: boolean }) {
       })
   }
 
-  return { comments, isLoading }
+  return { isLoading }
 }

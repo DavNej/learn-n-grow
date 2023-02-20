@@ -22,9 +22,9 @@ function ProfileItem({ profile }: { profile: IProfile }) {
 }
 
 export default function ProfileList() {
-  const { profilesById, isLoading } = useProfileList()
+  const { isLoading } = useProfileList({ enabled: true })
   const { store } = useStore()
-  const { connectedProfileId } = store
+  const { connectedProfileId, profilesById } = store
 
   const profiles = Object.values(profilesById).filter(
     p => p.id !== connectedProfileId

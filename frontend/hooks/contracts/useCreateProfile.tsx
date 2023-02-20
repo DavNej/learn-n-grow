@@ -67,13 +67,10 @@ export function useCreateProfile({
           description: `Profile created 🎨`,
           status: 'success',
         })
+        onSuccess()
       }
     },
   })
-
-  if (isSuccess) {
-    onSuccess()
-  }
 
   return {
     data,

@@ -1,21 +1,17 @@
 import * as React from 'react'
 import axios from 'axios'
-import { IBasePublication, IPost } from '@/utils/types'
+import { IBasePublication, IPost, PostMap } from '@/utils/types'
 import { useStore } from '../useStore'
 
-type PostMap = Map<number, IPost>
-
-export function usePosts() {
-  const [postsByProfileId, setPostsByProfileId] = React.useState<
-    Map<number, PostMap>
-  >(new Map())
+export function usePosts({ enabled }: { enabled: boolean }) {
   const { store, setStore } = useStore()
-  const { publicationsByProfileId, learnNGrowContract } = store
+  const { publicationsByProfileId, learnNGrowContract, postsByProfileId } =
+    store
 
   const [isLoading, setIsLoading] = React.useState(true)
 
   React.useEffect(() => {
-    if (publicationsByProfileId.size > 0) {
+    if (publicationsByProfileId.size > 0 && enabled) {
       getPosts()
     } else {
       setIsLoading(false)
@@ -56,12 +52,11 @@ export function usePosts() {
             ..._post,
             ...res.data,
           })
+
           _postsByProfileId.set(_post.authorId, _posts)
         })
 
-        setPostsByProfileId(_postsByProfileId)
         setStore(s => ({ ...s, postsByProfileId: _postsByProfileId }))
-
         setIsLoading(false)
       })
       .catch(err => {

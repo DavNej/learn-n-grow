@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { IProfileList, PublicationMap } from '@/utils/types'
+import { IComment, IProfileList, PostMap, PublicationMap } from '@/utils/types'
 import type { Contract } from 'ethers'
 import { ethers } from 'ethers'
 import { useProvider } from 'wagmi'
@@ -12,6 +12,8 @@ interface IStore {
   provider: ethers.providers.Provider | undefined
   profilesById: IProfileList
   publicationsByProfileId: Map<number, PublicationMap>
+  postsByProfileId: Map<number, PostMap>
+  comments: IComment[]
 }
 
 const initialStore: IStore = {
@@ -20,6 +22,8 @@ const initialStore: IStore = {
   connectedProfileId: 0,
   profilesById: {},
   publicationsByProfileId: new Map(),
+  postsByProfileId: new Map(),
+  comments: [],
 }
 
 const StoreContext = React.createContext<{

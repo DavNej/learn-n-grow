@@ -46,9 +46,7 @@ export default function NewPost({ onClose }: { onClose: () => void }) {
   const { write, isLoading } = useCreatePost({
     contentURI,
     profileId: connectedProfileId,
-    onSuccess() {
-      onClose()
-    },
+    onSuccess() {},
   })
 
   React.useEffect(() => {

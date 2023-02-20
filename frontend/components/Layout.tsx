@@ -27,14 +27,14 @@ export default function Layout({ children }: React.PropsWithChildren) {
   const isMounted = useIsMounted()
   const { pathname } = useRouter()
   const { address, isConnected } = useAccount()
-  const [showNewPostForm, setShowNewPostForm] = React.useState(false)
-
   const {
     profile: connectedProfile,
     hasProfile,
     isLoading,
   } = useProfile({ address })
   const { setStore } = useStore()
+
+  const [showNewPostForm, setShowNewPostForm] = React.useState(false)
 
   React.useEffect(() => {
     if (connectedProfile) {

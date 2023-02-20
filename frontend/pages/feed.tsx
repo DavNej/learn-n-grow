@@ -9,11 +9,12 @@ import { IPost } from '@/utils/types'
 import { useComments } from '@/hooks/contracts/useComments'
 
 export default function Feed() {
-  usePublications()
-  const { postsByProfileId, isLoading } = usePosts()
-  const { comments } = useComments({ enabled: true })
+  usePublications({ enabled: true })
+  useComments({ enabled: true })
+  const { isLoading } = usePosts({ enabled: true })
   const { store } = useStore()
-  const { profilesById } = store
+  const { profilesById, postsByProfileId, comments } = store
+
   const posts: IPost[] = flatten(postsByProfileId)
   const hasPosts = posts.length > 0
 

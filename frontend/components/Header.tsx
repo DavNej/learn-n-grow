@@ -7,7 +7,6 @@ import { useStore } from '@/hooks/useStore'
 
 export default function Header() {
   const { store } = useStore()
-
   const { connectedProfileId, profilesById } = store
 
   const profile = profilesById[connectedProfileId]
