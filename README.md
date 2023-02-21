@@ -1,9 +1,10 @@
 # Learn N Grow
 
-Learn N Grow is supposedly a decentralized social media where anyone could share collectible content.
-Data is hosted on-chain and thanks to [Pinata](https://www.pinata.cloud/), a decentralized storage solution relying on the IPFS protocol.
+Learn N Grow is supposedly a decentralized social media where anyone could share collectible content. Data is hosted on-chain and on the IPFS protocol, thanks to [Pinata](https://www.pinata.cloud/), a decentralized storage service.
 
 > Blockchain being an open and transparent technology no need to be in a whitelist whatsoever to register. The Dapp is also open to anyone and no need to have a profile to use it in read only mode.
+
+Checkout contract on [etherscan](https://goerli.etherscan.io/address/0x18DD042707d7ec2C5f0393271eE22A77E1A1AEcc)
 
 ## Features
 
