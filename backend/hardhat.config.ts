@@ -14,7 +14,6 @@ import 'solidity-coverage'
 import glob from 'glob'
 import path from 'path'
 
-const PRIVATE_KEY = process.env.PRIVATE_KEY || ''
 const ALCHEMY_GOERLI = process.env.ALCHEMY_GOERLI || ''
 const ETERSCAN_API_KEY = process.env.ETERSCAN_API_KEY || ''
 
@@ -24,6 +23,14 @@ if (!process.env.SKIP_TASKS_LOAD) {
   })
 }
 
+const goerliAccounts = [
+  process.env.PRIVATE_KEY_0 || '',
+  process.env.PRIVATE_KEY_1 || '',
+  process.env.PRIVATE_KEY_2 || '',
+  process.env.PRIVATE_KEY_3 || '',
+  process.env.PRIVATE_KEY_4 || '',
+]
+
 const networks: Record<string, NetworkUserConfig> = {
   local: {
     url: 'http://127.0.0.1:8545',
@@ -32,7 +39,7 @@ const networks: Record<string, NetworkUserConfig> = {
   goerli: {
     url: ALCHEMY_GOERLI,
     chainId: 5,
-    accounts: [PRIVATE_KEY],
+    accounts: goerliAccounts,
   },
 }
 
