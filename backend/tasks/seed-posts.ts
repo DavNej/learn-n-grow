@@ -5,8 +5,9 @@ import { LearnNGrow__factory } from '../typechain-types/index'
 import { waitForTx } from '../utils'
 import { CONTRACT_ADDRESS } from '../utils/constants'
 
-task('create-posts', 'Populate posts').setAction(async (_, hre) => {
-  const [deployer, user, userTwo, userThree] = await hre.ethers.getSigners()
+task('seed-posts', 'Populate posts').setAction(async (_, hre) => {
+  const [deployer, user, userTwo, userThree, userFour] =
+    await hre.ethers.getSigners()
 
   const learnNGrow = LearnNGrow__factory.connect(CONTRACT_ADDRESS, deployer)
 
@@ -15,7 +16,7 @@ task('create-posts', 'Populate posts').setAction(async (_, hre) => {
     learnNGrow.connect(user).post({
       profileId: userProfileId,
       contentURI:
-        'https://gateway.pinata.cloud/ipfs/bafkreibddjzdanba2sz3r5habkk2obtfpgf2baqnn3sjc2drrtpwt22kae',
+        'https://gateway.pinata.cloud/ipfs/bafkreietegics3pwarjrowo5utu6fzjfk4zx6o7x7asln6fmen4jbbv7tu',
     })
   )
 
@@ -24,7 +25,7 @@ task('create-posts', 'Populate posts').setAction(async (_, hre) => {
     learnNGrow.connect(userTwo).post({
       profileId: userTwoProfileId,
       contentURI:
-        'https://gateway.pinata.cloud/ipfs/bafkreigkbol2sdv2zzx7gkgooephmt6jftk5g5jtmb7gkk2qmjxwxegwhq',
+        'https://gateway.pinata.cloud/ipfs/bafkreifdlrfon7354xtndyfnxqyd2up4po4c6sa2ofxwavjuy3eey57zs4',
     })
   )
 
@@ -33,7 +34,16 @@ task('create-posts', 'Populate posts').setAction(async (_, hre) => {
     learnNGrow.connect(userThree).post({
       profileId: userThreeProfileId,
       contentURI:
-        'https://gateway.pinata.cloud/ipfs/bafkreidwxv2fwzp26rrhm43r3ii5xvlgvokbqgvfaevm5qsnqhufzlrjhe',
+        'https://gateway.pinata.cloud/ipfs/bafkreidiyjsdvnpovmajjiplum2q5azfbeq4gyoc5nt6wg4ydcokrr44wq',
+    })
+  )
+
+  const userFourProfileId = await learnNGrow.profile(userFour.address)
+  await waitForTx(
+    learnNGrow.connect(userFour).post({
+      profileId: userFourProfileId,
+      contentURI:
+        'https://gateway.pinata.cloud/ipfs/bafkreihpbeqpcmrgia7y7tom6jpcfezn2747l46xo74byrw7rlmp24jliy',
     })
   )
 })

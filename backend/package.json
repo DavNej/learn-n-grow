@@ -8,6 +8,10 @@
     "compile": "SKIP_TASKS_LOAD=true hardhat clean && SKIP_TASKS_LOAD=true hardhat compile",
     "deploy": "hardhat deploy",
     "dev": "yarn compile && yarn deploy && hardhat node",
+    "seed:comments": "hardhat seed-comments --network local",
+    "seed:posts": "hardhat seed-posts --network local",
+    "seed:profiles": "hardhat seed-profiles --network local",
+    "seed": "yarn seed:profiles && yarn seed:posts && yarn seed:comments",
     "test": "hardhat test"
   },
   "devDependencies": {

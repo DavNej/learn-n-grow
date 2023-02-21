@@ -5,8 +5,9 @@ import { LearnNGrow__factory } from '../typechain-types/index'
 import { waitForTx } from '../utils'
 import { CONTRACT_ADDRESS } from '../utils/constants'
 
-task('create-profiles', 'Populate profiles').setAction(async (_, hre) => {
-  const [deployer, user, userTwo, userThree] = await hre.ethers.getSigners()
+task('seed-profiles', 'Populate profiles').setAction(async (_, hre) => {
+  const [deployer, user, userTwo, userThree, userFour] =
+    await hre.ethers.getSigners()
 
   const learnNGrow = LearnNGrow__factory.connect(CONTRACT_ADDRESS, deployer)
 
@@ -31,6 +32,14 @@ task('create-profiles', 'Populate profiles').setAction(async (_, hre) => {
       handle: 'coq.eth',
       imageURI:
         'https://gateway.pinata.cloud/ipfs/QmVBiWuvd3LZDafCJbWJWCb3cXrwKLYqrRhsjHPRrBja8k',
+    })
+  )
+
+  await waitForTx(
+    learnNGrow.connect(userFour).createProfile({
+      handle: 'heron.eth',
+      imageURI:
+        'https://gateway.pinata.cloud/ipfs/QmRudXHS2XvkYfaDSNowzJvirSZQAqki7Z5ULHizHhv5iG',
     })
   )
 })
