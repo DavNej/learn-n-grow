@@ -26,6 +26,13 @@ export interface IProfile {
   tokenURI?: string
 }
 
+// export type ITokenJson = any
+
+// export interface IProfileToken {
+//   json: ITokenJson
+//   imageURI: `http${string}`
+// }
+
 export type IProfileList = Record<string, IProfile>
 
 export interface IBasePublication {

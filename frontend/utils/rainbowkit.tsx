@@ -23,7 +23,7 @@ const { connectors } = getDefaultWallets({
 })
 
 const client = createClient({
-  autoConnect: false,
+  autoConnect: !(process.env.NODE_ENV === 'production'),
   connectors,
   provider,
 })
