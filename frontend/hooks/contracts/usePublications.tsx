@@ -8,7 +8,7 @@ export function usePublications({ enabled }: { enabled: boolean }) {
   const { store, setStore } = useStore()
   const { profilesById, learnNGrowContract, publicationsByProfileId } = store
 
-  const [isLoading, setIsLoading] = React.useState(true)
+  const [isLoading, setIsLoading] = React.useState(false)
 
   React.useEffect(() => {
     if (Object.keys(profilesById).length > 0 && enabled) {
