@@ -13,7 +13,6 @@ import {
   LEARN_N_GROW_NFT_NAME,
   LEARN_N_GROW_NFT_SYMBOL,
 } from './helpers/constants'
-import { revertToSnapshot, takeSnapshot } from './helpers/utils'
 
 // Accounts
 export let accounts: Signer[]
@@ -34,13 +33,17 @@ export let learnNGrow: LearnNGrow
 export let eventsLib: Events
 
 export function makeSuiteCleanRoom(name: string, tests: () => void) {
+  let snapshotId: string = '0x1'
+
   describe(name, () => {
     beforeEach(async function () {
-      await takeSnapshot()
+      // take snapshot of the EVM
+      snapshotId = await hre.ethers.provider.send('evm_snapshot', [])
     })
     tests()
     afterEach(async function () {
-      await revertToSnapshot()
+      // revert to snapshot taken to leave all clean
+      await hre.ethers.provider.send('evm_revert', [snapshotId])
     })
   })
 }

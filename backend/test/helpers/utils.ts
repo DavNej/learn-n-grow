@@ -12,16 +12,6 @@ import { eventsLib, learnNGrow, user } from '../__setup.spec'
 import { TransactionReceipt } from '@ethersproject/providers'
 import { keccak256, toUtf8Bytes } from 'ethers/lib/utils'
 
-let snapshotId: string = '0x1'
-
-export async function takeSnapshot() {
-  snapshotId = await hre.ethers.provider.send('evm_snapshot', [])
-}
-
-export async function revertToSnapshot() {
-  await hre.ethers.provider.send('evm_revert', [snapshotId])
-}
-
 export interface CreateProfileReturningTokenIdStruct {
   sender?: Signer
   vars: DataTypes.CreateProfileDataStruct
