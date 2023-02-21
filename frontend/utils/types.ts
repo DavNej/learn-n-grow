@@ -61,3 +61,5 @@ export interface IComment extends ICommentPublication {
   author: Address
   mediaURI?: string
 }
+
+export type PostMap = Map<number, IPost>

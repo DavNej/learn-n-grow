@@ -1,8 +1,18 @@
 import React from 'react'
-import { Avatar, Box, Flex, Heading, Image, Link, Text } from '@chakra-ui/react'
+import {
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Image,
+  Link,
+  Text,
+} from '@chakra-ui/react'
 import { IComment, IPost, IProfile } from '@/utils/types'
 import { formatTimestamp } from '@/utils/format'
-import { useStore } from '@/hooks/useStore'
+import NewComment from './NewComment'
+import Comments from './Comments'
 
 export default function Post({
   post,
@@ -16,11 +26,9 @@ export default function Post({
   noBanner?: boolean
 }) {
   const handle = `@${profile.handle}`
-
   const date = post.creationDate && formatTimestamp(post.creationDate)
 
-  const { store } = useStore()
-  const { profilesById } = store
+  const [showNewComment, setShowNewComment] = React.useState(false)
 
   return (
     <Box
@@ -32,7 +40,7 @@ export default function Post({
       borderColor='gray.400'>
       <Flex alignItems='center' justifyContent='space-between'>
         {!noBanner && (
-          <Link href={`/profile/${profile.handle}`}>
+          <Link href={'/' + profile.handle}>
             <Avatar mr={4} name={profile.handle} src={profile.imageURI} />
           </Link>
         )}
@@ -40,29 +48,40 @@ export default function Post({
           flexDirection='column'
           alignItems='stretch'
           justifyContent='space-between'>
-          {!noBanner && <Heading size='sm'>{handle}</Heading>}
+          {!noBanner && (
+            <Link href={'/' + profile.handle}>
+              <Heading size='sm'>{handle}</Heading>
+            </Link>
+          )}
           <Text fontSize='xs'>{date}</Text>
         </Flex>
       </Flex>
-      <Text p={4} my={4} border='2px' borderColor='gray.100' borderRadius='md'>
+
+      <Text p={4} my={4} border='1px' borderColor='gray.200' borderRadius='md'>
         {post.content}
       </Text>
 
       {post.mediaURI && <Image src={post.mediaURI} />}
 
-      <Box bgColor='green.100'>
-        {comments.map(comment => (
-          <Box key={comment.id} mt={4}>
-            <Flex alignItems='center' justifyContent='space-between'>
-              <Link href={`/profile/${profilesById[comment.authorId]?.handle}`}>
-                @{profilesById[comment.authorId]?.handle}
-              </Link>
-              <Text>{formatTimestamp(comment.creationDate)}</Text>
-            </Flex>
-            <Text>{comment.content}</Text>
-          </Box>
-        ))}
-      </Box>
+      <Flex justifyContent='center'>
+        <Button
+          size='xs'
+          onClick={() => {
+            setShowNewComment(true)
+          }}>
+          Add comment
+        </Button>
+      </Flex>
+
+      <Comments comments={comments} />
+
+      {showNewComment && (
+        <NewComment
+          profileIdPointed={profile.id}
+          pubIdPointed={post.id}
+          onClose={() => setShowNewComment(false)}
+        />
+      )}
     </Box>
   )
 }
