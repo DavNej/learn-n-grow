@@ -23,7 +23,6 @@ export function usePosts({ enabled }: { enabled: boolean }) {
 
     setIsLoading(true)
 
-    const _postsByProfileId = new Map<number, PostMap>()
     const contentURIMap: Map<string, IBasePublication> = new Map()
 
     publicationsByProfileId.forEach((profilePubs, profileId) => {
@@ -42,18 +41,22 @@ export function usePosts({ enabled }: { enabled: boolean }) {
 
     Promise.all(uris.map(contentURI => axios.get(contentURI)))
       .then(responses => {
+        const _postsByProfileId = new Map<number, PostMap>()
+
         responses.forEach(res => {
           if (!res.config.url) return
           const _post = contentURIMap.get(res.config.url)
           if (!_post) return
-          const _posts = new Map<number, IPost>()
 
-          _posts.set(_post.id, {
+          const profilePosts =
+            _postsByProfileId.get(_post.authorId) || new Map<number, IPost>()
+
+          profilePosts.set(_post.id, {
             ..._post,
             ...res.data,
           })
 
-          _postsByProfileId.set(_post.authorId, _posts)
+          _postsByProfileId.set(_post.authorId, profilePosts)
         })
 
         setStore(s => ({ ...s, postsByProfileId: _postsByProfileId }))

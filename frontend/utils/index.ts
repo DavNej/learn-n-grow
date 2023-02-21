@@ -68,5 +68,5 @@ export function buildPublication({ content, mediaURI, address }: IPublication) {
     author: address,
   }
 
-  return !!mediaURI ? { ...common } : { ...common, mediaURI }
+  return !!mediaURI ? { ...common, mediaURI } : { ...common }
 }
