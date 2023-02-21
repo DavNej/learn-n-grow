@@ -9,6 +9,7 @@ import Post from '@/components/Post'
 import { usePosts } from '@/hooks/contracts/usePosts'
 import { useComments } from '@/hooks/contracts/useComments'
 import { usePublications } from '@/hooks/contracts/usePublications'
+import { filterComments } from './feed'
 
 export default function Profile() {
   const { query } = useRouter()
@@ -56,10 +57,10 @@ export default function Profile() {
       {posts ? (
         posts.map(post => (
           <Post
-            comments={comments.filter(c => c.pubIdPointed && post.id)}
             key={post.id}
             post={post}
             profile={profile}
+            comments={filterComments({ comments, post })}
             noBanner
           />
         ))

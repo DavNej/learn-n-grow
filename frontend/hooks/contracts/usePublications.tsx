@@ -82,7 +82,6 @@ export function usePublications({ enabled }: { enabled: boolean }) {
     }
 
     setStore(s => ({ ...s, publicationsByProfileId: _publicationsByProfileId }))
-
     setIsLoading(false)
   }
 

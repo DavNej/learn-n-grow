@@ -33,7 +33,7 @@ export default function ProfileList() {
 
   return (
     <aside>
-      <Flex
+      <Box
         py={2}
         bg='white'
         overflow='hidden'
@@ -41,7 +41,9 @@ export default function ProfileList() {
         minW={200}
         justifyContent='center'>
         {isLoading ? (
-          <Spinner />
+          <Flex justifyContent='center'>
+            <Spinner />
+          </Flex>
         ) : hasProfiles ? (
           profiles.map(profile => (
             <ProfileItem key={profile.handle} profile={profile} />
@@ -51,7 +53,7 @@ export default function ProfileList() {
             No members 🤷
           </Text>
         )}
-      </Flex>
+      </Box>
     </aside>
   )
 }

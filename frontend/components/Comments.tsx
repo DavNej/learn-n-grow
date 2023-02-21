@@ -10,7 +10,7 @@ import {
   Link,
   Text,
 } from '@chakra-ui/react'
-import { IComment, IPost, IProfile } from '@/utils/types'
+import { IComment } from '@/utils/types'
 import { formatTimestamp } from '@/utils/format'
 import { useStore } from '@/hooks/useStore'
 

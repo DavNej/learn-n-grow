@@ -42,11 +42,11 @@ export function usePosts({ enabled }: { enabled: boolean }) {
 
     Promise.all(uris.map(contentURI => axios.get(contentURI)))
       .then(responses => {
-        const _posts = new Map<number, IPost>()
         responses.forEach(res => {
           if (!res.config.url) return
           const _post = contentURIMap.get(res.config.url)
           if (!_post) return
+          const _posts = new Map<number, IPost>()
 
           _posts.set(_post.id, {
             ..._post,

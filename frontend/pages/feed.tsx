@@ -5,8 +5,20 @@ import { useStore } from '@/hooks/useStore'
 import Post from '@/components/Post'
 import { usePublications } from '@/hooks/contracts/usePublications'
 import { flatten } from '@/utils'
-import { IPost } from '@/utils/types'
+import { IComment, IPost } from '@/utils/types'
 import { useComments } from '@/hooks/contracts/useComments'
+
+export function filterComments({
+  comments,
+  post,
+}: {
+  comments: IComment[]
+  post: IPost
+}) {
+  return comments.filter(
+    c => c.pubIdPointed === post.id && c.profileIdPointed === post.authorId
+  )
+}
 
 export default function Feed() {
   usePublications({ enabled: true })
@@ -39,7 +51,7 @@ export default function Feed() {
       key={`${post.authorId}-${post.id}`}
       post={post}
       profile={profilesById[post.authorId]}
-      comments={comments.filter(c => c.pubIdPointed && post.id)}
+      comments={filterComments({ comments, post })}
     />
   ))
 }

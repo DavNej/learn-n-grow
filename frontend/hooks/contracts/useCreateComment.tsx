@@ -83,13 +83,10 @@ export function useCreateComment({
           description: `Comment created 🎉`,
           status: 'success',
         })
+        onSuccess()
       }
     },
   })
-
-  if (isSuccess) {
-    onSuccess()
-  }
 
   return {
     data,
