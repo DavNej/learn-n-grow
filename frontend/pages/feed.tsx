@@ -1,12 +1,14 @@
 import React from 'react'
 import { Box, Flex, Spinner, Text } from '@chakra-ui/react'
+import Post from '@/components/Post'
+
+import { usePublications } from '@/hooks/contracts/usePublications'
+import { useComments } from '@/hooks/contracts/useComments'
 import { usePosts } from '@/hooks/contracts/usePosts'
 import { useStore } from '@/hooks/useStore'
-import Post from '@/components/Post'
-import { usePublications } from '@/hooks/contracts/usePublications'
+
 import { flatten } from '@/utils'
 import { IComment, IPost } from '@/utils/types'
-import { useComments } from '@/hooks/contracts/useComments'
 
 export function filterComments({
   comments,
@@ -21,16 +23,18 @@ export function filterComments({
 }
 
 export default function Feed() {
-  usePublications({ enabled: true })
+  const { isLoading: isPublicationsLoading } = usePublications({
+    enabled: true,
+  })
   useComments({ enabled: true })
-  const { isLoading } = usePosts({ enabled: true })
+  const { isLoading: isPostsLoading } = usePosts({ enabled: true })
   const { store } = useStore()
   const { profilesById, postsByProfileId, comments } = store
 
   const posts: IPost[] = flatten(postsByProfileId)
   const hasPosts = posts.length > 0
 
-  if (isLoading)
+  if (isPublicationsLoading || isPostsLoading)
     return (
       <Flex justifyContent='center'>
         <Spinner />

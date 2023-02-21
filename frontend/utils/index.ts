@@ -1,6 +1,7 @@
 import { UseToastOptions } from '@chakra-ui/react'
 import { createHash } from 'crypto'
 import { Address } from 'wagmi'
+import { PINATA_GATEWAY } from './pinata'
 
 export function isUndefined(arg: unknown | undefined) {
   return typeof arg === 'undefined'
@@ -69,4 +70,10 @@ export function buildPublication({ content, mediaURI, address }: IPublication) {
   }
 
   return !!mediaURI ? { ...common, mediaURI } : { ...common }
+}
+
+export function replaceIpfsGateway(uri: string) {
+  // const IPFS_GATEWAY = 'https://gateway.ipfs.io/ipfs/'
+  // return uri.replace(PINATA_GATEWAY, IPFS_GATEWAY)
+  return uri
 }

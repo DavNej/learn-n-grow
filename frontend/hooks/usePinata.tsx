@@ -1,11 +1,11 @@
+import axios from 'axios'
+import { useState, useCallback } from 'react'
+
 import {
   buildPinFileArgs,
   buildPinJsonArgs,
   PINATA_GATEWAY,
 } from '@/utils/pinata'
-import axios from 'axios'
-
-import { useState, useCallback } from 'react'
 
 export function usePinata() {
   const [isLoading, setIsLoading] = useState(false)

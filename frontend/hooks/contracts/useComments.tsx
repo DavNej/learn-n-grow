@@ -2,6 +2,7 @@ import * as React from 'react'
 import axios from 'axios'
 import { IComment, ICommentPublication } from '@/utils/types'
 import { useStore } from '../useStore'
+import { replaceIpfsGateway } from '@/utils'
 
 export function useComments({ enabled }: { enabled: boolean }) {
   const { store, setStore } = useStore()
@@ -25,10 +26,11 @@ export function useComments({ enabled }: { enabled: boolean }) {
     publicationsByProfileId.forEach((profilePubs, profileId) => {
       profilePubs.forEach(pub => {
         if (pub.type === 'comment') {
-          contentURIMap.set(pub.contentURI, {
+          const contentURI = replaceIpfsGateway(pub.contentURI)
+          contentURIMap.set(contentURI, {
             id: pub.id,
             authorId: profileId,
-            contentURI: pub.contentURI,
+            contentURI,
             profileIdPointed: pub.profileIdPointed,
             pubIdPointed: pub.pubIdPointed,
           })
