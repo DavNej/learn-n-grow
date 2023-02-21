@@ -50,8 +50,8 @@ export default function Comments({ comments }: { comments: IComment[] }) {
                     borderTop={!idx ? '' : '1px'}>
                     <Flex alignItems='center' justifyContent='space-between'>
                       <Link
-                        as={'strong'}
-                        href={'/' + profilesById[comment.authorId]?.handle}>
+                        href={'/' + profilesById[comment.authorId]?.handle}
+                        fontWeight='bold'>
                         @{profilesById[comment.authorId]?.handle}
                       </Link>
                       <Text>{formatTimestamp(comment.creationDate)}</Text>

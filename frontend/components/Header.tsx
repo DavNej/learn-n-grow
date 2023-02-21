@@ -20,7 +20,7 @@ export default function Header() {
               <Avatar mr={4} name={profile.handle} src={profile.imageURI} />
             </Link>
           )}
-          <Link href='/'>
+          <Link href='/feed'>
             <Flex p='1rem' justifyContent='space-between' alignItems='center'>
               <Image src='/plant.png' alt='Logo' height={30} width={30} />
               <Text ml={2} as='strong'>
