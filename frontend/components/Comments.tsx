@@ -21,23 +21,27 @@ export default function Comments({ comments }: { comments: IComment[] }) {
   if (comments.length === 0) return null
 
   return (
-    <Box
-      bgColor='gray.50'
-      borderRadius='md'
-      p={4}
-      mt={4}
-      border='1px'
-      borderColor='gray.400'>
-      <Accordion allowToggle>
-        <AccordionItem border='none'>
-          {({ isExpanded }) => (
-            <>
-              <AccordionButton p={0} _hover={{ backgroundColor: 'none' }}>
-                <Link as='span' flex='1' textAlign='center'>
-                  {isExpanded ? 'Hide' : 'Show'} comments
-                </Link>
-              </AccordionButton>
-              <AccordionPanel pb={4}>
+    <Accordion allowToggle>
+      <AccordionItem border='none'>
+        {({ isExpanded }) => (
+          <>
+            <AccordionButton
+              p={0}
+              _hover={{ backgroundColor: 'none' }}
+              width='150px'
+              m='auto'
+              mt={2}>
+              <Link as='span' flex='1' textAlign='center'>
+                {isExpanded ? 'Hide' : 'Show'} comments
+              </Link>
+            </AccordionButton>
+            <AccordionPanel pb={4}>
+              <Box
+                bgColor='gray.50'
+                borderRadius='md'
+                p={4}
+                border='1px'
+                borderColor='gray.400'>
                 {comments.map((comment, idx) => (
                   <Box
                     key={comment.id}
@@ -52,15 +56,17 @@ export default function Comments({ comments }: { comments: IComment[] }) {
                       </Link>
                       <Text>{formatTimestamp(comment.creationDate)}</Text>
                     </Flex>
-                    <Text p={2}>{comment.content}</Text>
+                    <Text p={2} textAlign='left'>
+                      {comment.content}
+                    </Text>
                     {comment.mediaURI && <Image p={4} src={comment.mediaURI} />}
                   </Box>
                 ))}
-              </AccordionPanel>
-            </>
-          )}
-        </AccordionItem>
-      </Accordion>
-    </Box>
+              </Box>
+            </AccordionPanel>
+          </>
+        )}
+      </AccordionItem>
+    </Accordion>
   )
 }
