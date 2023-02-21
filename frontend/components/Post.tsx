@@ -75,13 +75,12 @@ export default function Post({
 
       <Comments comments={comments} />
 
-      {showNewComment && (
-        <NewComment
-          profileIdPointed={profile.id}
-          pubIdPointed={post.id}
-          onClose={() => setShowNewComment(false)}
-        />
-      )}
+      <NewComment
+        profileIdPointed={profile.id}
+        pubIdPointed={post.id}
+        isOpen={showNewComment}
+        onClose={() => setShowNewComment(false)}
+      />
     </Box>
   )
 }

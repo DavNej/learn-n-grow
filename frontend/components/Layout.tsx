@@ -99,9 +99,10 @@ export default function Layout({ children }: React.PropsWithChildren) {
           </Flex>
         </Container>
 
-        {showNewPostForm && (
-          <NewPost onClose={() => setShowNewPostForm(false)} />
-        )}
+        <NewPost
+          isOpen={showNewPostForm}
+          onClose={() => setShowNewPostForm(false)}
+        />
       </main>
     </>
   )

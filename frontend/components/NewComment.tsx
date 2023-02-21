@@ -28,10 +28,12 @@ import { usePinata } from '@/hooks/usePinata'
 import { buildPublication } from '@/utils'
 
 export default function NewComment({
+  isOpen,
   onClose,
   profileIdPointed,
   pubIdPointed,
 }: {
+  isOpen: boolean
   onClose: () => void
   profileIdPointed: number
   pubIdPointed: number
@@ -61,6 +63,7 @@ export default function NewComment({
 
   React.useEffect(() => {
     if (shouldComment && write) {
+      console.log('write')
       write?.()
       setShouldComment(false)
     }
@@ -79,7 +82,7 @@ export default function NewComment({
     }
   }
 
-  async function onComment() {
+  async function sendComment() {
     const commentContent =
       address &&
       buildPublication({
@@ -102,7 +105,7 @@ export default function NewComment({
   const handle = `@${profile.handle}`
 
   return (
-    <Modal isOpen onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>New comment</ModalHeader>
@@ -150,7 +153,7 @@ export default function NewComment({
             ) : (
               <Button
                 colorScheme='blue'
-                onClick={onComment}
+                onClick={sendComment}
                 isDisabled={!debouncedContent || isUploadLoading}>
                 Comment
               </Button>

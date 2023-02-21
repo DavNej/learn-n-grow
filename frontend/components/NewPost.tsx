@@ -27,7 +27,13 @@ import { useStore } from '@/hooks/useStore'
 import { usePinata } from '@/hooks/usePinata'
 import { buildPublication } from '@/utils'
 
-export default function NewPost({ onClose }: { onClose: () => void }) {
+export default function NewPost({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean
+  onClose: () => void
+}) {
   const { address } = useAccount()
 
   const { store } = useStore()
@@ -51,6 +57,7 @@ export default function NewPost({ onClose }: { onClose: () => void }) {
 
   React.useEffect(() => {
     if (shouldPost && write) {
+      console.log('write')
       write?.()
       setShouldPost(false)
     }
@@ -92,7 +99,7 @@ export default function NewPost({ onClose }: { onClose: () => void }) {
   const handle = `@${profile.handle}`
 
   return (
-    <Modal isOpen onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>New post</ModalHeader>
