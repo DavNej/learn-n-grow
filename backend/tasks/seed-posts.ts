@@ -3,13 +3,22 @@ import '@nomicfoundation/hardhat-toolbox'
 import { task } from 'hardhat/config'
 import { LearnNGrow__factory } from '../typechain-types/index'
 import { waitForTx } from '../utils'
-import { CONTRACT_ADDRESS } from '../utils/constants'
+import {
+  LOCAL_CONTRACT_ADDRESS,
+  GOERLI_CONTRACT_ADDRESS,
+} from '../utils/constants'
+
+let contractAddress = LOCAL_CONTRACT_ADDRESS
 
 task('seed-posts', 'Populate posts').setAction(async (_, hre) => {
   const [deployer, user, userTwo, userThree, userFour] =
     await hre.ethers.getSigners()
 
-  const learnNGrow = LearnNGrow__factory.connect(CONTRACT_ADDRESS, deployer)
+  if (hre.network.name === 'goerli') {
+    contractAddress = GOERLI_CONTRACT_ADDRESS
+  }
+
+  const learnNGrow = LearnNGrow__factory.connect(contractAddress, deployer)
 
   const userProfileId = await learnNGrow.profile(user.address)
   await waitForTx(
