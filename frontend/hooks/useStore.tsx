@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { IComment, IProfileList, PostMap, PublicationMap } from '@/utils/types'
+import { IComment, ProfileRecord, PostMap, PublicationMap } from '@/utils/types'
 import type { Contract } from 'ethers'
 import { ethers } from 'ethers'
 import { useProvider } from 'wagmi'
@@ -10,7 +10,7 @@ interface IStore {
   connectedProfileId: number
   learnNGrowContract: Contract | undefined
   provider: ethers.providers.Provider | undefined
-  profilesById: IProfileList
+  profilesById: ProfileRecord
   publicationsByProfileId: Map<number, PublicationMap>
   postsByProfileId: Map<number, PostMap>
   comments: IComment[]

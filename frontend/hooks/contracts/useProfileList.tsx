@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { BigNumber } from 'ethers'
-import { IProfileList } from '@/utils/types'
+import { ProfileRecord } from '@/utils/types'
 import { useStore } from '../useStore'
 
 const MAX_PROFILE_COUNT = 20
@@ -21,7 +21,7 @@ export function useProfileList({ enabled }: { enabled: boolean }) {
   async function getProfileList() {
     if (!learnNGrowContract) return null
 
-    const profiles: IProfileList = {}
+    const profiles: ProfileRecord = {}
 
     setIsLoading(true)
 

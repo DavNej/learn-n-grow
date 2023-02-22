@@ -33,7 +33,7 @@ export interface IProfile {
 //   imageURI: `http${string}`
 // }
 
-export type IProfileList = Record<string, IProfile>
+export type ProfileRecord = Record<number, IProfile>
 
 export interface IBasePublication {
   id: number
