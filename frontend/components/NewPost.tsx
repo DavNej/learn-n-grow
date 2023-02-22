@@ -12,7 +12,6 @@ import {
   ModalOverlay,
   Textarea,
   Image,
-  Center,
   Spinner,
   Flex,
   Heading,
@@ -24,8 +23,9 @@ import FileInput from '@/components/FileInput'
 import { useCreatePost } from '@/hooks/contracts/useCreatePost'
 import useDebounce from '@/hooks/useDebounce'
 import { useStore } from '@/hooks/useStore'
-import { usePinata } from '@/hooks/usePinata'
 import { buildPublication } from '@/utils'
+import { encodeFileToDataUri } from '@/utils/dataUri'
+import * as pinata from '@/utils/pinata'
 
 export default function NewPost({
   isOpen,
@@ -35,68 +35,51 @@ export default function NewPost({
   onClose: () => void
 }) {
   const { address } = useAccount()
-
   const { store } = useStore()
   const { connectedProfileId, profilesById } = store
-  const profile = profilesById[connectedProfileId] || {}
 
+  const [isLoading, setIsLoading] = React.useState(false)
+  const [shouldTransact, setShouldTransact] = React.useState(false)
+
+  const [contentURI, setContentURI] = React.useState('')
+  const [mediaURI, setMediaURI] = React.useState('')
   const [content, setContent] = React.useState('')
   const debouncedContent = useDebounce(content, 500)
-  const [mediaURI, setMediaURI] = React.useState('')
-  const debouncedMediaURI = useDebounce(mediaURI, 500)
-  const [contentURI, setContentURI] = React.useState('')
-  const [imageIsLoading, setImageIsLoading] = React.useState(false)
-  const [shouldPost, setShouldPost] = React.useState(false)
 
-  const { upload, isLoading: isUploadLoading } = usePinata()
-  const { write, isLoading } = useCreatePost({
+  const { write } = useCreatePost({
     contentURI,
     profileId: connectedProfileId,
-    onSuccess() {},
   })
 
-  React.useEffect(() => {
-    if (shouldPost && write) {
-      console.log('write')
-      write?.()
-      setShouldPost(false)
-    }
-  }, [shouldPost, write])
-
-  function handleImageChange(img: File) {
-    setImageIsLoading(true)
-    if (!!img) {
-      upload({
-        data: img,
-        onSuccess(uri) {
-          setMediaURI(uri)
-          setImageIsLoading(false)
-        },
-      })
-    }
-  }
-
-  async function onPost() {
-    const postContent =
-      address &&
-      buildPublication({
-        content: debouncedContent,
-        mediaURI: debouncedMediaURI,
-        address,
-      })
-
-    if (!!postContent) {
-      upload({
-        data: postContent,
-        onSuccess(uri) {
-          setContentURI(uri)
-          setShouldPost(true)
-        },
-      })
-    }
-  }
-
+  const profile = profilesById[connectedProfileId] || {}
+  const disableUpload = !address || !debouncedContent
   const handle = `@${profile.handle}`
+
+  React.useEffect(() => {
+    if (shouldTransact && write && contentURI) {
+      console.log('write')
+      write()
+      setShouldTransact(false)
+      setIsLoading(false)
+    }
+  }, [write, shouldTransact, contentURI])
+
+  function uploadToPinata() {
+    if (disableUpload) return
+
+    setIsLoading(true)
+
+    const json = buildPublication({
+      content: debouncedContent,
+      mediaURI,
+      address,
+    })
+
+    pinata.upload(json, ipfsHash => {
+      setContentURI(ipfsHash)
+      setShouldTransact(true)
+    })
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -114,23 +97,10 @@ export default function NewPost({
             placeholder="What's on your mind ?"
             onChange={e => setContent(e.target.value)}
           />
-          {imageIsLoading ? (
-            <Box
-              mx='auto'
-              mt={6}
-              width='260px'
-              height='260px'
-              bgColor='gray.300'>
-              <Center height={'100%'}>
-                <Spinner />
-              </Center>
+          {!!mediaURI && (
+            <Box mx='auto' mt={6} width='260px' height='260px'>
+              <Image borderRadius='sm' src={mediaURI} alt='Preview' />
             </Box>
-          ) : (
-            !!mediaURI && (
-              <Box mx='auto' mt={6} width='260px' height='260px'>
-                <Image borderRadius='sm' src={mediaURI} alt='Preview' />
-              </Box>
-            )
           )}
         </ModalBody>
 
@@ -138,17 +108,15 @@ export default function NewPost({
           <Flex width='100%' justifyContent='space-between'>
             <FileInput
               withButton
-              onChange={handleImageChange}
-              isDisabled={isUploadLoading}
+              onChange={img => encodeFileToDataUri(img, setMediaURI)}
             />
-            {debouncedContent &&
-            (isLoading || (isUploadLoading && !imageIsLoading)) ? (
+            {isLoading ? (
               <Spinner mr={4} />
             ) : (
               <Button
                 colorScheme='blue'
-                onClick={onPost}
-                isDisabled={!debouncedContent || isUploadLoading}>
+                onClick={uploadToPinata}
+                isDisabled={disableUpload}>
                 Post
               </Button>
             )}

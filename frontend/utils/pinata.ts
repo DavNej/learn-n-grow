@@ -1,5 +1,7 @@
 import type { AxiosRequestConfig } from 'axios'
+import axios from 'axios'
 import { hashWithSha256 } from '@/utils'
+import { encodeJsonToDataUri } from './dataUri'
 
 export const PINATA_GATEWAY = 'https://gateway.pinata.cloud/ipfs/'
 
@@ -8,32 +10,14 @@ const JWT = `Bearer ${process.env.NEXT_PUBLIC_PINATA_JWT}`
 
 type Args = [string, FormData | string, AxiosRequestConfig]
 
-export function buildPinFileArgs(file: File): Args {
-  const formData = new FormData()
-
-  const name = hashWithSha256(file)
-  const metadata = JSON.stringify({ name })
-  formData.append('pinataMetadata', metadata)
-
-  const options = JSON.stringify({ cidVersion: 0 })
-  formData.append('pinataOptions', options)
-
-  formData.append('file', file)
-
-  const headers = {
-    'Content-Type': 'multipart/form-data',
-    Authorization: JWT,
-  }
-
-  return [baseUrl + '/pinFileToIPFS', formData, { headers }]
-}
-
-export function buildPinJsonArgs(json: Object): Args {
+function buildPinJsonArgs(json: object): Args {
   const name = hashWithSha256(json)
+  const pinataContent = encodeJsonToDataUri(json)
+
   const data = JSON.stringify({
     pinataOptions: { cidVersion: 1 },
     pinataMetadata: { name },
-    pinataContent: json,
+    pinataContent,
   })
 
   const headers = {
@@ -42,4 +26,12 @@ export function buildPinJsonArgs(json: Object): Args {
   }
 
   return [baseUrl + '/pinJSONToIPFS', data, { headers }]
+}
+
+export function upload(json: object, callback: (ipfsHash: string) => void) {
+  const axiosArgs = buildPinJsonArgs(json)
+
+  axios.post(...axiosArgs).then(res => {
+    callback(res.data.IpfsHash)
+  })
 }

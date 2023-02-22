@@ -56,13 +56,15 @@ export function flatten(obj: any) {
   return JSON.parse(str).flat()
 }
 
-interface IPublication {
+export function buildPublication({
+  content,
+  mediaURI,
+  address,
+}: {
   content: string
   mediaURI: string
   address: Address
-}
-
-export function buildPublication({ content, mediaURI, address }: IPublication) {
+}) {
   const common = {
     content,
     creationDate: Date.now(),

@@ -20,7 +20,7 @@ export function useCreatePost({
 }: {
   profileId: number
   contentURI: string
-  onSuccess: () => void
+  onSuccess?: () => void
 }) {
   const functionName: ILearnNGrowWriteFunctionName = 'post'
   const args: readonly [{ profileId: BigNumber; contentURI: string }] = [
@@ -67,13 +67,10 @@ export function useCreatePost({
           description: `Post created 🎉`,
           status: 'success',
         })
+        onSuccess?.()
       }
     },
   })
-
-  if (isSuccess) {
-    onSuccess()
-  }
 
   return {
     data,

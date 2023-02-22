@@ -20,7 +20,7 @@ export function useCreateProfile({
 }: {
   handle: string
   imageURI: string
-  onSuccess: () => void
+  onSuccess?: () => void
 }) {
   const functionName: ILearnNGrowWriteFunctionName = 'createProfile'
   const args: readonly [{ handle: string; imageURI: string }] = [
@@ -67,7 +67,7 @@ export function useCreateProfile({
           description: `Profile created 🎨`,
           status: 'success',
         })
-        onSuccess()
+        onSuccess?.()
       }
     },
   })

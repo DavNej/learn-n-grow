@@ -2,13 +2,7 @@ import React, { useState } from 'react'
 import { Image } from '@chakra-ui/react'
 import FileInput from './FileInput'
 
-function ImageInput({
-  onChange,
-  src,
-}: {
-  onChange: (i: File) => void
-  src?: string
-}) {
+function ImageInput({ onChange }: { onChange: (i: File) => void }) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
   function handleImageChange(img: File) {
@@ -33,7 +27,7 @@ function ImageInput({
           e.currentTarget.src = '/avatar-placeholder.png'
           e.currentTarget.style.border = '2px solid red'
         }}
-        src={previewUrl || src || '/avatar-placeholder.png'}
+        src={previewUrl || '/avatar-placeholder.png'}
         alt='Avatar'
       />
     </>
