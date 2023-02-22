@@ -10,5 +10,15 @@ task('debug', 'Debug task').setAction(async (_, hre) => {
 
   const learnNGrow = LearnNGrow__factory.connect(contractAddress, deployer)
 
-  console.log(learnNGrow)
+  const handles = ['chimpanzee.eth', 'elephant.eth', 'coq.eth']
+  for (let i = 0; i < handles.length; i++) {
+    const profileId = await learnNGrow.getProfileIdByHandle(handles[i])
+    const pubCount = await learnNGrow.getPubCount(profileId)
+
+    console.log('🦋 | task | pubCount:', pubCount)
+
+    const pub = await learnNGrow.getPub(profileId, pubCount)
+    console.log(pub)
+    console.log('\n')
+  }
 })
