@@ -7,8 +7,6 @@ import { Contract } from 'ethers'
 
 type PublicationRecord = Record<number, IPublication[]>
 
-let learnNGrowContract: Contract
-
 type QueryOptions = Omit<
   UseQueryOptions<
     PublicationRecord,
@@ -18,6 +16,8 @@ type QueryOptions = Omit<
   >,
   'queryKey' | 'queryFn'
 >
+
+let learnNGrowContract: Contract
 
 export default function usePublications(options?: QueryOptions) {
   const { store } = useStore()

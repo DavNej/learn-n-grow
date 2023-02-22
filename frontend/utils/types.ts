@@ -18,6 +18,13 @@ export type ILearnNGrowWriteFunctionName =
   | 'post'
   | 'setProfileImageURI'
 
+// export type ITokenJson = any
+
+// export interface IProfileToken {
+//   json: ITokenJson
+//   imageURI: `http${string}`
+// }
+
 export interface IProfile {
   handle: string
   imageURI: string
@@ -25,13 +32,6 @@ export interface IProfile {
   id: number
   tokenURI?: string
 }
-
-// export type ITokenJson = any
-
-// export interface IProfileToken {
-//   json: ITokenJson
-//   imageURI: `http${string}`
-// }
 
 export type ProfileRecord = Record<number, IProfile>
 
@@ -46,12 +46,13 @@ export interface IPostPublication extends IBasePublication {
 }
 
 export interface ICommentPublication extends IBasePublication {
-  type?: 'comment'
   profileIdPointed: number
   pubIdPointed: number
+  type: 'comment'
 }
 
 export type IPublication = IPostPublication | ICommentPublication
+
 export type PublicationMap = Map<number, IPublication>
 
 export interface IPost extends IBasePublication {
