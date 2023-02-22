@@ -1,9 +1,9 @@
+import { useQuery, useQueryClient } from 'react-query'
 import type { UseQueryOptions } from 'react-query'
-import { useQuery } from 'react-query'
+import type { Contract } from 'ethers'
 
 import { ProfileRecord } from '@/utils/types'
 import { useStore } from '../useStore'
-import { Contract } from 'ethers'
 
 type QueryOptions = Omit<
   UseQueryOptions<ProfileRecord, Error, ProfileRecord, string>,
@@ -22,8 +22,12 @@ export default function useProfiles(options?: QueryOptions) {
 
   learnNGrowContract = storeLearnNGrowContract
 
-  const enabled = options?.enabled !== false
-  const queryOptions: QueryOptions = { ...(options || {}), enabled }
+  const defaultOptions = {
+    initialData: {},
+    enabled: options?.enabled !== false,
+  }
+
+  const queryOptions: QueryOptions = { ...defaultOptions, ...(options || {}) }
 
   return useQuery<ProfileRecord, Error, ProfileRecord, string>(
     'getAllProfiles',

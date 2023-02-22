@@ -42,13 +42,13 @@ export interface IBasePublication {
 }
 
 export interface IPostPublication extends IBasePublication {
-  type: 'post'
+  type?: 'post'
 }
 
 export interface ICommentPublication extends IBasePublication {
   profileIdPointed: number
   pubIdPointed: number
-  type: 'comment'
+  type?: 'comment'
 }
 
 export type IPublication = IPostPublication | ICommentPublication

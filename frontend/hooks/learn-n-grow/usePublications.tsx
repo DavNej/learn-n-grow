@@ -1,17 +1,15 @@
+import { useQuery, useQueryClient } from 'react-query'
 import type { QueryFunctionContext, UseQueryOptions } from 'react-query'
-import { useQuery } from 'react-query'
+import type { Contract } from 'ethers'
 
 import { IPublication, ProfileRecord } from '@/utils/types'
 import { useStore } from '../useStore'
-import { Contract } from 'ethers'
-
-type PublicationRecord = Record<number, IPublication[]>
 
 type QueryOptions = Omit<
   UseQueryOptions<
-    PublicationRecord,
+    IPublication[],
     Error,
-    PublicationRecord,
+    IPublication[],
     [string, ProfileRecord]
   >,
   'queryKey' | 'queryFn'
@@ -20,20 +18,27 @@ type QueryOptions = Omit<
 let learnNGrowContract: Contract
 
 export default function usePublications(options?: QueryOptions) {
+  const queryClient = useQueryClient()
   const { store } = useStore()
-  const { learnNGrowContract: storeLearnNGrowContract, profilesById } = store
+  const { learnNGrowContract: storeLearnNGrowContract } = store
 
   if (!storeLearnNGrowContract) return
-
   learnNGrowContract = storeLearnNGrowContract
 
-  const enabled = !!profilesById && options?.enabled !== false
-  const queryOptions: QueryOptions = { ...(options || {}), enabled }
+  const profilesById = queryClient.getQueryData<ProfileRecord>('getAllProfiles')
+  if (!profilesById) return
+
+  const defaultOptions = {
+    initialData: [],
+    enabled: options?.enabled !== false,
+  }
+
+  const queryOptions: QueryOptions = { ...defaultOptions, ...(options || {}) }
 
   return useQuery<
-    PublicationRecord,
+    IPublication[],
     Error,
-    PublicationRecord,
+    IPublication[],
     [string, ProfileRecord]
   >(['getAllPublications', profilesById], GETAllPublications, queryOptions)
 }
@@ -50,7 +55,7 @@ async function getAllPublications(profilesById: ProfileRecord) {
     p => !!p.pubCount
   )
 
-  const publicationsByProfileIdNew: PublicationRecord = {}
+  const publicationsByProfileId: Record<number, IPublication[]> = {}
 
   for (let i = 0; i < profilesWithPublications.length; i++) {
     const { pubCount, id: profileId } = profilesWithPublications[i]
@@ -59,10 +64,10 @@ async function getAllPublications(profilesById: ProfileRecord) {
       pubCount,
     })
 
-    publicationsByProfileIdNew[profileId] = publications
+    publicationsByProfileId[profileId] = publications
   }
 
-  return publicationsByProfileIdNew
+  return Object.values(publicationsByProfileId)
 }
 
 async function getProfilePublications({
