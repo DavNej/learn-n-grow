@@ -49,6 +49,9 @@ export default function NewPost({
   const { write } = useCreatePost({
     contentURI,
     profileId: connectedProfileId,
+    onSuccess() {
+      setIsLoading(false)
+    },
   })
 
   const profile = profilesById[connectedProfileId] || {}

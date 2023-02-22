@@ -12,7 +12,6 @@ import {
   ModalOverlay,
   Textarea,
   Image,
-  Center,
   Spinner,
   Flex,
   Heading,
@@ -24,8 +23,9 @@ import FileInput from '@/components/FileInput'
 import { useCreateComment } from '@/hooks/contracts/useCreateComment'
 import useDebounce from '@/hooks/useDebounce'
 import { useStore } from '@/hooks/useStore'
-import { usePinata } from '@/hooks/usePinata'
 import { buildPublication } from '@/utils'
+import { encodeFileToDataUri } from '@/utils/dataUri'
+import * as pinata from '@/utils/pinata'
 
 export default function NewComment({
   isOpen,
@@ -39,67 +39,53 @@ export default function NewComment({
   pubIdPointed: number
 }) {
   const { address } = useAccount()
-
   const { store } = useStore()
   const { connectedProfileId, profilesById } = store
-  const profile = profilesById[connectedProfileId] || {}
 
+  const [isLoading, setIsLoading] = React.useState(false)
+  const [shouldTransact, setShouldTransact] = React.useState(false)
+
+  const [contentURI, setContentURI] = React.useState('')
+  const [mediaURI, setMediaURI] = React.useState('')
   const [content, setContent] = React.useState('')
   const debouncedContent = useDebounce(content, 500)
-  const [mediaURI, setMediaURI] = React.useState('')
-  const debouncedMediaURI = useDebounce(mediaURI, 500)
-  const [contentURI, setContentURI] = React.useState('')
-  const [imageIsLoading, setImageIsLoading] = React.useState(false)
-  const [shouldComment, setShouldComment] = React.useState(false)
 
-  const { upload, isLoading: isUploadLoading } = usePinata()
-  const { write, isLoading } = useCreateComment({
+  const { write } = useCreateComment({
     contentURI,
     profileId: connectedProfileId,
     profileIdPointed,
     pubIdPointed,
-    onSuccess() {},
+    onSuccess() {
+      setIsLoading(false)
+    },
   })
 
+  const profile = profilesById[connectedProfileId] || {}
+  const disableUpload = !address || !debouncedContent
+
   React.useEffect(() => {
-    if (shouldComment && write) {
+    if (shouldTransact && write && contentURI) {
       console.log('write')
-      write?.()
-      setShouldComment(false)
+      // write()
+      setShouldTransact(false)
     }
-  }, [shouldComment, write])
+  }, [write, shouldTransact, contentURI])
 
-  function handleImageChange(img: File) {
-    setImageIsLoading(true)
-    if (!!img) {
-      upload({
-        data: img,
-        onSuccess(uri) {
-          setMediaURI(uri)
-          setImageIsLoading(false)
-        },
-      })
-    }
-  }
+  function uploadToPinata() {
+    if (disableUpload) return
 
-  async function sendComment() {
-    const commentContent =
-      address &&
-      buildPublication({
-        content: debouncedContent,
-        mediaURI: debouncedMediaURI,
-        address,
-      })
+    setIsLoading(true)
 
-    if (!!commentContent) {
-      upload({
-        data: commentContent,
-        onSuccess(uri) {
-          setContentURI(uri)
-          setShouldComment(true)
-        },
-      })
-    }
+    const json = buildPublication({
+      content: debouncedContent,
+      mediaURI,
+      address,
+    })
+
+    pinata.upload(json, ipfsHash => {
+      setContentURI(ipfsHash)
+      setShouldTransact(true)
+    })
   }
 
   const handle = `@${profile.handle}`
@@ -120,23 +106,10 @@ export default function NewComment({
             placeholder="What's on your mind ?"
             onChange={e => setContent(e.target.value)}
           />
-          {imageIsLoading ? (
-            <Box
-              mx='auto'
-              mt={6}
-              width='260px'
-              height='260px'
-              bgColor='gray.300'>
-              <Center height={'100%'}>
-                <Spinner />
-              </Center>
+          {!!mediaURI && (
+            <Box mx='auto' mt={6} width='260px' height='260px'>
+              <Image borderRadius='sm' src={mediaURI} alt='Preview' />
             </Box>
-          ) : (
-            !!mediaURI && (
-              <Box mx='auto' mt={6} width='260px' height='260px'>
-                <Image borderRadius='sm' src={mediaURI} alt='Preview' />
-              </Box>
-            )
           )}
         </ModalBody>
 
@@ -144,17 +117,15 @@ export default function NewComment({
           <Flex width='100%' justifyContent='space-between'>
             <FileInput
               withButton
-              onChange={handleImageChange}
-              isDisabled={isUploadLoading}
+              onChange={img => encodeFileToDataUri(img, setMediaURI)}
             />
-            {debouncedContent &&
-            (isLoading || (isUploadLoading && !imageIsLoading)) ? (
+            {isLoading ? (
               <Spinner mr={4} />
             ) : (
               <Button
                 colorScheme='blue'
-                onClick={sendComment}
-                isDisabled={!debouncedContent || isUploadLoading}>
+                onClick={uploadToPinata}
+                isDisabled={disableUpload}>
                 Comment
               </Button>
             )}

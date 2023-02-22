@@ -13,6 +13,7 @@ import { IComment, IPost, IProfile } from '@/utils/types'
 import { formatTimestamp } from '@/utils/format'
 import NewComment from './NewComment'
 import Comments from './Comments'
+import { useStore } from '@/hooks/useStore'
 
 export default function Post({
   post,
@@ -29,6 +30,9 @@ export default function Post({
   const date = post.creationDate && formatTimestamp(post.creationDate)
 
   const [showNewComment, setShowNewComment] = React.useState(false)
+
+  const { store } = useStore()
+  const { connectedProfileId } = store
 
   return (
     <Box
@@ -63,15 +67,17 @@ export default function Post({
 
       {post.mediaURI && <Image src={post.mediaURI} />}
 
-      <Flex justifyContent='center'>
-        <Button
-          size='xs'
-          onClick={() => {
-            setShowNewComment(true)
-          }}>
-          Add comment
-        </Button>
-      </Flex>
+      {!!connectedProfileId && (
+        <Flex justifyContent='center'>
+          <Button
+            size='xs'
+            onClick={() => {
+              setShowNewComment(true)
+            }}>
+            Add comment
+          </Button>
+        </Flex>
+      )}
 
       <Comments comments={comments} />
 
