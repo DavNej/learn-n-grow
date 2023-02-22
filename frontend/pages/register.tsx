@@ -34,9 +34,7 @@ export default function Register() {
   const { write, isPrepareError, error, isLoading } = useCreateProfile({
     handle: debouncedHandle,
     imageURI: debouncedImageURI,
-    onSuccess() {
-      push('/' + handle)
-    },
+    onSuccess() {},
   })
 
   const { store } = useStore()
