@@ -74,8 +74,9 @@ export function buildPublication({
   return !!mediaURI ? { ...common, mediaURI } : { ...common }
 }
 
-export function replaceIpfsGateway(uri: string) {
+export function ipfsGateway(cid: string) {
+  const IPFS_GATEWAY = 'https://gateway.pinata.cloud/ipfs/'
   // const IPFS_GATEWAY = 'https://gateway.ipfs.io/ipfs/'
-  // return uri.replace(PINATA_GATEWAY, IPFS_GATEWAY)
-  return uri
+
+  return IPFS_GATEWAY + cid
 }

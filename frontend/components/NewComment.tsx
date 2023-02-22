@@ -82,8 +82,8 @@ export default function NewComment({
       address,
     })
 
-    pinata.upload(json, ipfsHash => {
-      setContentURI(ipfsHash)
+    pinata.upload(json, cid => {
+      setContentURI(cid)
       setShouldTransact(true)
     })
   }

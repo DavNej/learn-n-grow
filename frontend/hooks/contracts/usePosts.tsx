@@ -2,7 +2,6 @@ import * as React from 'react'
 import axios from 'axios'
 import { IBasePublication, IPost, PostMap } from '@/utils/types'
 import { useStore } from '../useStore'
-import { replaceIpfsGateway } from '@/utils'
 
 export function usePosts({ enabled }: { enabled: boolean }) {
   const { store, setStore } = useStore()
@@ -29,11 +28,10 @@ export function usePosts({ enabled }: { enabled: boolean }) {
     publicationsByProfileId.forEach((profilePubs, profileId) => {
       profilePubs.forEach(pub => {
         if (pub.type === 'post') {
-          const contentURI = replaceIpfsGateway(pub.contentURI)
-          contentURIMap.set(contentURI, {
+          contentURIMap.set(pub.contentURI, {
             id: pub.id,
             authorId: profileId,
-            contentURI,
+            contentURI: pub.contentURI,
           })
         }
       })

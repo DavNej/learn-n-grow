@@ -18,23 +18,23 @@ import {
 import ImageInput from '@/components/ImageInput'
 import useDebounce from '@/hooks/useDebounce'
 import { useCreateProfile } from '@/hooks/contracts/useCreateProfile'
-import { usePinata } from '@/hooks/usePinata'
 import { useStore } from '@/hooks/useStore'
+import * as pinata from '@/utils/pinata'
+import { ipfsGateway } from '@/utils'
 
 export default function Register() {
   const [handle, setHandle] = React.useState('')
   const debouncedHandle = useDebounce(handle, 500)
   const [imageURI, setImageURI] = React.useState('')
-  const debouncedImageURI = useDebounce(imageURI, 500)
+
+  const [isImageUploading, setIsImageUploading] = React.useState(false)
 
   const { isConnected } = useAccount()
   const { push } = useRouter()
 
-  const { isLoading: isUploadLoading, upload } = usePinata()
-  const { write, isPrepareError, error, isLoading } = useCreateProfile({
+  const { write, isPrepareError, error } = useCreateProfile({
     handle: debouncedHandle,
-    imageURI: debouncedImageURI,
-    onSuccess() {},
+    imageURI,
   })
 
   const { store } = useStore()
@@ -46,19 +46,13 @@ export default function Register() {
     }
   }, [isConnected, connectedProfileId])
 
-  function handleImageChange(img: File) {
-    if (!!img) {
-      upload({
-        data: img,
-        onSuccess(uri) {
-          setImageURI(uri)
-        },
-      })
-    }
-  }
+  function onImageChange(img: File) {
+    setIsImageUploading(true)
 
-  async function mintProfile() {
-    await write?.()
+    pinata.upload(img, cid => {
+      setImageURI(ipfsGateway(cid))
+      setIsImageUploading(false)
+    })
   }
 
   return (
@@ -67,17 +61,7 @@ export default function Register() {
         Create your profile
       </Heading>
       <Flex my={8} alignItems='center'>
-        {isUploadLoading ? (
-          <Center boxSize='150px'>
-            <Spinner />
-          </Center>
-        ) : (
-          <ImageInput
-            src={imageURI || undefined}
-            onChange={handleImageChange}
-          />
-        )}
-
+        <ImageInput onChange={onImageChange} />
         <Box flexGrow={1} ml={8}>
           <FormControl isRequired isInvalid={isPrepareError}>
             <FormLabel>Profile handle</FormLabel>
@@ -87,18 +71,19 @@ export default function Register() {
 
           <FormControl isRequired mt={2}>
             <FormLabel>ImageURI</FormLabel>
-            <Input
-              value={imageURI}
-              onChange={e => setImageURI(e.target.value)}
-            />
+            {isImageUploading ? (
+              <Spinner ml={4} />
+            ) : (
+              <Input value={imageURI} isDisabled />
+            )}
           </FormControl>
         </Box>
       </Flex>
       <Center>
         <Button
           colorScheme='blue'
-          onClick={mintProfile}
-          isDisabled={!write || isLoading}>
+          onClick={() => write?.()}
+          isDisabled={!write || isImageUploading}>
           Mint profile
         </Button>
       </Center>
