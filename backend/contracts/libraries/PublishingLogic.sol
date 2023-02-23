@@ -104,7 +104,7 @@ library PublishingLogic {
         if (
             vars.profileId == vars.profileIdPointed &&
             vars.pubIdPointed == pubId
-        ) revert Errors.CannotCommentOnSelf();
+        ) revert Errors.CannotCommentOnOwnPub();
 
         _pubByIdByProfile[vars.profileId][pubId].contentURI = vars.contentURI;
         _pubByIdByProfile[vars.profileId][pubId].profileIdPointed = vars

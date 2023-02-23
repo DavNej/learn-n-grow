@@ -11,5 +11,5 @@ library Errors {
     error NotProfileOwner();
     error UnsafeURI();
     error PublicationDoesNotExist();
-    error CannotCommentOnSelf();
+    error CannotCommentOnOwnPub();
 }

@@ -1,5 +1,5 @@
 export const ERRORS = {
-  CANNOT_COMMENT_ON_SELF: 'CannotCommentOnSelf',
+  CANNOT_COMMENT_ON_SELF: 'CannotCommentOnOwnPub',
   EMPTY_IMAGE_URI: 'ProfileImageURIEmpty',
   HANDLE_CONTAINS_INVALID_CHARACTERS: 'HandleContainsInvalidCharacters',
   INVALID_HANDLE_LENGTH: 'HandleLengthInvalid',
