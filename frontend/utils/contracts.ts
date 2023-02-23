@@ -2,7 +2,7 @@ import { Address } from 'wagmi'
 
 export const learnNGrowAddress: Address =
   process.env.NODE_ENV === 'production'
-    ? '0x18DD042707d7ec2C5f0393271eE22A77E1A1AEcc'
+    ? '0xD05AADD2488C03A9169daF50f4d6800E763D1Cea'
     : '0x5FbDB2315678afecb367f032d93F642f64180aa3'
 
 export const learnNGrowAbi = [
