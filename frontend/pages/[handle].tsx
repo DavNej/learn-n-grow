@@ -12,6 +12,8 @@ import {
   usePubsContent,
 } from '@/hooks/learn-n-grow'
 import { isFullComment, isFullPost } from '@/utils/types'
+import Link from 'next/link'
+import { makeOpenSeaUrl } from '@/utils'
 
 export default function Profile() {
   const { query, push } = useRouter()
@@ -96,7 +98,9 @@ export default function Profile() {
 
       <Flex p={8} justifyContent='center'>
         {token ? (
-          <div dangerouslySetInnerHTML={{ __html: token.image }} />
+          <Link target='_blank' href={makeOpenSeaUrl(profileId)}>
+            <div dangerouslySetInnerHTML={{ __html: token.image }} />
+          </Link>
         ) : (
           <Spinner />
         )}

@@ -26,14 +26,14 @@ export default function Layout({ children }: React.PropsWithChildren) {
   const isMounted = useIsMounted()
   const { pathname } = useRouter()
   const { isConnected } = useAccount()
-  const { data: profile, isLoading } = useProfile()
+  const { data: profile } = useProfile()
 
   const [showNewPostForm, setShowNewPostForm] = React.useState(false)
 
-  const showCreateProfileButton =
-    !isLoading && !profile && pathname !== newProfilePagePath
-
   if (!isMounted) return null
+
+  const showCreateProfileButton =
+    profile === null && pathname !== newProfilePagePath
 
   return (
     <>

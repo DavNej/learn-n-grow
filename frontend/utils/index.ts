@@ -1,7 +1,7 @@
 import { UseToastOptions } from '@chakra-ui/react'
 import { createHash } from 'crypto'
 import { Address } from 'wagmi'
-import { PINATA_GATEWAY } from './pinata'
+import { learnNGrowAddress } from './contracts'
 
 export function isUndefined(arg: unknown | undefined) {
   return typeof arg === 'undefined'
@@ -83,4 +83,8 @@ export function urlFromCid(cid: string) {
 
 export function cidFromUrl(url: string) {
   return url.replace(IPFS_GATEWAY, '')
+}
+
+export function makeOpenSeaUrl(tokenId: number) {
+  return `https://testnets.opensea.io/assets/goerli/${learnNGrowAddress}/${tokenId}`
 }

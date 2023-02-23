@@ -58,12 +58,12 @@ export default function NewComment({
   const disableUpload = !address || !debouncedContent
 
   React.useEffect(() => {
-    if (shouldTransact && write && contentURI) {
-      console.log('write')
+    if (shouldTransact && write) {
       write()
       setShouldTransact(false)
+      setIsLoading(false)
     }
-  }, [write, shouldTransact, contentURI])
+  }, [write, shouldTransact])
 
   function uploadToPinata() {
     if (disableUpload) return

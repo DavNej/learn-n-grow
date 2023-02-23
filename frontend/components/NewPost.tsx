@@ -24,7 +24,7 @@ import useDebounce from '@/hooks/useDebounce'
 import { buildPublication } from '@/utils'
 import { encodeFileToDataUri } from '@/utils/dataUri'
 import * as pinata from '@/utils/pinata'
-import { useProfile, useProfiles } from '@/hooks/learn-n-grow'
+import { useProfile } from '@/hooks/learn-n-grow'
 
 export default function NewPost({
   isOpen,
@@ -47,22 +47,17 @@ export default function NewPost({
   const { write } = useCreatePost({
     contentURI,
     profileId: profile?.id || 0,
-
-    onSuccess() {
-      setIsLoading(false)
-    },
   })
 
   const disableUpload = !address || !debouncedContent
 
   React.useEffect(() => {
-    if (shouldTransact && write && contentURI) {
-      console.log('write')
+    if (shouldTransact && write) {
       write()
       setShouldTransact(false)
       setIsLoading(false)
     }
-  }, [write, shouldTransact, contentURI])
+  }, [write, shouldTransact])
 
   function uploadToPinata() {
     if (disableUpload) return

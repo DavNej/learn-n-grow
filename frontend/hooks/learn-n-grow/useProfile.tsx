@@ -7,7 +7,12 @@ import { useStore } from '../useStore'
 import { Address, useAccount } from 'wagmi'
 
 type QueryOptions = Omit<
-  UseQueryOptions<IProfile | null, Error, IProfile | null, string>,
+  UseQueryOptions<
+    IProfile | null | undefined,
+    Error,
+    IProfile | null | undefined,
+    string
+  >,
   'queryKey' | 'queryFn'
 >
 
@@ -23,8 +28,13 @@ export default function useProfile(options?: QueryOptions) {
 
   const queryOptions: QueryOptions = { ...defaultOptions, ...(options || {}) }
 
-  return useQuery<IProfile | null, Error, IProfile | null, string>(
-    'getProfile',
+  return useQuery<
+    IProfile | null | undefined,
+    Error,
+    IProfile | null | undefined,
+    string
+  >(
+    `getProfile | ${address}`,
     getProfile(learnNGrowContract, address),
     queryOptions
   )
@@ -35,7 +45,7 @@ function getProfile(
   address: Address | undefined
 ) {
   return async function () {
-    if (!learnNGrowContract || !address) return null
+    if (!learnNGrowContract || !address) return undefined
 
     const profileId = await learnNGrowContract.profile(address)
 
