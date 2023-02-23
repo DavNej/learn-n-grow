@@ -74,3 +74,10 @@ export interface IFullComment extends ICommentContent, ICommentPublication {}
 
 export type IFullPublication = IFullPost | IFullComment
 
+export function isFullPost(pub: IFullPublication): pub is IFullPost {
+  return (pub as IFullPost).type === 'post'
+}
+
+export function isFullComment(pub: IFullPublication): pub is IFullComment {
+  return (pub as IFullComment).type === 'comment'
+}

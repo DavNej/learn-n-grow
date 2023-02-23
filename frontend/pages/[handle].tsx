@@ -3,34 +3,47 @@ import { useRouter } from 'next/router'
 
 import { Text, Avatar, Box, Flex, Heading, Spinner } from '@chakra-ui/react'
 
-import { useStore } from '@/hooks/useStore'
 import { useProfileToken } from '@/hooks/contracts/useTokenURI'
 import Post from '@/components/Post'
-import { usePosts } from '@/hooks/contracts/usePosts'
-import { useComments } from '@/hooks/contracts/useComments'
-import { usePublications } from '@/hooks/contracts/usePublications'
-import { filterComments } from './feed'
+import { filterPostComments } from './feed'
+import {
+  useProfiles,
+  usePublications,
+  usePubsContent,
+} from '@/hooks/learn-n-grow'
+import { isFullComment, isFullPost } from '@/utils/types'
 
 export default function Profile() {
-  const { query } = useRouter()
-  usePublications({ enabled: true })
-  usePosts({ enabled: true })
-  useComments({ enabled: true })
-  const { store } = useStore()
-  const { postsByProfileId, comments } = store
-
+  const { query, push } = useRouter()
   const { handle: handleParam } = query
+
+  const { isLoading: isProfilesLoading, data: profilesById } = useProfiles()
+  usePublications()
+  const {
+    isLoading: isPublicationsLoading,
+    isSuccess,
+    data: publications,
+  } = usePubsContent()
+
   const handle = handleParam ? handleParam.toString() : ''
-  const profile = Object.values(store.profilesById).find(
-    p => p.handle === handle
-  )
+  const profile =
+    profilesById && Object.values(profilesById).find(p => p.handle === handle)
   const profileId = profile?.id || 0
+
   const token = useProfileToken({ profileId })
 
   if (!profile) return null
 
-  const profilePosts = postsByProfileId.get(profileId)
-  const posts = profilePosts && Array.from(profilePosts.values())
+  if (isProfilesLoading)
+    return (
+      <Flex justifyContent='center'>
+        <Spinner />
+      </Flex>
+    )
+
+  const profilePubs = publications?.filter(p => p.authorId === profileId) || []
+  const posts = profilePubs.filter(isFullPost)
+  const comments = publications?.filter(isFullComment) || []
 
   return (
     <Box bg='white' p={4} borderRadius='xl'>
@@ -54,13 +67,17 @@ export default function Profile() {
         Posts
       </Heading>
 
-      {posts ? (
+      {isPublicationsLoading || !isSuccess ? (
+        <Flex justifyContent='center'>
+          <Spinner />
+        </Flex>
+      ) : posts.length > 0 ? (
         posts.map(post => (
           <Post
             key={post.id}
             post={post}
             profile={profile}
-            comments={filterComments({ comments, post })}
+            comments={filterPostComments({ comments, post })}
             noBanner
           />
         ))

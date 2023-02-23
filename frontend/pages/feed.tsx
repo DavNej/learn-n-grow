@@ -2,46 +2,55 @@ import React from 'react'
 import { Box, Flex, Spinner, Text } from '@chakra-ui/react'
 import Post from '@/components/Post'
 
-import { usePublications } from '@/hooks/contracts/usePublications'
-import { useComments } from '@/hooks/contracts/useComments'
-import { usePosts } from '@/hooks/contracts/usePosts'
-import { useStore } from '@/hooks/useStore'
+import {
+  useProfiles,
+  usePublications,
+  usePubsContent,
+} from '@/hooks/learn-n-grow'
 
-import { flatten } from '@/utils'
-import { IComment, IPost } from '@/utils/types'
+import {
+  IFullComment,
+  IFullPost,
+  isFullComment,
+  isFullPost,
+} from '@/utils/types'
 
-export function filterComments({
+export function filterPostComments({
   comments,
   post,
 }: {
-  comments: IComment[]
-  post: IPost
+  comments: IFullComment[]
+  post: IFullPost
 }) {
   return comments.filter(
     c => c.pubIdPointed === post.id && c.profileIdPointed === post.authorId
   )
 }
 
-export default function Feed() {
-  const { isLoading: isPublicationsLoading } = usePublications({
-    enabled: true,
-  })
-  useComments({ enabled: true })
-  const { isLoading: isPostsLoading } = usePosts({ enabled: true })
-  const { store } = useStore()
-  const { profilesById, postsByProfileId, comments } = store
+export default function Food() {
+  const { isLoading: isProfilesLoading, data: profilesById } = useProfiles()
+  usePublications()
+  const {
+    isLoading: isPublicationsLoading,
+    isSuccess,
+    data: publications,
+  } = usePubsContent()
 
-  const posts: IPost[] = flatten(postsByProfileId)
-  const hasPosts = posts.length > 0
+  const isLoading = isProfilesLoading && isPublicationsLoading
 
-  if (isPublicationsLoading || isPostsLoading)
+  if (isLoading)
     return (
       <Flex justifyContent='center'>
         <Spinner />
       </Flex>
     )
 
-  if (!hasPosts)
+  const posts = publications?.filter(isFullPost) || []
+  const comments = publications?.filter(isFullComment) || []
+
+  const hasPosts = posts.length > 0
+
+  if (!hasPosts && isSuccess)
     return (
       <Box p={4} bgColor='white' borderRadius='md'>
         <Text fontSize='md' textAlign='center'>
@@ -50,12 +59,14 @@ export default function Feed() {
       </Box>
     )
 
-  return posts.map(post => (
-    <Post
-      key={`${post.authorId}-${post.id}`}
-      post={post}
-      profile={profilesById[post.authorId]}
-      comments={filterComments({ comments, post })}
-    />
-  ))
+  return posts.map(post =>
+    profilesById ? (
+      <Post
+        key={`${post.authorId}-${post.id}`}
+        post={post}
+        profile={profilesById[post.authorId]}
+        comments={filterPostComments({ comments, post })}
+      />
+    ) : null
+  )
 }
