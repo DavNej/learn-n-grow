@@ -27,18 +27,22 @@ export function filterPostComments({
   )
 }
 
-export default function Food() {
-  const { isLoading: isProfilesLoading, data: profilesById } = useProfiles()
+export default function Feed() {
+  const {
+    // isLoading: isProfilesLoading,
+    data: profilesById,
+  } = useProfiles()
+
   usePublications()
   const {
-    isLoading: isPublicationsLoading,
+    // isLoading: isPublicationsLoading,
     isSuccess,
     data: publications,
   } = usePubsContent()
 
-  const isLoading = isProfilesLoading && isPublicationsLoading
+  // const isLoading = isProfilesLoading || isPublicationsLoading
 
-  if (isLoading)
+  if (!isSuccess)
     return (
       <Flex justifyContent='center'>
         <Spinner />
