@@ -33,6 +33,9 @@ export default function Post({
 
   const { data: connectedProfile } = useProfile()
 
+  const showAddCommentButton =
+    connectedProfile && profile.id !== connectedProfile.id
+
   return (
     <Box
       p={4}
@@ -70,7 +73,7 @@ export default function Post({
         </Flex>
       )}
 
-      {connectedProfile && (
+      {showAddCommentButton && (
         <Flex justifyContent='center'>
           <Button
             size='xs'
