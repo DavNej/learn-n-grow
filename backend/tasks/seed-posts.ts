@@ -24,8 +24,7 @@ task('seed-posts', 'Populate posts').setAction(async (_, hre) => {
   await waitForTx(
     learnNGrow.connect(user).post({
       profileId: userProfileId,
-      contentURI:
-        'https://gateway.pinata.cloud/ipfs/bafkreietegics3pwarjrowo5utu6fzjfk4zx6o7x7asln6fmen4jbbv7tu',
+      contentURI: 'bafkreig6477xhh7bv4gp5rs26ht6ju3tpw7italmoclyqjow3kydjkxojy',
     })
   )
 
@@ -33,8 +32,7 @@ task('seed-posts', 'Populate posts').setAction(async (_, hre) => {
   await waitForTx(
     learnNGrow.connect(userTwo).post({
       profileId: userTwoProfileId,
-      contentURI:
-        'https://gateway.pinata.cloud/ipfs/bafkreifdlrfon7354xtndyfnxqyd2up4po4c6sa2ofxwavjuy3eey57zs4',
+      contentURI: 'bafkreifjutky4cpkkoi5bbbkzygiz445rhcambv44f37pl2vdahbql6mwe',
     })
   )
 
@@ -42,8 +40,7 @@ task('seed-posts', 'Populate posts').setAction(async (_, hre) => {
   await waitForTx(
     learnNGrow.connect(userThree).post({
       profileId: userThreeProfileId,
-      contentURI:
-        'https://gateway.pinata.cloud/ipfs/bafkreidiyjsdvnpovmajjiplum2q5azfbeq4gyoc5nt6wg4ydcokrr44wq',
+      contentURI: 'bafkreie7dzfx74wqii4c7pfovoooldjxxr7u2xws7emoazt3xypmprsvr4',
     })
   )
 
@@ -51,8 +48,7 @@ task('seed-posts', 'Populate posts').setAction(async (_, hre) => {
   await waitForTx(
     learnNGrow.connect(userFour).post({
       profileId: userFourProfileId,
-      contentURI:
-        'https://gateway.pinata.cloud/ipfs/bafkreihpbeqpcmrgia7y7tom6jpcfezn2747l46xo74byrw7rlmp24jliy',
+      contentURI: 'bafkreif7qejrflpjc4j7gfnfacfzrak4ctj36nsnbxjhdmzc47t6firfa4',
     })
   )
 })

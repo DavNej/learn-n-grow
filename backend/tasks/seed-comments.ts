@@ -30,8 +30,7 @@ task('seed-comments', 'Populate comments').setAction(async (_, hre) => {
       profileId: userProfileId,
       profileIdPointed: userTwoProfileId,
       pubIdPointed: hre.ethers.BigNumber.from(1),
-      contentURI:
-        'https://gateway.pinata.cloud/ipfs/bafkreiawk23ab4q2uzhkn66lganq4wst4zvkw4k6k23dyqtyqptxhfkeda',
+      contentURI: 'bafkreia6th5nxyiur6frdz6spvfh2fj4ce4l4h4h22hlklzqxn2mdtqb7e',
     })
   )
 
@@ -40,8 +39,7 @@ task('seed-comments', 'Populate comments').setAction(async (_, hre) => {
       profileId: userTwoProfileId,
       profileIdPointed: userProfileId,
       pubIdPointed: hre.ethers.BigNumber.from(1),
-      contentURI:
-        'https://gateway.pinata.cloud/ipfs/bafkreidcxtz4xmfrzik22nk4ozs4ujzn23sitbmg6joald4eo5b3ok2n7u',
+      contentURI: 'bafkreies4uj57kn242fuxnwog4yddffzs32f33zgw7hlkmpnansyl7rz4m',
     })
   )
 
@@ -50,18 +48,16 @@ task('seed-comments', 'Populate comments').setAction(async (_, hre) => {
       profileId: userThreeProfileId,
       profileIdPointed: userFourProfileId,
       pubIdPointed: hre.ethers.BigNumber.from(1),
-      contentURI:
-        'https://gateway.pinata.cloud/ipfs/bafkreicntdieylmjnw6drpc6ez3rc4nnsi6c2nbemf5jvkkvq3s46pemci',
+      contentURI: 'bafkreih4zmghxzex6op76deb3q6fn6nme26ebktsc2kzt2qdkqvte4yoia',
     })
   )
 
   await waitForTx(
     learnNGrow.connect(userThree).comment({
       profileId: userThreeProfileId,
-      profileIdPointed: userFourProfileId,
+      profileIdPointed: userTwoProfileId,
       pubIdPointed: hre.ethers.BigNumber.from(1),
-      contentURI:
-        'https://gateway.pinata.cloud/ipfs/bafkreia66vnpuahyjujdeqo5bidxio2qvludif5lq4th54qui5tuuicxwa',
+      contentURI: 'bafkreigts3ddfpib3cvbwyptrx3vbp6e4dpl7ev4l6kbltlo2rgtu4the4',
     })
   )
 })
