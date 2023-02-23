@@ -14,7 +14,7 @@ export const learnNGrowAbi = [
     stateMutability: 'nonpayable',
     type: 'constructor',
   },
-  { inputs: [], name: 'CannotCommentOnSelf', type: 'error' },
+  { inputs: [], name: 'CannotCommentOnOwnPub', type: 'error' },
   { inputs: [], name: 'HandleContainsInvalidCharacters', type: 'error' },
   { inputs: [], name: 'HandleLengthInvalid', type: 'error' },
   { inputs: [], name: 'HandleTaken', type: 'error' },

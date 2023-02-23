@@ -69,7 +69,7 @@ export function formatError(contract: Contract, error: Error) {
   if (message.includes('PublicationDoesNotExist')) {
     return 'Publication does not exist'
   }
-  if (message.includes('CannotCommentOnSelf')) {
+  if (message.includes('CannotCommentOnOwnPub')) {
     return 'Cannot comment on self'
   }
   if (message.includes('Nonce too high')) {
