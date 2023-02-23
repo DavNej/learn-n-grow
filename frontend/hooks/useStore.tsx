@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { IComment, ProfileRecord, PostMap, PublicationMap } from '@/utils/types'
 import type { Contract } from 'ethers'
 import { ethers } from 'ethers'
 import { useProvider } from 'wagmi'
@@ -9,21 +8,11 @@ import { learnNGrow } from '@/utils/contracts'
 interface IStore {
   connectedProfileId: number
   learnNGrowContract: Contract | undefined
-  provider: ethers.providers.Provider | undefined
-  profilesById: ProfileRecord
-  publicationsByProfileId: Map<number, PublicationMap>
-  postsByProfileId: Map<number, PostMap>
-  comments: IComment[]
 }
 
 const initialStore: IStore = {
   learnNGrowContract: undefined,
-  provider: undefined,
   connectedProfileId: 0,
-  profilesById: {},
-  publicationsByProfileId: new Map(),
-  postsByProfileId: new Map(),
-  comments: [],
 }
 
 const StoreContext = React.createContext<{

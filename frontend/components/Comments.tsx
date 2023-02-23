@@ -10,13 +10,14 @@ import {
   Link,
   Text,
 } from '@chakra-ui/react'
-import { IComment } from '@/utils/types'
 import { formatTimestamp } from '@/utils/format'
-import { useStore } from '@/hooks/useStore'
+import { IFullComment } from '@/utils/types'
+import { useProfiles } from '@/hooks/learn-n-grow'
 
-export default function Comments({ comments }: { comments: IComment[] }) {
-  const { store } = useStore()
-  const { profilesById } = store
+export default function Comments({ comments }: { comments: IFullComment[] }) {
+  const { data } = useProfiles()
+
+  const profilesById = data || []
 
   if (comments.length === 0) return null
 

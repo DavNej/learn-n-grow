@@ -15,7 +15,6 @@ import {
   Spinner,
   Flex,
   Heading,
-  Box,
   Avatar,
 } from '@chakra-ui/react'
 
@@ -26,6 +25,7 @@ import { useStore } from '@/hooks/useStore'
 import { buildPublication } from '@/utils'
 import { encodeFileToDataUri } from '@/utils/dataUri'
 import * as pinata from '@/utils/pinata'
+import { useProfiles } from '@/hooks/learn-n-grow'
 
 export default function NewPost({
   isOpen,
@@ -36,7 +36,9 @@ export default function NewPost({
 }) {
   const { address } = useAccount()
   const { store } = useStore()
-  const { connectedProfileId, profilesById } = store
+  const { connectedProfileId } = store
+
+  const { data: profilesById } = useProfiles()
 
   const [isLoading, setIsLoading] = React.useState(false)
   const [shouldTransact, setShouldTransact] = React.useState(false)
@@ -54,7 +56,7 @@ export default function NewPost({
     },
   })
 
-  const profile = profilesById[connectedProfileId] || {}
+  const profile = (profilesById && profilesById[connectedProfileId]) || {}
   const disableUpload = !address || !debouncedContent
   const handle = `@${profile.handle}`
 

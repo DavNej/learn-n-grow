@@ -1,9 +1,10 @@
-import { useQuery, useQueryClient } from 'react-query'
+import { useQuery } from 'react-query'
 import type { UseQueryOptions } from 'react-query'
 import type { Contract } from 'ethers'
 
 import { IPublication, ProfileRecord } from '@/utils/types'
 import { useStore } from '../useStore'
+import useProfiles from './useProfiles'
 
 type QueryOptions = Omit<
   UseQueryOptions<IPublication[], Error, IPublication[], string>,
@@ -14,8 +15,7 @@ export default function usePublications(options?: QueryOptions) {
   const { store } = useStore()
   const { learnNGrowContract } = store
 
-  const queryClient = useQueryClient()
-  const profilesById = queryClient.getQueryData<ProfileRecord>('getProfiles')
+  const { data: profilesById } = useProfiles()
 
   const defaultOptions = {
     enabled: options?.enabled !== false && !!profilesById,
