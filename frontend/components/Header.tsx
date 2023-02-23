@@ -3,16 +3,11 @@ import Image from 'next/image'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { Avatar, Container, Flex, Text } from '@chakra-ui/react'
 import Link from 'next/link'
-import { useStore } from '@/hooks/useStore'
-import { useProfiles } from '@/hooks/learn-n-grow'
+
+import { useProfile } from '@/hooks/learn-n-grow'
 
 export default function Header() {
-  const { store } = useStore()
-  const { connectedProfileId } = store
-
-  const { data: profilesById } = useProfiles()
-
-  const profile = profilesById && profilesById[connectedProfileId]
+  const { data: profile } = useProfile()
 
   return (
     <header>

@@ -14,8 +14,7 @@ import {
 } from '@chakra-ui/react'
 
 import useIsMounted from '@/hooks/useIsMounted'
-import { useProfile } from '@/hooks/contracts/useProfile'
-import { useStore } from '@/hooks/useStore'
+import { useProfile } from '@/hooks/learn-n-grow'
 
 import Header from './Header'
 import ProfileList from './ProfileList'
@@ -26,24 +25,13 @@ const newProfilePagePath = '/register'
 export default function Layout({ children }: React.PropsWithChildren) {
   const isMounted = useIsMounted()
   const { pathname } = useRouter()
-  const { address, isConnected } = useAccount()
-  const {
-    profile: connectedProfile,
-    hasProfile,
-    isLoading,
-  } = useProfile({ address })
-  const { setStore } = useStore()
+  const { isConnected } = useAccount()
+  const { data: profile, isLoading } = useProfile()
 
   const [showNewPostForm, setShowNewPostForm] = React.useState(false)
 
-  React.useEffect(() => {
-    if (connectedProfile) {
-      setStore(s => ({ ...s, connectedProfileId: connectedProfile.id }))
-    }
-  }, [connectedProfile])
-
   const showCreateProfileButton =
-    !isLoading && !hasProfile && pathname !== newProfilePagePath
+    !isLoading && !profile && pathname !== newProfilePagePath
 
   if (!isMounted) return null
 
@@ -62,7 +50,7 @@ export default function Layout({ children }: React.PropsWithChildren) {
         <Container maxW='5xl'>
           <Flex>
             <Flex p={4} flexDirection='column'>
-              {hasProfile && (
+              {profile && (
                 <Button
                   mb={4}
                   width='100%'

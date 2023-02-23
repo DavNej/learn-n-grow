@@ -3,8 +3,7 @@ import { Avatar, Box, Flex, Spinner, Text } from '@chakra-ui/react'
 
 import Link from 'next/link'
 import { IProfile } from '@/utils/types'
-import { useStore } from '@/hooks/useStore'
-import { useProfiles } from '@/hooks/learn-n-grow'
+import { useProfile, useProfiles } from '@/hooks/learn-n-grow'
 
 function ProfileItem({ profile }: { profile: IProfile }) {
   return (
@@ -22,13 +21,11 @@ function ProfileItem({ profile }: { profile: IProfile }) {
 }
 
 export default function ProfileList() {
-  const { store } = useStore()
-  const { connectedProfileId } = store
-
+  const { data: profile } = useProfile()
   const { data: profilesById, isLoading } = useProfiles()
 
   const profiles = Object.values(profilesById || {}).filter(
-    p => p.id !== connectedProfileId
+    p => p.id !== profile?.id
   )
   const hasProfiles = profiles.length > 0
 

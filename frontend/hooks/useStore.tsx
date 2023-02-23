@@ -6,13 +6,11 @@ import { useProvider } from 'wagmi'
 import { learnNGrow } from '@/utils/contracts'
 
 interface IStore {
-  connectedProfileId: number
   learnNGrowContract: Contract | undefined
 }
 
 const initialStore: IStore = {
   learnNGrowContract: undefined,
-  connectedProfileId: 0,
 }
 
 const StoreContext = React.createContext<{

@@ -21,11 +21,10 @@ import {
 import FileInput from '@/components/FileInput'
 import { useCreatePost } from '@/hooks/contracts/useCreatePost'
 import useDebounce from '@/hooks/useDebounce'
-import { useStore } from '@/hooks/useStore'
 import { buildPublication } from '@/utils'
 import { encodeFileToDataUri } from '@/utils/dataUri'
 import * as pinata from '@/utils/pinata'
-import { useProfiles } from '@/hooks/learn-n-grow'
+import { useProfile, useProfiles } from '@/hooks/learn-n-grow'
 
 export default function NewPost({
   isOpen,
@@ -35,10 +34,7 @@ export default function NewPost({
   onClose: () => void
 }) {
   const { address } = useAccount()
-  const { store } = useStore()
-  const { connectedProfileId } = store
-
-  const { data: profilesById } = useProfiles()
+  const { data: profile } = useProfile()
 
   const [isLoading, setIsLoading] = React.useState(false)
   const [shouldTransact, setShouldTransact] = React.useState(false)
@@ -50,15 +46,14 @@ export default function NewPost({
 
   const { write } = useCreatePost({
     contentURI,
-    profileId: connectedProfileId,
+    profileId: profile?.id || 0,
+
     onSuccess() {
       setIsLoading(false)
     },
   })
 
-  const profile = (profilesById && profilesById[connectedProfileId]) || {}
   const disableUpload = !address || !debouncedContent
-  const handle = `@${profile.handle}`
 
   React.useEffect(() => {
     if (shouldTransact && write && contentURI) {
@@ -85,6 +80,10 @@ export default function NewPost({
       setShouldTransact(true)
     })
   }
+
+  if (!profile) return null
+
+  const handle = `@${profile.handle}`
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

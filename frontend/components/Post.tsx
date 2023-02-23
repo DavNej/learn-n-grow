@@ -13,7 +13,7 @@ import { IFullComment, IFullPost, IProfile } from '@/utils/types'
 import { formatTimestamp } from '@/utils/format'
 import NewComment from './NewComment'
 import Comments from './Comments'
-import { useStore } from '@/hooks/useStore'
+import { useProfile } from '@/hooks/learn-n-grow'
 
 export default function Post({
   post,
@@ -31,8 +31,7 @@ export default function Post({
 
   const [showNewComment, setShowNewComment] = React.useState(false)
 
-  const { store } = useStore()
-  const { connectedProfileId } = store
+  const { data: connectedProfile } = useProfile()
 
   return (
     <Box
@@ -71,7 +70,7 @@ export default function Post({
         </Flex>
       )}
 
-      {!!connectedProfileId && (
+      {connectedProfile && (
         <Flex justifyContent='center'>
           <Button
             size='xs'

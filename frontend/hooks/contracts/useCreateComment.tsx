@@ -18,13 +18,11 @@ export function useCreateComment({
   contentURI,
   profileIdPointed,
   pubIdPointed,
-  onSuccess,
 }: {
   profileId: number
   contentURI: string
   profileIdPointed: number
   pubIdPointed: number
-  onSuccess: () => void
 }) {
   const functionName: ILearnNGrowWriteFunctionName = 'comment'
   const args: readonly [
@@ -83,7 +81,6 @@ export function useCreateComment({
           description: `Comment created 🎉`,
           status: 'success',
         })
-        onSuccess()
       }
     },
   })

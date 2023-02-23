@@ -15,18 +15,16 @@ import {
   Spinner,
   Flex,
   Heading,
-  Box,
   Avatar,
 } from '@chakra-ui/react'
 
 import FileInput from '@/components/FileInput'
 import { useCreateComment } from '@/hooks/contracts/useCreateComment'
 import useDebounce from '@/hooks/useDebounce'
-import { useStore } from '@/hooks/useStore'
 import { buildPublication } from '@/utils'
 import { encodeFileToDataUri } from '@/utils/dataUri'
 import * as pinata from '@/utils/pinata'
-import { useProfiles } from '@/hooks/learn-n-grow'
+import { useProfile } from '@/hooks/learn-n-grow'
 
 export default function NewComment({
   isOpen,
@@ -40,10 +38,7 @@ export default function NewComment({
   pubIdPointed: number
 }) {
   const { address } = useAccount()
-  const { store } = useStore()
-  const { connectedProfileId } = store
-
-  const { data: profilesById } = useProfiles()
+  const { data: profile } = useProfile()
 
   const [isLoading, setIsLoading] = React.useState(false)
   const [shouldTransact, setShouldTransact] = React.useState(false)
@@ -55,15 +50,11 @@ export default function NewComment({
 
   const { write } = useCreateComment({
     contentURI,
-    profileId: connectedProfileId,
+    profileId: profile?.id || 0,
     profileIdPointed,
     pubIdPointed,
-    onSuccess() {
-      setIsLoading(false)
-    },
   })
 
-  const profile = (profilesById && profilesById[connectedProfileId]) || {}
   const disableUpload = !address || !debouncedContent
 
   React.useEffect(() => {
@@ -90,6 +81,8 @@ export default function NewComment({
       setShouldTransact(true)
     })
   }
+
+  if (!profile) return null
 
   const handle = `@${profile.handle}`
 

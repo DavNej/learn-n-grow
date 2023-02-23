@@ -18,9 +18,9 @@ import {
 import ImageInput from '@/components/ImageInput'
 import useDebounce from '@/hooks/useDebounce'
 import { useCreateProfile } from '@/hooks/contracts/useCreateProfile'
-import { useStore } from '@/hooks/useStore'
 import * as pinata from '@/utils/pinata'
 import { urlFromCid } from '@/utils'
+import { useProfile } from '@/hooks/learn-n-grow'
 
 export default function Register() {
   const [handle, setHandle] = React.useState('')
@@ -37,14 +37,13 @@ export default function Register() {
     imageURI,
   })
 
-  const { store } = useStore()
-  const { connectedProfileId } = store
+  const { data: profile } = useProfile()
 
   React.useEffect(() => {
-    if (!isConnected || connectedProfileId) {
+    if (!isConnected || profile) {
       push('/feed')
     }
-  }, [isConnected, connectedProfileId])
+  }, [isConnected, profile])
 
   function onImageChange(img: File) {
     setIsImageUploading(true)
