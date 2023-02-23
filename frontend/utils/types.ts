@@ -42,32 +42,35 @@ export interface IBasePublication {
 }
 
 export interface IPostPublication extends IBasePublication {
-  type?: 'post'
+  type: 'post'
 }
 
 export interface ICommentPublication extends IBasePublication {
   profileIdPointed: number
   pubIdPointed: number
-  type?: 'comment'
+  type: 'comment'
 }
 
 export type IPublication = IPostPublication | ICommentPublication
 
-export type PublicationMap = Map<number, IPublication>
-
-export interface IPost extends IBasePublication {
-  content: string
-  creationDate: number
-  author: Address
-  comments?: IComment[]
-  mediaURI?: string
-}
-
-export interface IComment extends ICommentPublication {
+export interface IPostContent {
   content: string
   creationDate: number
   author: Address
   mediaURI?: string
 }
 
-export type PostMap = Map<number, IPost>
+export interface ICommentContent {
+  content: string
+  creationDate: number
+  author: Address
+  mediaURI?: string
+}
+
+export type IPublicationContent = IPostContent | ICommentContent
+
+export interface IFullPost extends IPostContent, IPostPublication {}
+export interface IFullComment extends ICommentContent, ICommentPublication {}
+
+export type IFullPublication = IFullPost | IFullComment
+

@@ -9,7 +9,7 @@ import {
   Link,
   Text,
 } from '@chakra-ui/react'
-import { IComment, IPost, IProfile } from '@/utils/types'
+import { IFullComment, IFullPost, IProfile } from '@/utils/types'
 import { formatTimestamp } from '@/utils/format'
 import NewComment from './NewComment'
 import Comments from './Comments'
@@ -21,8 +21,8 @@ export default function Post({
   profile,
   noBanner,
 }: {
-  post: IPost
-  comments: IComment[]
+  post: IFullPost
+  comments: IFullComment[]
   profile: IProfile
   noBanner?: boolean
 }) {

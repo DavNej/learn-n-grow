@@ -20,7 +20,7 @@ import useDebounce from '@/hooks/useDebounce'
 import { useCreateProfile } from '@/hooks/contracts/useCreateProfile'
 import { useStore } from '@/hooks/useStore'
 import * as pinata from '@/utils/pinata'
-import { ipfsGateway } from '@/utils'
+import { urlFromCid } from '@/utils'
 
 export default function Register() {
   const [handle, setHandle] = React.useState('')
@@ -50,7 +50,7 @@ export default function Register() {
     setIsImageUploading(true)
 
     pinata.upload(img, cid => {
-      setImageURI(ipfsGateway(cid))
+      setImageURI(urlFromCid(cid))
       setIsImageUploading(false)
     })
   }
