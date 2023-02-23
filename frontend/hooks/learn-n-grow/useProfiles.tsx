@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from 'react-query'
+import { useQuery } from 'react-query'
 import type { UseQueryOptions } from 'react-query'
 import type { Contract } from 'ethers'
 
@@ -12,47 +12,44 @@ type QueryOptions = Omit<
 
 const MAX_PROFILE_COUNT = 20
 
-let learnNGrowContract: Contract
-
 export default function useProfiles(options?: QueryOptions) {
   const { store } = useStore()
-  const { learnNGrowContract: storeLearnNGrowContract } = store
-
-  if (!storeLearnNGrowContract) return
-
-  learnNGrowContract = storeLearnNGrowContract
+  const { learnNGrowContract } = store
 
   const defaultOptions = {
-    initialData: {},
     enabled: options?.enabled !== false,
   }
 
   const queryOptions: QueryOptions = { ...defaultOptions, ...(options || {}) }
 
   return useQuery<ProfileRecord, Error, ProfileRecord, string>(
-    'getAllProfiles',
-    getAllProfiles,
+    'getProfiles',
+    getProfiles(learnNGrowContract),
     queryOptions
   )
 }
 
-async function getAllProfiles() {
-  const profilesById: ProfileRecord = {}
+function getProfiles(learnNGrowContract: Contract | undefined) {
+  return async function () {
+    if (!learnNGrowContract) return []
 
-  for (let i = 1; i <= MAX_PROFILE_COUNT; i++) {
-    const profile = await learnNGrowContract.getProfile(i)
+    const profilesById: ProfileRecord = {}
 
-    if (!profile.handle) {
-      return profilesById
+    for (let i = 1; i <= MAX_PROFILE_COUNT; i++) {
+      const profile = await learnNGrowContract.getProfile(i)
+
+      if (!profile.handle) {
+        return profilesById
+      }
+
+      profilesById[i] = {
+        id: i,
+        handle: profile.handle,
+        imageURI: profile.imageURI,
+        pubCount: profile.pubCount.toNumber(),
+      }
     }
 
-    profilesById[i] = {
-      id: i,
-      handle: profile.handle,
-      imageURI: profile.imageURI,
-      pubCount: profile.pubCount.toNumber(),
-    }
+    return profilesById
   }
-
-  return profilesById
 }
