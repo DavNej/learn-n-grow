@@ -4,7 +4,7 @@ Learn N Grow is supposedly a decentralized social media where anyone could share
 
 > Blockchain being an open and transparent technology no need to be in a whitelist whatsoever to register. The Dapp is also open to anyone and no need to have a profile to use it in read only mode.
 
-* Checkout the contract on [Etherscan](https://goerli.etherscan.io/address/0x18DD042707d7ec2C5f0393271eE22A77E1A1AEcc)
+* Checkout the contract on [Etherscan](https://goerli.etherscan.io/address/0xD05AADD2488C03A9169daF50f4d6800E763D1Cea)
 * Checkout the DApp on [Vercel](https://learn-n-grow.vercel.app/feed)
 
 ## Features
