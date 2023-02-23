@@ -59,7 +59,11 @@ export default function Comments({ comments }: { comments: IComment[] }) {
                     <Text p={2} textAlign='left'>
                       {comment.content}
                     </Text>
-                    {comment.mediaURI && <Image p={4} src={comment.mediaURI} />}
+                    {comment.mediaURI && (
+                      <Flex mx='auto' mt={2} width='260px' height='260px'>
+                        <Image objectFit='cover' src={comment.mediaURI} />
+                      </Flex>
+                    )}
                   </Box>
                 ))}
               </Box>

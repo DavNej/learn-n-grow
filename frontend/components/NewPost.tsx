@@ -101,9 +101,14 @@ export default function NewPost({
             onChange={e => setContent(e.target.value)}
           />
           {!!mediaURI && (
-            <Box mx='auto' mt={6} width='260px' height='260px'>
-              <Image borderRadius='sm' src={mediaURI} alt='Preview' />
-            </Box>
+            <Flex mx='auto' mt={6} width='260px' height='260px'>
+              <Image
+                objectFit='cover'
+                borderRadius='sm'
+                src={mediaURI}
+                alt='Preview'
+              />
+            </Flex>
           )}
         </ModalBody>
 

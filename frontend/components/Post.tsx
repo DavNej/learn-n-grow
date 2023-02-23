@@ -65,7 +65,11 @@ export default function Post({
         {post.content}
       </Text>
 
-      {post.mediaURI && <Image src={post.mediaURI} />}
+      {post.mediaURI && (
+        <Flex mx='auto' mb={4} mt={6} width='260px' height='260px'>
+          <Image objectFit='cover' src={post.mediaURI} />
+        </Flex>
+      )}
 
       {!!connectedProfileId && (
         <Flex justifyContent='center'>
