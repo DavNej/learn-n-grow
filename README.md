@@ -30,7 +30,3 @@ To run the local blockchain:
 * `yarn install && yarn dev`
 
 Then visit [localhost:3000](http://localhost:3000)
-
-## Demo video
-
-Follow this link to see the demo 🤓
